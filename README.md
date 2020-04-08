@@ -10,7 +10,7 @@ These files are Excel, Singularity and Docker container images and SRA xsd for g
 
 Download the DDBJ public repository.  
 ```
-git clone https://github.com/ddbj/pub.git
+git clone https://github.com/ddbj/submission-excel2xml.git
 ```
 
 ## Enter metadata in the excel
@@ -23,7 +23,7 @@ See 'example-0001_dra_metadata.xlsx' for example.
 
 Build the Singularity image.
 ```
-cd pub/codes/dra/excel2xml
+cd submission-excel2xml
 sudo singularity build excel2xml.simg Singularity
 ```
 
@@ -55,7 +55,7 @@ so the checked XMLs may be failed in the DRA submission system.
 
 Build the Docker image.
 ```
-cd pub/codes/dra/excel2xml
+cd submission-excel2xml
 sudo docker build -t excel2xml .
 ```
 
