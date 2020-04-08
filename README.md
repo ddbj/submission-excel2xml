@@ -32,9 +32,9 @@ Specify the D-way account ID, submission number and BioProject accession.
 
 For example,  
 * DRA submission id 'example-0001': -a example -i 0001  
-* BioProject 'PRJDB1' : -p PRJDB1  
+* BioProject 'PRJDB7252' : -p PRJDB7252  
 ```
-singularity exec excel2xml.simg excel2xml.rb -a example -i 0001 -p PRJDB1 example-0001_dra_metadata.xlsx
+singularity exec excel2xml.simg excel2xml.rb -a example -i 0001 -p PRJDB7252 example-0001_dra_metadata.xlsx
 ```
 
 Three XMLs are generated from the excel.
@@ -64,10 +64,10 @@ Specify the D-way account ID, submission number, BioProject accession and full p
 
 For example,  
 * DRA submission id 'example-0001': -a example -i 0001  
-* BioProject 'PRJDB1' : -p PRJDB1  
+* BioProject 'PRJDB7252' : -p PRJDB7252  
 * 'path_to_excel_directory': full path of the directory which contains the excel.  
 ```
-sudo docker run -v /path_to_excel_directory:/data -w /data excel2xml excel2xml.rb -a example -i 0001 example-0001_dra_metadata.xlsx
+sudo docker run -v /path_to_excel_directory:/data -w /data excel2xml excel2xml.rb -a example -i 0001 -p PRJDB7252 example-0001_dra_metadata.xlsx
 ```
 
 Three XMLs are generated from the excel.  
