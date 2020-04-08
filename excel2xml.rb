@@ -1,0 +1,495 @@
+#! /usr/bin/ruby
+# -*- coding: utf-8 -*-
+
+require 'rubygems'
+require 'roo'
+require 'builder'
+require 'optparse'
+require 'date'
+
+#
+# Bioinformation and DDBJ Center
+# Generate Submission, Experiment and Run metadata XMLs for DDBJ Sequence Read Archive (DRA) submission.
+# 2020-04-08 version 1.0 
+#
+
+# Options
+account = ""
+submission_no = ""
+bioproject_accession = ""
+OptionParser.new{|opt|
+
+	opt.on('-a [VALUE]', 'D-way account ID'){|v|
+		# accout id
+		raise "usage: -a D-way account ID" if v.nil?
+		account = v
+		puts "D-way account ID: #{v}"
+	}
+
+	opt.on('-i [NUMBER]', 'submission number'){|v|
+		raise "usage: -i submission number (e.g., 0001)" if v.nil? || !(/^\d{4}$/ =~ v)
+		submission_no = v
+		puts "Submission number: #{v}"
+	}
+
+	opt.on('-p [BioProject accession]', 'BioProject accession number'){|v|
+		raise "usage: -p BioProject accession number (e.g., PRJDB100)" if v.nil? || !(/^PRJDB\d{1,}$/ =~ v)
+		bioproject_accession = v
+		puts "BioProject accession: #{v}"
+	}
+
+	begin
+		opt.parse!
+	rescue
+		puts "Invalid option. #{opt}"
+	end
+
+}
+
+# submission id
+submission_id = ""
+if !(account == "" || submission_no == "")
+	submission_id = account + "-" + submission_no
+end
+
+# Function
+# clean up float number
+def clean_number(num)
+
+	if num.is_a?(Float) && /\.0$/ =~ num.to_s
+		return num.to_i
+	else
+		return num
+	end
+
+end
+
+## Settings
+# XML instruction
+instruction = '<?xml version="1.0" encoding="UTF-8"?>'
+
+### Read the DRA metadata excel
+
+# open xlsx file
+begin
+	s = Roo::Excelx.new(ARGV[0])
+rescue
+	raise "No such file to open."
+end
+
+# metadata sheets
+meta_object = ['Submission', 'Experiment', 'Run', 'Run-file']
+
+# array for metadata objects
+submission_a = Array.new
+experiment_a = Array.new
+run_a = Array.new
+run_file_a = Array.new
+
+# open a sheet and put data into an array with line number
+for meta in meta_object
+
+	s.default_sheet = meta
+
+	i = 1 # line number
+	for line in s
+		
+		case meta
+
+		when "Submission" then
+			submission_a.push([i, line])
+		when "Experiment" then
+			experiment_a.push([i, line])
+		when "Run" then
+			run_a.push([i, line])
+		when "Run-file" then
+			run_file_a.push([i, line])
+		end
+
+		i += 1
+
+	end
+
+end
+
+## metadata content into hash
+
+# Submission
+i = 0 # array index number
+
+center_name = ""
+lab_name = ""
+hold = ""
+submitter_a = []
+
+for num, line in submission_a
+
+	if num == 2
+		center_name = line[0].to_s
+		lab_name = line[1].to_s
+		hold = line[2].to_s
+	end
+
+	if num > 4 && line[0] && line[1]
+
+		if line[0]
+			submitter_a.push([line[0], line[1]])
+		end
+
+	end
+
+end
+
+# Experiment
+experiments_a = Array.new
+i = 0 # array index number
+
+for num, line in experiment_a
+
+	if /^Experiment-(\d{1,})/ =~ line[0].to_s
+
+		alias_number = $1.rjust(4, "0")
+		experiment_alias = "#{submission_id}_Experiment_#{alias_number}"
+
+		if line[0]
+			experiments_a.push(line[1,12].unshift(experiment_alias))
+		end
+
+	end
+
+end
+
+# Run
+runs_a = Array.new
+i = 0 # array index number
+
+for num, line in run_a
+
+	if /^Run-(\d{1,})/ =~ line[0].to_s
+
+		alias_number = $1.rjust(4, "0")
+		run_alias = "#{submission_id}_Run_#{alias_number}"
+
+		if line[0] && /^Experiment-(\d{1,})/ =~ line[2].to_s
+			alias_number = $1.rjust(4, "0")
+			to_experiment_alias = "#{submission_id}_Experiment_#{alias_number}"
+			runs_a.push([run_alias, line[1], to_experiment_alias])
+		end
+
+	end
+
+end
+
+# Run-file
+run_files_a = Array.new
+i = 0 # array index number
+
+for num, line in run_file_a
+
+	if /^Run-(\d{1,})/ =~ line[1].to_s
+
+		alias_number = $1.rjust(4, "0")
+		run_alias = "#{submission_id}_Run_#{alias_number}"
+
+		if line[0]
+			run_files_a.push([line[0], run_alias, line[2], line[3]])
+		end
+
+	end
+
+end
+
+## Create XML
+prefix = submission_id + "_"
+
+# Submission
+xml_submission = Builder::XmlMarkup.new(:indent=>4)
+
+submission_f = open(prefix + "Submission.xml", "w")
+submission_f.puts instruction
+
+# Experiment
+xml_experiment = Builder::XmlMarkup.new(:indent=>4)
+
+experiment_f = open(prefix + "Experiment.xml", "w")
+experiment_f.puts instruction
+
+# Run
+xml_run = Builder::XmlMarkup.new(:indent=>4)
+
+run_f = open(prefix + "Run.xml", "w")
+run_f.puts instruction
+
+# Output Submission XML
+if not submission_a.empty?
+	
+	submission_f.puts xml_submission.SUBMISSION("accession" => "", "center_name" => center_name, "lab_name" => lab_name, "alias" => "#{submission_id}_Submission", "submission_date" => Time.now.to_datetime.rfc3339){|submission|
+
+			submission.CONTACTS{|contacts|
+
+				for name, mail in submitter_a
+					contacts.CONTACT("name" => name, "inform_on_error" => mail, "inform_on_status" => mail)
+				end
+
+			} # CONTACTS
+
+			submission.ACTIONS{|actions|
+			
+				actions.ACTION{|action|
+					action.ADD("source" => "#{submission_id}_Experiment.xml", "schema" => "experiment")
+				}
+
+				actions.ACTION{|action|
+					action.ADD("source" => "#{submission_id}_Run.xml", "schema" => "run")
+				}
+
+				actions.ACTION{|action|
+					action.HOLD("HoldUntilDate" => "#{hold}+09:00")
+				}
+			
+			} # ACTIONS
+
+	} # SUBMISSION
+
+end
+
+# output Experiment XML
+experiment_f.puts xml_experiment.EXPERIMENT_SET{|experiment_set|
+
+	for exp in experiments_a
+
+		experiment_set.EXPERIMENT("accession" => "", "center_name" => center_name, "alias" => exp[0]){|experiment|
+			experiment.TITLE(exp[1])
+			experiment.STUDY_REF("accession" => bioproject_accession){|study_ref|
+				study_ref.IDENTIFIERS{|identifiers|
+					identifiers.PRIMARY_ID(bioproject_accession, "label" => "BioProject ID")
+				}
+			}
+
+			experiment.DESIGN{|design|
+				
+				design.DESIGN_DESCRIPTION()
+
+				design.SAMPLE_DESCRIPTOR("accession" => exp[2]){|sample_ref|
+					sample_ref.IDENTIFIERS{|identifiers|
+						identifiers.PRIMARY_ID(exp[2], "label" => "BioSample ID")
+					}
+				}
+
+				design.LIBRARY_DESCRIPTOR{|lib_des|
+					lib_des.LIBRARY_NAME(exp[3])					
+					lib_des.LIBRARY_STRATEGY(exp[6])
+					lib_des.LIBRARY_SOURCE(exp[4])
+					lib_des.LIBRARY_SELECTION(exp[5])
+
+					lib_des.LIBRARY_LAYOUT{|layout|
+						if exp[9] =~ /paired/ && exp[10] && exp[11]
+							layout.PAIRED("NOMINAL_LENGTH" => exp[10].to_i, "NOMINAL_SDEV" => exp[11])
+						elsif exp[9] =~ /paired/ && exp[10]
+							layout.PAIRED("NOMINAL_LENGTH" => exp[10].to_i)
+						elsif exp[9] =~ /paired/ && exp[11]
+							layout.PAIRED("NOMINAL_SDEV" => exp[11])
+						elsif exp[9] =~ /paired/
+							layout.PAIRED
+						else
+							layout.SINGLE
+						end
+					} # layout
+					
+					lib_des.LIBRARY_CONSTRUCTION_PROTOCOL(exp[7])
+
+				} # lib_des
+
+				design.SPOT_DESCRIPTOR{|spot_des|
+					spot_des.SPOT_DECODE_SPEC{|decode|
+						
+						decode.SPOT_LENGTH(exp[12])
+
+						# 454 paired
+						if exp[9] =~ /paired/ && exp[8] =~ /454/
+
+							decode.READ_SPEC{|spec|
+								spec.READ_INDEX("0")
+								spec.READ_CLASS("Technical Read")
+								spec.READ_TYPE("Adapter")
+								spec.BASE_COORD("1")
+							} # spec
+
+							decode.READ_SPEC{|spec|
+								spec.READ_INDEX("1")
+								spec.READ_CLASS("Application Read")
+								spec.READ_TYPE("Forward")
+								spec.BASE_COORD("5")
+							} # spec
+
+							decode.READ_SPEC{|spec|
+								spec.READ_INDEX("2")
+								spec.READ_CLASS("Technical Read")
+								spec.READ_TYPE("Linker")
+								spec.EXPECTED_BASECALL_TABLE{|expected_basecall_table|
+									expected_basecall_table.BASECALL("TCGTATAACTTCGTATAATGTATGCTATACGAAGTTATTACG", "min_match" => 38, "max_mismatch" => 5, "match_edge" => "full")
+									expected_basecall_table.BASECALL("CGTAATAACTTCGTATAGCATACATTATACGAAGTTATACGA", "min_match" => 38, "max_mismatch" => 5, "match_edge" => "full")
+								}
+							} # spec
+
+							decode.READ_SPEC{|spec|
+								spec.READ_INDEX("3")
+								spec.READ_CLASS("Application Read")
+								spec.READ_TYPE("Forward")
+								spec.RELATIVE_ORDER("follows_read_index" => 2)
+							} # spec
+
+						# except 454 paired
+						else
+							
+							decode.READ_SPEC{|spec|
+								spec.READ_INDEX("0")
+								spec.READ_CLASS("Application Read")
+								spec.READ_TYPE("Forward")
+								spec.BASE_COORD("1")
+							} # spec
+
+							if exp[9] =~ /paired/ && exp[9] =~ /FF/
+								base = (exp[12].to_i/2) + 1
+								decode.READ_SPEC{|spec|
+									spec.READ_INDEX("1")
+									spec.READ_CLASS("Application Read")
+									spec.READ_TYPE("Forward")
+									spec.BASE_COORD(base)
+								} # spec
+							elsif exp[9] =~ /paired/ && exp[9] =~ /FR/
+								base = (exp[12].to_i/2) + 1
+								decode.READ_SPEC{|spec|
+									spec.READ_INDEX("1")
+									spec.READ_CLASS("Application Read")
+									spec.READ_TYPE("Reverse")
+									spec.BASE_COORD(base)
+								} # spec
+							end
+
+						end # if except 454 paired
+
+					} # decode
+				} # spot_des
+
+			} # design
+
+			experiment.PLATFORM{|platform|
+
+				case exp[8]
+
+				when /454/i
+					platform.LS454{|platform_e|
+						platform_e.INSTRUMENT_MODEL(exp[8])
+					}
+
+				when /illumina|nextseq|hiseq/i
+					platform.ILLUMINA{|platform_e|
+						platform_e.INSTRUMENT_MODEL(exp[8])
+					}
+
+				when /solid/i
+					platform.ABI_SOLID{|platform_e|
+						platform_e.INSTRUMENT_MODEL(exp[8])
+					}
+
+				when /AB 5500/
+					platform.ABI_SOLID{|platform_e|
+						platform_e.INSTRUMENT_MODEL(exp[8])
+					}
+
+				when /Ion Torrent/
+					platform.ION_TORRENT{|platform_e|
+						platform_e.INSTRUMENT_MODEL(exp[8])
+					}
+
+				when /pacbio/i
+					platform.PACBIO_SMRT{|platform_e|
+						platform_e.INSTRUMENT_MODEL(exp[8])
+					}
+				when /Sequel/
+					platform.PACBIO_SMRT{|platform_e|
+						platform_e.INSTRUMENT_MODEL(exp[8])
+					}
+				when /ION/
+					platform.OXFORD_NANOPORE{|platform_e|
+						platform_e.INSTRUMENT_MODEL(exp[8])
+					}
+
+				when /AB 3/
+						platform.CAPILLARY{|platform_e|
+							platform_e.INSTRUMENT_MODEL(exp[8])
+						}
+				when /Helicos HeliScope/
+					platform.HELICOS{|platform_e|
+						platform_e.INSTRUMENT_MODEL(exp[8])
+					}
+
+				when /Complete/					
+					platform.COMPLETE_GENOMICS{|platform_e|
+						platform_e.INSTRUMENT_MODEL(exp[8])
+					}
+
+				end
+
+			} #platform
+
+			# processing
+			experiment.PROCESSING{|processing|
+				processing.PIPELINE{|pipeline|
+					pipeline.PIPE_SECTION{|pipe_section|
+						pipe_section.STEP_INDEX("1")
+	                    pipe_section.PREV_STEP_INDEX("NIL")
+	                    pipe_section.PROGRAM
+	                    pipe_section.VERSION
+					}
+				}
+			}
+
+		} # exp
+
+	end
+
+}
+
+# Run
+if not runs_a.empty?
+	
+	run_f.puts xml_run.RUN_SET{|run_set|
+
+		for run in runs_a
+
+			run_set.RUN("accession" => "", "center_name" => center_name, "alias" => run[0]){|run_e|
+				
+				for exp in experiments_a
+					run_e.TITLE(exp[1]) if exp[0] == run[2]
+				end
+
+				run_e.EXPERIMENT_REF("accession" => "", "refcenter" => center_name, "refname" => run[2])
+				
+				run_e.DATA_BLOCK{|block|
+					
+					block.FILES{|files|
+
+						for run_file in run_files_a
+						
+							if run[0] == run_file[1]
+														
+								# fixed attributes: "checksum_method" => "MD5", "ascii_offset" => "!", "quality_encoding" => "ascii", "quality_scoring_system" => "phred"
+								files.FILE("checksum" => run_file[3], "checksum_method" => "MD5", "ascii_offset" => "!", "quality_encoding" => "ascii", "quality_scoring_system" => "phred", "filetype" => run_file[2], "filename" => run_file[0])
+								
+							end
+												
+						end
+
+					} # files
+
+				} # block
+
+			} # run_e
+
+		end # for
+
+	} # run_set
+
+end
