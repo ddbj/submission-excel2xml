@@ -10,7 +10,8 @@ require 'date'
 #
 # Bioinformation and DDBJ Center
 # Generate Submission, Experiment and Run metadata XMLs for DDBJ Sequence Read Archive (DRA) submission.
-# 2020-04-08 version 1.0 
+# 2020-03-28 version 1.0 
+# 2020-04-24 version 1.1 allow PSUB and SSUB IDs
 #
 
 # Options
@@ -32,10 +33,10 @@ OptionParser.new{|opt|
 		puts "Submission number: #{v}"
 	}
 
-	opt.on('-p [BioProject accession]', 'BioProject accession number'){|v|
-		raise "usage: -p BioProject accession number (e.g., PRJDB100)" if v.nil? || !(/^PRJDB\d{1,}$/ =~ v)
+	opt.on('-p [BioProject ID]', 'BioProject ID'){|v|
+		raise "usage: -p BioProject ID (e.g., PRJDB100 or PSUB000003)" if v.nil? || !(/^PRJDB\d{1,}$/ =~ v || /^PSUB\d{1,}$/ =~ v)
 		bioproject_accession = v
-		puts "BioProject accession: #{v}"
+		puts "BioProject ID: #{v}"
 	}
 
 	begin
@@ -260,21 +261,39 @@ experiment_f.puts xml_experiment.EXPERIMENT_SET{|experiment_set|
 
 		experiment_set.EXPERIMENT("accession" => "", "center_name" => center_name, "alias" => exp[0]){|experiment|
 			experiment.TITLE(exp[1])
-			experiment.STUDY_REF("accession" => bioproject_accession){|study_ref|
-				study_ref.IDENTIFIERS{|identifiers|
-					identifiers.PRIMARY_ID(bioproject_accession, "label" => "BioProject ID")
+			
+			if bioproject_accession =~ /^PRJDB\d{1,}$/
+				experiment.STUDY_REF("accession" => bioproject_accession){|study_ref|
+					study_ref.IDENTIFIERS{|identifiers|
+						identifiers.PRIMARY_ID(bioproject_accession, "label" => "BioProject ID")
+					}
 				}
-			}
+			elsif bioproject_accession =~ /^PSUB\d{1,}$/
+				experiment.STUDY_REF{|study_ref|
+					study_ref.IDENTIFIERS{|identifiers|
+						identifiers.PRIMARY_ID(bioproject_accession, "label" => "BioProject Submission ID")
+					}
+				}
+			end
 
 			experiment.DESIGN{|design|
 				
 				design.DESIGN_DESCRIPTION()
 
-				design.SAMPLE_DESCRIPTOR("accession" => exp[2]){|sample_ref|
-					sample_ref.IDENTIFIERS{|identifiers|
-						identifiers.PRIMARY_ID(exp[2], "label" => "BioSample ID")
+				if exp[2] =~ /^SAMD\d{8}$/
+					design.SAMPLE_DESCRIPTOR("accession" => exp[2]){|sample_ref|
+						sample_ref.IDENTIFIERS{|identifiers|
+							identifiers.PRIMARY_ID(exp[2], "label" => "BioSample ID")
+						}
 					}
-				}
+				elsif exp[2] =~ /^(SSUB\d{6}) *: *(.*)$/
+					sample_name = "#{$1} : #{$2}"
+					design.SAMPLE_DESCRIPTOR{|sample_ref|
+						sample_ref.IDENTIFIERS{|identifiers|
+							identifiers.PRIMARY_ID(sample_name, "label" => "BioSample Submission ID")
+						}
+					}
+				end
 
 				design.LIBRARY_DESCRIPTOR{|lib_des|
 					lib_des.LIBRARY_NAME(exp[3])					
@@ -493,3 +512,6 @@ if not runs_a.empty?
 	} # run_set
 
 end
+
+=begin
+=end
