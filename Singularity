@@ -21,7 +21,7 @@ From: ubuntu:18.04
     sed -i.bak -e "s%http://security.ubuntu.com/ubuntu/%http://ftp.jaist.ac.jp/pub/Linux/ubuntu/%g" /etc/apt/sources.list
     apt-get -y update
     apt-get -y upgrade
-    apt-get -y install vim less build-essential libxml2-dev zlib1g-dev \
+    apt-get -y install vim less build-essential libxml2-dev zlib1g-dev libxml2-utils \
                        ruby-full=1:2.5.1
     gem install mini_portile2 -v "2.4.0"
     gem install nokogiri -v "1.10.9"
@@ -32,5 +32,5 @@ From: ubuntu:18.04
 
     chmod +x /usr/local/bin/excel2xml.rb
     chmod +x /usr/local/bin/validate_dra_meta.rb
-
+        
 
