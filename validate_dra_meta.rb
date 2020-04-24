@@ -3,6 +3,7 @@
 
 require 'rubygems'
 require 'date'
+require 'rexml/document'
 require 'nokogiri'
 require 'optparse'
 
@@ -11,7 +12,8 @@ require 'optparse'
 # Validate Submission, Experiment and Run metadata XMLs for DDBJ Sequence Read Archive (DRA) submission.
 # This program performs minimum check before uploading XMLs.
 # Most validation are done during XML registration process in D-way.
-# 2020-04-08 version 1.0 
+# 2020-03-28 version 1.0 
+# 2020-04-24 version 1.1 check existence of nominal length for paired experiment
 #
 
 ## Options
@@ -66,6 +68,8 @@ submission_h = {}
 
 experiment_alias_a = []
 experiment_paired_alias_a = []
+experiment_paired_without_nominal_length_alias_a = []
+
 run_alias_a = []
 run_files_a = []
 run_experiment_a = []
@@ -102,7 +106,14 @@ if FileTest.exist?("#{submission_id}_Experiment.xml")
 		experiment_alias_a.push(exp_aliase)
 
 		if experiment.at_css('PAIRED')
+			
 			experiment_paired_alias_a.push(exp_aliase)
+
+			# nominal length
+			unless experiment.at_css('PAIRED')['NOMINAL_LENGTH']
+				puts "Error: Experiment: #{exp_aliase} NOMINAL_LENGTH is required for paired library."
+			end
+
 		end
 	
 	end # doc_experiment.css('EXPERIMENT')
@@ -173,8 +184,11 @@ if !run_to_experiment_a.empty? || !experiment_to_run_a.empty?
 	puts "Error: Run to Experiment reference error"
 
 	puts "#{run_experiment_a.join(", ")}: experiment not exist." if !run_to_experiment_a.empty?
-	puts "#{experiment_to_run_a.join(", ")}: unreferenced." if !experiment_to_run_a.empty?
+	puts "#{experiment_to_run_a.join(", ")}: unreferenced." if !experiment_to_run_a.empty?	
 
 else
 	puts "Run to Experiment reference OK"
 end
+
+=begin
+=end

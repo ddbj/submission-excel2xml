@@ -1,8 +1,8 @@
 # Excel and container images for DRA metadata XML submission  
 
 * Bioinformation and DDBJ Center
-* release: 2020-04-08  
-* version: v1.0
+* release: 2020-04-24  
+* version: v1.1
 
 These files are Excel, Singularity and Docker container images and SRA xsd for generation and validation of Submission, Experiment and Run XMLs for [DDBJ Sequence Read Archive (DRA)](https://www.ddbj.nig.ac.jp/dra/submission-e.html) submission. 
 
