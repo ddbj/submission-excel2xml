@@ -9,6 +9,7 @@ RUN apt-get -y update && \
                        build-essential \
                        libxml2-dev \
                        zlib1g-dev \
+                       libxml2-utils \
                        ruby-full=1:2.5.1
 RUN gem install mini_portile2 -v "2.4.0" && \
     gem install nokogiri -v "1.10.9" && \

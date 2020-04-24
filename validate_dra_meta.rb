@@ -189,6 +189,3 @@ if !run_to_experiment_a.empty? || !experiment_to_run_a.empty?
 else
 	puts "Run to Experiment reference OK"
 end
-
-=begin
-=end
