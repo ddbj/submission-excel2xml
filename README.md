@@ -6,7 +6,7 @@
 * 公開日: 2020-04-24  
 * version: v1.1
 
-[DDBJ Sequence Read Archive (DRA)](https://www.ddbj.nig.ac.jp/dra/submission-e.html) に登録するための Submission、Experiment と Run XML を生成・チェックするためのエクセル、Singularity と Docker コンテナ、及び、SRA xsd です。
+[DDBJ Sequence Read Archive (DRA)](https://www.ddbj.nig.ac.jp/dra/submission.html) に登録するための Submission、Experiment と Run XML を生成・チェックするためのエクセル、Singularity と Docker コンテナ、及び、SRA xsd。
 
 ## ダウンロード
 
@@ -17,8 +17,7 @@ git clone https://github.com/ddbj/submission-excel2xml.git
 
 ## エクセルにメタデータを記入  
 
-メタデータとデータファイルをエクセルの 'Submission'、'Experiment'、'Run' と 'Run-file' シートに記入します。  
-メタデータについては[ウェブサイト](https://www.ddbj.nig.ac.jp/dra/submission.html#metadata)と 'Readme' シートをご覧ください。  
+メタデータとデータファイルをエクセルの 'Submission'、'Experiment'、'Run' と 'Run-file' シートに記入します。メタデータについては[ウェブサイト](https://www.ddbj.nig.ac.jp/dra/submission.html#metadata)と 'Readme' シートをご覧ください。  
 'example-0001_dra_metadata.xlsx' が記入例になります。  
 
 ### XML を生成: Singularity  
@@ -88,31 +87,35 @@ DRA の登録サイトではより詳細なチェックが実施されるため�
 
 ### SRA xsd に対する XML チェック  
 
-* メタデータ XML は [respective SRA xsd](https://github.com/ddbj/pub/tree/master/docs/dra/xsd/1-5) に対してチェックされます。メッセージに従って XML を修正してください。  
+* メタデータ XML は [SRA xsd](https://github.com/ddbj/pub/tree/master/docs/dra/xsd/1-5) に対してチェックされます。   
+メッセージに従って XML を修正してください。  
 
 ### XML の内容チェック  
 
 **Submission** 
-* Error: Submission: 公開予定日が過去の日付  
+* Error: Submission: 公開予定日が過去の日付   
 将来の日付を指定してください。  
 
 **Experiment と Run** 
 * Error: Run: #{run_alias} Paired library only has one file.  
-ペアライブラリ Experiment では少なくとも二つの配列データファイル (例、R1.fastq と R2.fastq) を指定してください。  
+ペアライブラリ Experiment では少なくとも二つの配列データファイル (例、R1.fastq と R2.fastq) が含まれている必要があります。  
 
 ### オブジェクトの参照関係チェック
 * Error: Run to Experiment reference error.  
 全ての Experiment が Run から参照されていない。  
 Experiment を参照していない Run が存在する。  
 Run から参照されていない Experiment が存在する。
-このような場合は全ての Run が全ての Experiment を参照するように修正してください。
+このような場合、全ての Run が全ての Experiment を参照するように修正してください。  
 
 メタデータモデルは [DRA Handbook](https://www.ddbj.nig.ac.jp/dra/submission.html#metadata-objects) を参照してください。  
 
 ## DRA ウェブ画面から XML を登録する  
 
-メタデータ XML を登録する前に[登録ディレクトリに配列データファイルをアップロードします](https://www.ddbj.nig.ac.jp/dra/submission.html#upload-sequence-data)。  
-D-way にログインした後に[Submission、Experiment と Run XML を DRA 登録の XML アップロードエリアでアップロードします](https://www.ddbj.nig.ac.jp/dra/submission.html#create-metadata-in-xml-files)。  
+メタデータ XML を登録する前に[登録ディレクトリに配列データファイルをアップロードします](https://www.ddbj.nig.ac.jp/dra/submission.html#upload-sequence-data)。D-way にログイン後、[Submission、Experiment と Run XML を DRA 登録ページででアップロード](https://www.ddbj.nig.ac.jp/dra/submission.html#create-metadata-in-xml-files) します。   
+
+## Github や XML 生成方法が分からない場合  
+
+[DRA メタデータエクセル](https://www.ddbj.nig.ac.jp/files/submission/dra_metadata.xlsx) をウェブサイトからダウンロード、内容を英語で記入し、メール (trace@ddbj.nig.ac.jp) 添付で DRA チームにお送りください。   
 
 ## English  
 
@@ -230,3 +233,6 @@ See [the DRA Handbook](https://www.ddbj.nig.ac.jp/dra/submission-e.html#metadata
 Before submitting the metadata XMLs, [upload sequence data files to the submission directory](https://www.ddbj.nig.ac.jp/dra/submission-e.html#upload-sequence-data).  
 After logging in the D-way, [upload the Submission, Experiment and Run XMLs in the XML upload area of the DRA submission](https://www.ddbj.nig.ac.jp/dra/submission-e.html#create-metadata-in-xml-files).  
 
+## When Github and XML generation are not clear for you  
+
+Download [DRA metadata Excel](https://www.ddbj.nig.ac.jp/files/submission/dra_metadata.xlsx) from website, fill in and send it to the DRA team by Email (trace@ddbj.nig.ac.jp).  
