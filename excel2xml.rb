@@ -144,7 +144,6 @@ end
 # Experiment
 experiments_a = Array.new
 i = 0 # array index number
-
 for num, line in experiment_a
 
 	if /^Experiment-(\d{1,})/ =~ line[0].to_s
@@ -156,7 +155,11 @@ for num, line in experiment_a
 			experiments_a.push(line[1,12].unshift(experiment_alias))
 		end
 
+	elsif line[0] && line[0].to_s != "" && /^Experiment-(\d{1,})/ !~ line[0].to_s && i > 0
+		puts "Invalid Experiment alias format: #{line[0].to_s}. "
 	end
+
+	i += 1
 
 end
 
@@ -177,7 +180,11 @@ for num, line in run_a
 			runs_a.push([run_alias, line[1], to_experiment_alias])
 		end
 
+	elsif line[0] && line[0].to_s != "" && /^Run-(\d{1,})/ !~ line[0].to_s && i > 0
+		puts "Invalid Run alias format: #{line[0].to_s}. "
 	end
+
+	i += 1
 
 end
 
@@ -196,7 +203,11 @@ for num, line in run_file_a
 			run_files_a.push([line[0], run_alias, line[2], line[3]])
 		end
 
+	elsif line[1] && line[1].to_s != "" && /^Run-(\d{1,})/ !~ line[1].to_s && i > 0
+		puts "Invalid Run alias format in Run-file: #{line[1].to_s}. "
 	end
+
+	i += 1
 
 end
 
