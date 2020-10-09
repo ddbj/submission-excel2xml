@@ -1,5 +1,121 @@
 # Excel and container images for DRA metadata XML submission  
 
+## 日本語  
+
+* 生命情報・DDBJ センター
+* 公開日: 2020-04-24  
+* version: v1.1
+
+[DDBJ Sequence Read Archive (DRA)](https://www.ddbj.nig.ac.jp/dra/submission-e.html) に登録するための Submission、Experiment と Run XML を生成・チェックするためのエクセル、Singularity と Docker コンテナ、及び、SRA xsd です。
+
+## ダウンロード
+
+DDBJ public レポジトリをダウンロードします。  
+```
+git clone https://github.com/ddbj/submission-excel2xml.git
+```
+
+## エクセルにメタデータを記入  
+
+メタデータとデータファイルをエクセルの 'Submission'、'Experiment'、'Run' と 'Run-file' シートに記入します。  
+メタデータについては[ウェブサイト](https://www.ddbj.nig.ac.jp/dra/submission.html#metadata)と 'Readme' シートをご覧ください。  
+'example-0001_dra_metadata.xlsx' が記入例になります。  
+
+### XML を生成: Singularity  
+
+Singularity イメージを構築します。  
+```
+cd submission-excel2xml
+sudo singularity build excel2xml.simg Singularity
+```
+
+エクセルから Submission、Experiment と Run XML を生成します。
+D-way アカウント ID、submission 番号と BioProject アクセッション番号を指定します。
+
+例
+* DRA submission id 'example-0001': -a example -i 0001  
+* BioProject 'PRJDB7252' : -p PRJDB7252  
+```
+singularity exec excel2xml.simg excel2xml.rb -a example -i 0001 -p PRJDB7252 example-0001_dra_metadata.xlsx
+```
+
+エクセルから三つの XML が生成されます。  
+* example-0001_Submission.xml
+* example-0001_Experiment.xml
+* example-0001_Run.xml
+
+Submission ID を指定して XML をチェックします。  
+```
+singularity exec excel2xml.simg validate_dra_meta.rb -a example -i 0001
+```
+
+ここでは xsd に対するチェックと最低限のチェックが実施されます。  
+DRA の登録サイトではより詳細なチェックが実施されるため、パスした XML が登録過程でエラーになることがあります。  
+
+### XML を生成: Docker  
+
+Docker イメージを構築します。  
+```
+cd submission-excel2xml
+sudo docker build -t excel2xml .
+```
+
+エクセルから Submission、Experiment と Run XML を生成します。  
+D-way アカウント ID、submission 番号、BioProject アクセッション番号とエクセルを含むディレクトリのフルパスを指定します。  
+
+例
+* DRA submission id 'example-0001': -a example -i 0001  
+* BioProject 'PRJDB7252' : -p PRJDB7252  
+* 'path_to_excel_directory': エクセルを含むディレクトリのフルパス  
+```
+sudo docker run -v /path_to_excel_directory:/data -w /data excel2xml excel2xml.rb -a example -i 0001 -p PRJDB7252 example-0001_dra_metadata.xlsx
+```
+
+エクセルから三つの XML が生成されます。 
+* example-0001_Submission.xml
+* example-0001_Experiment.xml
+* example-0001_Run.xml
+
+Submission ID を指定して XML をチェックします。  
+```
+sudo docker run -v /path_to_excel_directory:/data -w /data excel2xml validate_dra_meta.rb -a example -i 0001
+```
+
+ここでは xsd に対するチェックと最低限のチェックが実施されます。  
+DRA の登録サイトではより詳細なチェックが実施されるため、パスした XML が登録過程でエラーになることがあります。  
+
+## チェック結果    
+
+### SRA xsd に対する XML チェック  
+
+* メタデータ XML は [respective SRA xsd](https://github.com/ddbj/pub/tree/master/docs/dra/xsd/1-5) に対してチェックされます。メッセージに従って XML を修正してください。  
+
+### XML の内容チェック  
+
+**Submission** 
+* Error: Submission: 公開予定日が過去の日付  
+将来の日付を指定してください。  
+
+**Experiment と Run** 
+* Error: Run: #{run_alias} Paired library only has one file.  
+ペアライブラリ Experiment では少なくとも二つの配列データファイル (例、R1.fastq と R2.fastq) を指定してください。  
+
+### オブジェクトの参照関係チェック
+* Error: Run to Experiment reference error.  
+全ての Experiment が Run から参照されていない。  
+Experiment を参照していない Run が存在する。  
+Run から参照されていない Experiment が存在する。
+このような場合は全ての Run が全ての Experiment を参照するように修正してください。
+
+メタデータモデルは [DRA Handbook](https://www.ddbj.nig.ac.jp/dra/submission.html#metadata-objects) を参照してください。  
+
+## DRA ウェブ画面から XML を登録する  
+
+メタデータ XML を登録する前に[登録ディレクトリに配列データファイルをアップロードします](https://www.ddbj.nig.ac.jp/dra/submission.html#upload-sequence-data)。  
+D-way にログインした後に[Submission、Experiment と Run XML を DRA 登録の XML アップロードエリアでアップロードします](https://www.ddbj.nig.ac.jp/dra/submission.html#create-metadata-in-xml-files)。  
+
+## English  
+
 * Bioinformation and DDBJ Center
 * release: 2020-04-24  
 * version: v1.1
