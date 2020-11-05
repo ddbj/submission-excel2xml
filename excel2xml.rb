@@ -266,12 +266,42 @@ if not submission_a.empty?
 end
 
 # output Experiment XML
+exp_title_h = {}
 experiment_f.puts xml_experiment.EXPERIMENT_SET{|experiment_set|
 
 	for exp in experiments_a
 
+		# auto-generate title if the experiment title is empty
+		exp_title = ""
+		biosample_accession = ""
+		instrument_model = ""
+		paired_seq = ""
+
+		if exp[2] =~ /^SAMD\d{8}$/
+			biosample_accession = exp[2]
+		end
+
+		if exp[8] && exp[8] != ""
+			instrument_model = exp[8]
+		end
+
+		if exp[9] =~ /paired/
+			paired_seq = "paired end sequencing"
+		else
+			paired_seq = "sequencing"
+		end
+
+		if exp[1].nil? || exp[1] == ""
+			exp_title = "#{instrument_model} #{paired_seq} of #{biosample_accession}"
+		else
+			exp_title = exp[1]
+		end
+
+		exp_title_h.store(exp[0], exp_title)
+
 		experiment_set.EXPERIMENT("accession" => "", "center_name" => center_name, "alias" => exp[0]){|experiment|
-			experiment.TITLE(exp[1])
+
+			experiment.TITLE(exp_title)
 			
 			if bioproject_accession =~ /^PRJDB\d{1,}$/
 				experiment.STUDY_REF("accession" => bioproject_accession){|study_ref|
@@ -297,6 +327,9 @@ experiment_f.puts xml_experiment.EXPERIMENT_SET{|experiment_set|
 							identifiers.PRIMARY_ID(exp[2], "label" => "BioSample ID")
 						}
 					}
+
+					biosample_accession = exp[2]
+
 				elsif exp[2] =~ /^(SSUB\d{6}) *: *(.*)$/
 					sample_name = "#{$1} : #{$2}"
 					design.SAMPLE_DESCRIPTOR{|sample_ref|
@@ -315,14 +348,19 @@ experiment_f.puts xml_experiment.EXPERIMENT_SET{|experiment_set|
 					lib_des.LIBRARY_LAYOUT{|layout|
 						if exp[9] =~ /paired/ && exp[10] && exp[11]
 							layout.PAIRED("NOMINAL_LENGTH" => exp[10].to_i, "NOMINAL_SDEV" => exp[11])
+							paired_seq = "paired end sequencing"
 						elsif exp[9] =~ /paired/ && exp[10]
 							layout.PAIRED("NOMINAL_LENGTH" => exp[10].to_i)
+							paired_seq = "paired end sequencing"
 						elsif exp[9] =~ /paired/ && exp[11]
 							layout.PAIRED("NOMINAL_SDEV" => exp[11])
+							paired_seq = "paired end sequencing"
 						elsif exp[9] =~ /paired/
 							layout.PAIRED
+							paired_seq = "paired end sequencing"
 						else
 							layout.SINGLE
+							paired_seq = "sequencing"
 						end
 					} # layout
 					
@@ -462,6 +500,8 @@ experiment_f.puts xml_experiment.EXPERIMENT_SET{|experiment_set|
 
 				end
 
+				instrument_model = exp[8]
+
 			} #platform
 
 			# processing
@@ -474,7 +514,7 @@ experiment_f.puts xml_experiment.EXPERIMENT_SET{|experiment_set|
 	                    pipe_section.VERSION
 					}
 				}
-			}
+			}			
 
 		} # exp
 
@@ -491,8 +531,10 @@ if not runs_a.empty?
 
 			run_set.RUN("accession" => "", "center_name" => center_name, "alias" => run[0]){|run_e|
 				
-				for exp in experiments_a
-					run_e.TITLE(exp[1]) if exp[0] == run[2]
+				if exp_title_h[run[2]]
+					run_e.TITLE(exp_title_h[run[2]])
+				else
+					run_e.TITLE("")
 				end
 
 				run_e.EXPERIMENT_REF("accession" => "", "refcenter" => center_name, "refname" => run[2])
@@ -506,7 +548,11 @@ if not runs_a.empty?
 							if run[0] == run_file[1]
 														
 								# fixed attributes: "checksum_method" => "MD5", "ascii_offset" => "!", "quality_encoding" => "ascii", "quality_scoring_system" => "phred"
-								files.FILE("checksum" => run_file[3], "checksum_method" => "MD5", "ascii_offset" => "!", "quality_encoding" => "ascii", "quality_scoring_system" => "phred", "filetype" => run_file[2], "filename" => run_file[0])
+								if run_file[3]
+									files.FILE("checksum" => run_file[3].strip, "checksum_method" => "MD5", "ascii_offset" => "!", "quality_encoding" => "ascii", "quality_scoring_system" => "phred", "filetype" => run_file[2], "filename" => run_file[0])
+								else
+									files.FILE("checksum" => "", "checksum_method" => "MD5", "ascii_offset" => "!", "quality_encoding" => "ascii", "quality_scoring_system" => "phred", "filetype" => run_file[2], "filename" => run_file[0])
+								end
 								
 							end
 												
