@@ -128,6 +128,7 @@ end
 
 # Run
 run_file_number = 0
+run_files_checksums_a = []
 if FileTest.exist?("#{submission_id}_Run.xml")
 
 	doc_run = Nokogiri::XML(open("#{submission_id}_Run.xml"))
@@ -150,6 +151,11 @@ if FileTest.exist?("#{submission_id}_Run.xml")
 		run.css("FILE").each do |file|
 			run_files_a.push(file.attribute("filename").value)
 			run_file_number += 1
+		end
+
+		# md5
+		run.css("FILE").each do |file|
+			run_files_checksums_a.push([file.attribute("filename").value, file.attribute("checksum").value])
 		end
 
 		# paired file number check
@@ -188,4 +194,13 @@ if !run_to_experiment_a.empty? || !experiment_to_run_a.empty?
 
 else
 	puts "Run to Experiment reference OK"
+end
+
+# md5 checksum check
+for filename, checksum in run_files_checksums_a
+
+	if checksum !~ /^[a-f0-9]{32}$/i
+		puts "#{filename}:#{checksum} Invalid md5 checksum value."
+	end
+
 end
