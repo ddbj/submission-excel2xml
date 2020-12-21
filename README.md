@@ -10,7 +10,7 @@
 
 ## ダウンロード
 
-DDBJ public レポジトリをダウンロードします。  
+submission-excel2xml レポジトリをダウンロードします。  
 ```
 git clone https://github.com/ddbj/submission-excel2xml.git
 ```
@@ -43,7 +43,7 @@ singularity exec excel2xml.simg excel2xml.rb -a example -i 0001 -p PRJDB7252 exa
 * example-0001_Experiment.xml
 * example-0001_Run.xml
 
-Submission ID を指定して XML をチェックします。  
+Submission ID を指定して XML をチェックします。XML と xsd は submission-excel2xml ディレクトリ直下に配置されている必要があります。  
 ```
 singularity exec excel2xml.simg validate_dra_meta.rb -a example -i 0001
 ```
@@ -75,7 +75,7 @@ sudo docker run -v /path_to_excel_directory:/data -w /data excel2xml excel2xml.r
 * example-0001_Experiment.xml
 * example-0001_Run.xml
 
-Submission ID を指定して XML をチェックします。  
+Submission ID を指定して XML をチェックします。XML と xsd は submission-excel2xml ディレクトリ直下に配置されている必要があります。    
 ```
 sudo docker run -v /path_to_excel_directory:/data -w /data excel2xml validate_dra_meta.rb -a example -i 0001
 ```
@@ -127,7 +127,7 @@ These files are Excel, Singularity and Docker container images and SRA xsd for g
 
 ## Download
 
-Download the DDBJ public repository.  
+Download the DDBJ submission-excel2xml repository.  
 ```
 git clone https://github.com/ddbj/submission-excel2xml.git
 ```
@@ -161,7 +161,7 @@ Three XMLs are generated from the excel.
 * example-0001_Experiment.xml
 * example-0001_Run.xml
 
-Validate the XMLs by specifying the submission ID.
+Validate the XMLs by specifying the submission ID. The XML and xsd files must be under the submission-excel2xml directory.  
 ```
 singularity exec excel2xml.simg validate_dra_meta.rb -a example -i 0001
 ```
@@ -194,7 +194,7 @@ Three XMLs are generated from the excel.
 * example-0001_Experiment.xml
 * example-0001_Run.xml
 
-Validate the XMLs by specifying the submission ID.
+Validate the XMLs by specifying the submission ID. The XML and xsd files must be under the submission-excel2xml directory.  
 ```
 sudo docker run -v /path_to_excel_directory:/data -w /data excel2xml validate_dra_meta.rb -a example -i 0001
 ```
