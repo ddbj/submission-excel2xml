@@ -22,7 +22,7 @@ git clone https://github.com/ddbj/submission-excel2xml.git
 
 ### XML を生成: Singularity  
 
-Singularity イメージを構築します。  
+Singularity イメージを[ダウンロード](https://drive.google.com/drive/u/3/folders/1Qrqpgjw_No5q6mO6rcihNwVCyMBVytzL)、もしくは、以下の手順でローカル環境で構築します。  
 ```
 cd submission-excel2xml
 sudo singularity build excel2xml.simg Singularity
@@ -140,7 +140,7 @@ See 'example-0001_dra_metadata.xlsx' for example.
 
 ### Generate XMLs: Singularity  
 
-Build the Singularity image.
+[Download](https://drive.google.com/drive/u/3/folders/1Qrqpgjw_No5q6mO6rcihNwVCyMBVytzL) the Singularity image or build the Singularity image as follows.  
 ```
 cd submission-excel2xml
 sudo singularity build excel2xml.simg Singularity
