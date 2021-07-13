@@ -16,9 +16,20 @@ RUN gem install mini_portile2 -v "2.4.0" && \
     gem install rubyzip -v "2.3.0" && \
     gem install roo -v "2.8.3" && \
     gem install builder -v "3.2.4" && \
-    gem install date -v "3.0.0"
+    gem install date -v "3.0.0" && \
+    mkdir /opt/submission-excel2xml
 COPY excel2xml.rb /usr/local/bin
 COPY validate_dra_meta.rb /usr/local/bin
+COPY SRA.analysis.xsd /opt/submission-excel2xml
+COPY SRA.annotation.xsd /opt/submission-excel2xml
+COPY SRA.common.xsd /opt/submission-excel2xml
+COPY SRA.experiment.xsd /opt/submission-excel2xml
+COPY SRA.package.xsd /opt/submission-excel2xml
+COPY SRA.run.xsd /opt/submission-excel2xml
+COPY SRA.sample.xsd /opt/submission-excel2xml
+COPY SRA.study.xsd /opt/submission-excel2xml
+COPY SRA.submission.xsd /opt/submission-excel2xml
+
 RUN chmod +x /usr/local/bin/excel2xml.rb && \
     chmod +x /usr/local/bin/validate_dra_meta.rb
 
