@@ -10,7 +10,7 @@
 
 ## 履歴
 
-* 2021-07-13: v1.2 [xsd 1.5.9](https://github.com/ddbj/pub/tree/master/docs/dra#changes-to-common-xml-159-on-7-july-2021) に対応   
+* 2021-07-13: v1.2 [xsd 1.5.9](https://github.com/ddbj/pub/tree/master/docs/dra#changes-to-common-xml-159-on-7-july-2021) に対応。xsd を [pub](https://github.com/ddbj/pub) から取得するように変更。
 * 2020-04-24: v1.1 初版
 
 ## ダウンロード
@@ -48,7 +48,7 @@ singularity exec excel2xml.simg excel2xml.rb -a example -i 0001 -p PRJDB7252 exa
 * example-0001_Experiment.xml
 * example-0001_Run.xml
 
-Submission ID を指定して XML をチェックします。XML と xsd は submission-excel2xml ディレクトリ直下に配置されている必要があります。  
+Submission ID を指定して XML をチェックします。XML は submission-excel2xml ディレクトリ直下に配置されている必要があります。SRA xsd ファイルは build 中にコンテナー内の /opt/submission-excel2xml/ にダウンロードされています。          
 ```
 singularity exec excel2xml.simg validate_dra_meta.rb -a example -i 0001
 ```
@@ -80,7 +80,7 @@ sudo docker run -v /path_to_excel_directory:/data -w /data excel2xml excel2xml.r
 * example-0001_Experiment.xml
 * example-0001_Run.xml
 
-Submission ID を指定して XML をチェックします。XML と xsd は submission-excel2xml ディレクトリ直下に配置されている必要があります。    
+Submission ID を指定して XML をチェックします。XML は submission-excel2xml ディレクトリ直下に配置されている必要があります。SRA xsd ファイルは build 中にコンテナー内の /opt/submission-excel2xml/ にダウンロードされています。        
 ```
 sudo docker run -v /path_to_excel_directory:/data -w /data excel2xml validate_dra_meta.rb -a example -i 0001
 ```
@@ -92,8 +92,7 @@ DRA の登録サイトではより詳細なチェックが実施されるため�
 
 ### SRA xsd に対する XML チェック  
 
-* メタデータ XML は [SRA xsd](https://github.com/ddbj/pub/tree/master/docs/dra/xsd/1-5) に対してチェックされます。   
-メッセージに従って XML を修正してください。  
+* メタデータ XML は [SRA xsd](https://github.com/ddbj/pub/tree/master/docs/dra/xsd/1-5) に対してチェックされます。メッセージに従って XML を修正してください。  
 
 ### XML の内容チェック  
 
@@ -132,7 +131,7 @@ These files are Excel, Singularity and Docker container images and SRA xsd for g
 
 ## History
 
-* 2021-07-13: v1.2 Update to [xsd 1.5.9](https://github.com/ddbj/pub/tree/master/docs/dra#changes-to-common-xml-159-on-7-july-2021)   
+* 2021-07-13: v1.2 Update to [xsd 1.5.9](https://github.com/ddbj/pub/tree/master/docs/dra#changes-to-common-xml-159-on-7-july-2021). Download the xsd files from [pub](https://github.com/ddbj/pub).
 * 2020-04-24: v1.1 Initial release
 
 ## Download
@@ -171,7 +170,7 @@ Three XMLs are generated from the excel.
 * example-0001_Experiment.xml
 * example-0001_Run.xml
 
-Validate the XMLs by specifying the submission ID. The XML and xsd files must be under the submission-excel2xml directory.  
+Validate the XMLs by specifying the submission ID. The XML files must be under the submission-excel2xml directory. The SRA xsd files have been downloaded to /opt/submission-excel2xml/ from [pub](https://github.com/ddbj/pub) in the container during the build. 
 ```
 singularity exec excel2xml.simg validate_dra_meta.rb -a example -i 0001
 ```
@@ -204,7 +203,7 @@ Three XMLs are generated from the excel.
 * example-0001_Experiment.xml
 * example-0001_Run.xml
 
-Validate the XMLs by specifying the submission ID. The XML and xsd files must be under the submission-excel2xml directory.  
+Validate the XMLs by specifying the submission ID. The XML files must be under the submission-excel2xml directory. The SRA xsd files have been downloaded to /opt/submission-excel2xml/ from [pub](https://github.com/ddbj/pub) in the container during the build.  
 ```
 sudo docker run -v /path_to_excel_directory:/data -w /data excel2xml validate_dra_meta.rb -a example -i 0001
 ```
