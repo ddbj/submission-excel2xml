@@ -49,17 +49,19 @@ if !(account == "" || submission_no == "")
 end
 
 ## Validate DRA XML against xsd
+xsd_path = "/opt/submission-excel2xml/"
+
 puts "\n== XML validation against SRA xsd =="
 if FileTest.exist?("#{submission_id}_Submission.xml")
-	result = system("xmllint --schema SRA.submission.xsd --noout #{submission_id}_Submission.xml")
+	result = system("xmllint --schema #{xsd_path}SRA.submission.xsd --noout #{submission_id}_Submission.xml")
 end
 
 if FileTest.exist?("#{submission_id}_Experiment.xml")
-	result = system("xmllint --schema SRA.experiment.xsd --noout #{submission_id}_Experiment.xml")
+	result = system("xmllint --schema #{xsd_path}SRA.experiment.xsd --noout #{submission_id}_Experiment.xml")
 end
 
 if FileTest.exist?("#{submission_id}_Run.xml")
-	result = system("xmllint --schema SRA.run.xsd --noout #{submission_id}_Run.xml")
+	result = system("xmllint --schema #{xsd_path}SRA.run.xsd --noout #{submission_id}_Run.xml")
 end
 
 ## object relation check
