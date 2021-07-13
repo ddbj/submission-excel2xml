@@ -10,6 +10,7 @@ RUN apt-get -y update && \
                        libxml2-dev \
                        zlib1g-dev \
                        libxml2-utils \
+                       wget \
                        ruby-full=1:2.5.1
 RUN gem install mini_portile2 -v "2.4.0" && \
     gem install nokogiri -v "1.10.9" && \
@@ -17,18 +18,20 @@ RUN gem install mini_portile2 -v "2.4.0" && \
     gem install roo -v "2.8.3" && \
     gem install builder -v "3.2.4" && \
     gem install date -v "3.0.0" && \
-    mkdir /opt/submission-excel2xml
+    mkdir /opt/submission-excel2xml && \
+    cd /opt/submission-excel2xml && \
+    wget https://raw.githubusercontent.com/ddbj/pub/master/docs/dra/xsd/1-5/SRA.analysis.xsd && \
+    wget https://raw.githubusercontent.com/ddbj/pub/master/docs/dra/xsd/1-5/SRA.annotation.xsd && \
+    wget https://raw.githubusercontent.com/ddbj/pub/master/docs/dra/xsd/1-5/SRA.common.xsd && \
+    wget https://raw.githubusercontent.com/ddbj/pub/master/docs/dra/xsd/1-5/SRA.experiment.xsd && \
+    wget https://raw.githubusercontent.com/ddbj/pub/master/docs/dra/xsd/1-5/SRA.package.xsd && \
+    wget https://raw.githubusercontent.com/ddbj/pub/master/docs/dra/xsd/1-5/SRA.run.xsd && \
+    wget https://raw.githubusercontent.com/ddbj/pub/master/docs/dra/xsd/1-5/SRA.sample.xsd && \
+    wget https://raw.githubusercontent.com/ddbj/pub/master/docs/dra/xsd/1-5/SRA.study.xsd && \
+    wget https://raw.githubusercontent.com/ddbj/pub/master/docs/dra/xsd/1-5/SRA.submission.xsd
+
 COPY excel2xml.rb /usr/local/bin
 COPY validate_dra_meta.rb /usr/local/bin
-COPY SRA.analysis.xsd /opt/submission-excel2xml
-COPY SRA.annotation.xsd /opt/submission-excel2xml
-COPY SRA.common.xsd /opt/submission-excel2xml
-COPY SRA.experiment.xsd /opt/submission-excel2xml
-COPY SRA.package.xsd /opt/submission-excel2xml
-COPY SRA.run.xsd /opt/submission-excel2xml
-COPY SRA.sample.xsd /opt/submission-excel2xml
-COPY SRA.study.xsd /opt/submission-excel2xml
-COPY SRA.submission.xsd /opt/submission-excel2xml
 
 RUN chmod +x /usr/local/bin/excel2xml.rb && \
     chmod +x /usr/local/bin/validate_dra_meta.rb
