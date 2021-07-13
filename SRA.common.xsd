@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- INSDC Sequence Read Archive resource Common object XML specification -->
-<!-- version:1.5.8 -->
+<!-- version:1.5.9 -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
   <xs:attributeGroup name="NameGroup">
@@ -412,6 +412,16 @@
           </xs:sequence>
         </xs:complexType>
       </xs:element>
+      <xs:element name="BGISEQ">
+        <xs:annotation>
+          <xs:documentation> BGI platform type. </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="INSTRUMENT_MODEL" maxOccurs="1" minOccurs="1" type="typeBGISEQModel"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
       <xs:element name="OXFORD_NANOPORE">
         <xs:annotation>
           <xs:documentation> Oxford Nanopore platform type. nanopore-based electronic single molecule analysis </xs:documentation>
@@ -442,6 +452,16 @@
           </xs:sequence>
         </xs:complexType>
       </xs:element>
+      <xs:element name="Vela_Diagnostics">
+        <xs:annotation>
+          <xs:documentation> semi-conductor based sequencing technology. </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="INSTRUMENT_MODEL" maxOccurs="1" minOccurs="1" type="typeVelaDiagnosticsModel"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>      
       <xs:element name="CAPILLARY">
         <xs:annotation>
           <xs:documentation> Sequencers based on capillary electrophoresis technology manufactured by LifeTech (formerly Applied
@@ -596,6 +616,8 @@
       <xs:enumeration value="Illumina iSeq 100"/>
       <xs:enumeration value="NextSeq 500"/>
       <xs:enumeration value="NextSeq 550"/>            
+      <xs:enumeration value="NextSeq 1000"/>
+      <xs:enumeration value="NextSeq 2000"/>
     </xs:restriction>
   </xs:simpleType>
 
@@ -630,11 +652,22 @@
     </xs:restriction>
   </xs:simpleType>
 
+  <xs:simpleType name="typeBGISEQModel">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="BGISEQ-500"/>
+      <xs:enumeration value="DNBSEQ-G400"/>
+      <xs:enumeration value="DNBSEQ-T7"/>
+      <xs:enumeration value="DNBSEQ-G50"/>
+      <xs:enumeration value="MGISEQ-2000RS"/>
+    </xs:restriction>
+  </xs:simpleType>
+
   <xs:simpleType name="typePacBioModel">
     <xs:restriction base="xs:string">
       <xs:enumeration value="PacBio RS"/>
       <xs:enumeration value="PacBio RS II"/>
       <xs:enumeration value="Sequel"/>
+      <xs:enumeration value="Sequel II"/> 
     </xs:restriction>
   </xs:simpleType>
 
@@ -644,6 +677,9 @@
       <xs:enumeration value="Ion Torrent Proton"/>
       <xs:enumeration value="Ion Torrent S5"/>
       <xs:enumeration value="Ion Torrent S5 XL"/>
+      <xs:enumeration value="Ion GeneStudio S5"/>
+      <xs:enumeration value="Ion GeneStudio S5 plus"/>
+      <xs:enumeration value="Ion GeneStudio S5 prime"/>
       <xs:enumeration value="unspecified"/>
     </xs:restriction>
   </xs:simpleType>
@@ -666,8 +702,16 @@
       <xs:enumeration value="PromethION"/>
     </xs:restriction>
   </xs:simpleType>
-
-
+  <xs:simpleType name="typeGenapsysModel">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="GENIUS"/>
+      <xs:enumeration value="Genapsys Sequencer"/>
+    </xs:restriction>
+  </xs:simpleType>  
+  <xs:simpleType name="typeVelaDiagnosticsModel">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Sentosa SQ301"/>
+    </xs:restriction>
+  </xs:simpleType>  
   <!-- STRING ENUMERATIONS END -->
-
 </xs:schema>
