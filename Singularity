@@ -1,11 +1,23 @@
 BootStrap: docker
 From: ubuntu:18.04
 
+%setup
+    mkdir -p ${SINGULARITY_ROOTFS}/opt/submission-excel2xml
+
 
 %files
     # copying files from the host system to the container.
     excel2xml.rb /usr/local/bin
     validate_dra_meta.rb /usr/local/bin
+    SRA.analysis.xsd /opt/submission-excel2xml
+    SRA.annotation.xsd /opt/submission-excel2xml
+    SRA.common.xsd /opt/submission-excel2xml
+    SRA.experiment.xsd /opt/submission-excel2xml
+    SRA.package.xsd /opt/submission-excel2xml
+    SRA.run.xsd /opt/submission-excel2xml
+    SRA.sample.xsd /opt/submission-excel2xml
+    SRA.study.xsd /opt/submission-excel2xml
+    SRA.submission.xsd /opt/submission-excel2xml
 
 %labels
     Maintainer Bioinformation and DDBJ Center
@@ -13,6 +25,7 @@ From: ubuntu:18.04
 
 
 %runscript
+
 
 
 %post
