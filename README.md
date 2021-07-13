@@ -3,10 +3,15 @@
 ## 日本語  
 
 * 生命情報・DDBJ センター
-* 公開日: 2020-04-24  
-* version: v1.1
+* 公開日: 2021-07-13  
+* version: v1.2
 
 [DDBJ Sequence Read Archive (DRA)](https://www.ddbj.nig.ac.jp/dra/submission.html) に登録するための Submission、Experiment と Run XML を生成・チェックするためのエクセル、Singularity と Docker コンテナ、及び、SRA xsd。
+
+## 履歴
+
+* 2021-07-13: v1.2 [xsd 1.5.9](https://github.com/ddbj/pub/tree/master/docs/dra#changes-to-common-xml-159-on-7-july-2021) に対応   
+* 2020-04-24: v1.1 初版
 
 ## ダウンロード
 
@@ -120,10 +125,15 @@ Run から参照されていない Experiment が存在する。
 ## English  
 
 * Bioinformation and DDBJ Center
-* release: 2020-04-24  
-* version: v1.1
+* release: 2020-07-13  
+* version: v1.2
 
 These files are Excel, Singularity and Docker container images and SRA xsd for generation and validation of Submission, Experiment and Run XMLs for [DDBJ Sequence Read Archive (DRA)](https://www.ddbj.nig.ac.jp/dra/submission-e.html) submission. 
+
+## History
+
+* 2021-07-13: v1.2 Update to [xsd 1.5.9](https://github.com/ddbj/pub/tree/master/docs/dra#changes-to-common-xml-159-on-7-july-2021)   
+* 2020-04-24: v1.1 Initial release
 
 ## Download
 

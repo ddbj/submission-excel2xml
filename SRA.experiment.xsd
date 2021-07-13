@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- INSDC Sequence Read Archive resource Experiment (SRX/ERX/DRX) object XML specification -->
-<!-- version:1.5.8 -->
+<!-- version:1.5.9 -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
   <!--  <xs:include schemaLocation="http://www.ncbi.nlm.nih.gov/viewvc/v1/trunk/sra/doc/SRA_1-5/SRA.common.xsd?view=co"/>  -->
@@ -167,6 +167,11 @@
             <xs:enumeration value="SELEX">
               <xs:annotation>
                 <xs:documentation>Systematic Evolution of Ligands by EXponential enrichment</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="NOMe-Seq">
+              <xs:annotation>
+                <xs:documentation>Nucleosome Occupancy and Methylome sequencing.</xs:documentation>
               </xs:annotation>
             </xs:enumeration>
             <xs:enumeration value="RIP-Seq">

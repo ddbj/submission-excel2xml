@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- INSDC Sequence Read Archive resource Run (SRR/ERR/DRR) object XML specification -->
-<!-- version:1.5.8 -->
+<!-- version:1.5.9 -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
   <!--  <xs:include schemaLocation="http://www.ncbi.nlm.nih.gov/viewvc/v1/trunk/sra/doc/SRA_1-5/SRA.common.xsd?view=co"/>  -->
