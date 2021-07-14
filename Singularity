@@ -11,7 +11,7 @@ From: ubuntu:18.04
 
 %labels
     Maintainer Bioinformation and DDBJ Center
-    Version    v1.0
+    Version    v1.2
 
 
 %runscript
