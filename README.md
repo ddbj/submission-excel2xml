@@ -121,6 +121,22 @@ Run から参照されていない Experiment が存在する。
 
 [DRA メタデータエクセル](https://www.ddbj.nig.ac.jp/files/submission/dra_metadata.xlsx) をウェブサイトからダウンロード、内容を英語で記入し、メール (trace@ddbj.nig.ac.jp) 添付で DRA チームにお送りください。   
 
+## NIG スパコンでの実施方法
+
+国立遺伝学研究所 生命情報・DDBJ センターが運営する [NIG スパコン](https://www.ddbj.nig.ac.jp/sc) では `/lustre6/public/app/submission-excel2xml/` 
+に Singularity イメージが設置されています。ダウンロードや build 作業をすることなく、メタデータエクセルファイルがあれば XML 生成や XML のチェックを実施することができます。    
+多件数のデータファイルがスパコンにある場合、メタデータ XML 作成、及び、データファイルの DRA ファイル受付サーバ (ftp-private.ddbj.nig.ac.jp) への転送をスパコン上で完結することができます。
+
+エクセルから Submission、Experiment と Run XML を生成。
+```
+singularity exec /lustre6/public/app/submission-excel2xml/excel2xml.simg excel2xml.rb -a example -i 0001 -p PRJDB7252 example-0001_dra_metadata.xlsx
+```
+
+XML のチェック。
+```
+singularity exec /lustre6/public/app/submission-excel2xml/excel2xml.simg validate_dra_meta.rb -a example -i 0001
+```
+
 ## English  
 
 * Bioinformation and DDBJ Center
@@ -245,3 +261,19 @@ After logging in the D-way, [upload the Submission, Experiment and Run XMLs in t
 ## When Github and XML generation are not clear for you  
 
 Download [DRA metadata Excel](https://www.ddbj.nig.ac.jp/files/submission/dra_metadata.xlsx) from website, fill in and send it to the DRA team by Email (trace@ddbj.nig.ac.jp).  
+
+## NIG SuperComputer
+
+The singularity image is available at `/lustre6/public/app/submission-excel2xml/` in the [NIG SuperComputer](https://www.ddbj.nig.ac.jp/sc) operated by Bioinformation and DDBJ Center, National Institute of Genetics. The SuperComputer user can readily generate XMLs from the metadata excel file and check the XMLs.    
+The user can create DRA metadata XMLs and transfer corresponding data files to the DRA file server (ftp-private.ddbj.nig.ac.jp) in the SuperComputer.
+
+Generate Submission, Experiment and Run XMLs from the excel.
+```
+singularity exec /lustre6/public/app/submission-excel2xml/excel2xml.simg excel2xml.rb -a example -i 0001 -p PRJDB7252 example-0001_dra_metadata.xlsx
+```
+
+Validate the XMLs.
+```
+singularity exec /lustre6/public/app/submission-excel2xml/excel2xml.simg validate_dra_meta.rb -a example -i 0001
+```
+
