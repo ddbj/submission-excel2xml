@@ -116,6 +116,7 @@ Run から参照されていない Experiment が存在する。
 ## DRA ウェブ画面から XML を登録する  
 
 メタデータ XML を登録する前に[登録ディレクトリに配列データファイルをアップロードします](https://www.ddbj.nig.ac.jp/dra/submission.html#upload-sequence-data)。D-way にログイン後、[Submission、Experiment と Run XML を DRA 登録ページででアップロード](https://www.ddbj.nig.ac.jp/dra/submission.html#create-metadata-in-xml-files) します。   
+ブラウザーがタイムアウトしても処理は続いておりますので、ブラウザーを閉じてしばらく放置しておくと登録が完了します。
 
 ## Github や XML 生成方法が分からない場合  
 
@@ -257,6 +258,7 @@ See [the DRA Handbook](https://www.ddbj.nig.ac.jp/dra/submission-e.html#metadata
 
 Before submitting the metadata XMLs, [upload sequence data files to the submission directory](https://www.ddbj.nig.ac.jp/dra/submission-e.html#upload-sequence-data).  
 After logging in the D-way, [upload the Submission, Experiment and Run XMLs in the XML upload area of the DRA submission](https://www.ddbj.nig.ac.jp/dra/submission-e.html#create-metadata-in-xml-files).  
+Your web browser may time out, however, submission processes are ongoing on the backend. Please close the browser and laeve it for a while. The XML submission will be registered.
 
 ## When Github and XML generation are not clear for you  
 
