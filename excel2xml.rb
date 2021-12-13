@@ -12,7 +12,7 @@ require 'date'
 # Generate Submission, Experiment and Run metadata XMLs for DDBJ Sequence Read Archive (DRA) submission.
 # 2020-03-28 version 1.0 
 # 2020-04-24 version 1.1 allow PSUB and SSUB IDs
-# 2021-12-23 version 1.11 add bgiseq support
+# 2021-12-23 version 1.3 add bgiseq support
 #
 
 # Options

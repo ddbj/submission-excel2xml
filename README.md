@@ -4,12 +4,13 @@
 
 * 生命情報・DDBJ センター
 * 公開日: 2021-07-13  
-* version: v1.2
+* version: v1.3
 
 [DDBJ Sequence Read Archive (DRA)](https://www.ddbj.nig.ac.jp/dra/submission.html) に登録するための Submission、Experiment と Run XML を生成・チェックするためのエクセル、Singularity と Docker コンテナ、及び、SRA xsd。
 
 ## 履歴
 
+* 2021-12-13: v1.3 BGISEQ 追加
 * 2021-07-13: v1.2 [xsd 1.5.9](https://github.com/ddbj/pub/tree/master/docs/dra#changes-to-common-xml-159-on-7-july-2021) に対応。xsd を [pub](https://github.com/ddbj/pub) から取得するように変更。
 * 2020-04-24: v1.1 初版
 
