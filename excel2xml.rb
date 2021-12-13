@@ -12,6 +12,7 @@ require 'date'
 # Generate Submission, Experiment and Run metadata XMLs for DDBJ Sequence Read Archive (DRA) submission.
 # 2020-03-28 version 1.0 
 # 2020-04-24 version 1.1 allow PSUB and SSUB IDs
+# 2021-12-23 version 1.11 add bgiseq support
 #
 
 # Options
@@ -495,6 +496,11 @@ experiment_f.puts xml_experiment.EXPERIMENT_SET{|experiment_set|
 
 				when /Complete/					
 					platform.COMPLETE_GENOMICS{|platform_e|
+						platform_e.INSTRUMENT_MODEL(exp[8])
+					}
+
+				when /bgiseq|dnbseq|mgiseq/i				
+					platform.BGISEQ{|platform_e|
 						platform_e.INSTRUMENT_MODEL(exp[8])
 					}
 
