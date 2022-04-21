@@ -467,7 +467,7 @@ experiment_f.puts xml_experiment.EXPERIMENT_SET{|experiment_set|
 						platform_e.INSTRUMENT_MODEL(exp[8])
 					}
 
-				when /Ion Torrent/
+				when /Ion/
 					platform.ION_TORRENT{|platform_e|
 						platform_e.INSTRUMENT_MODEL(exp[8])
 					}
