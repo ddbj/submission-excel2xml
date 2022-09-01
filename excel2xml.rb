@@ -191,6 +191,7 @@ end
 
 # Run-file
 run_files_a = Array.new
+run_files_only_a = Array.new
 i = 0 # array index number
 
 for num, line in run_file_a
@@ -202,6 +203,7 @@ for num, line in run_file_a
 
 		if line[0]
 			run_files_a.push([line[0], run_alias, line[2], line[3]])
+			run_files_only_a.push(line[0])
 		end
 
 	elsif line[1] && line[1].to_s != "" && /^Run-(\d{1,})/ !~ line[1].to_s && i > 0
@@ -210,6 +212,14 @@ for num, line in run_file_a
 
 	i += 1
 
+end
+
+## filename duplication
+duplicated_run_files_a = Array.new
+duplicated_run_files_a = run_files_only_a.select{|e| run_files_only_a.count(e) > 1 }.sort.uniq
+
+if duplicated_run_files_a.size > 0
+	raise "Run file duplication: #{duplicated_run_files_a.join(",")}"
 end
 
 ## Create XML
