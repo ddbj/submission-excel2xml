@@ -566,6 +566,7 @@ if not runs_a.empty?
 								# fixed attributes: "checksum_method" => "MD5", "ascii_offset" => "!", "quality_encoding" => "ascii", "quality_scoring_system" => "phred"
 								if run_file[3]
 									files.FILE("checksum" => run_file[3].strip, "checksum_method" => "MD5", "ascii_offset" => "!", "quality_encoding" => "ascii", "quality_scoring_system" => "phred", "filetype" => run_file[2], "filename" => run_file[0])
+									raise "Invalid MD5 checksum value: #{run_file[3].strip}" if run_file[3].strip !~ /^[a-f0-9]{32}$/i
 								else
 									files.FILE("checksum" => "", "checksum_method" => "MD5", "ascii_offset" => "!", "quality_encoding" => "ascii", "quality_scoring_system" => "phred", "filetype" => run_file[2], "filename" => run_file[0])
 								end
