@@ -266,6 +266,11 @@ if not submission_a.empty?
 					action.ADD("source" => "#{submission_id}_Run.xml", "schema" => "run")
 				}
 
+				# check: hold date >= today
+				if hold && Date.parse(hold) < Date.today
+					raise "Error: Submission past hold date #{hold}"
+				end	
+
 				actions.ACTION{|action|
 					action.HOLD("HoldUntilDate" => "#{hold}+09:00")
 				}
