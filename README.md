@@ -3,13 +3,14 @@
 ## 日本語  
 
 * 生命情報・DDBJ センター
-* 公開日: 2021-07-13  
-* version: v1.3
+* 公開日: 2022-12-13
+* version: v1.4
 
 [DDBJ Sequence Read Archive (DRA)](https://www.ddbj.nig.ac.jp/dra/submission.html) に登録するための Submission、Experiment と Run XML を生成・チェックするためのエクセル、Singularity と Docker コンテナ、及び、SRA xsd。
 
 ## 履歴
 
+* 2022-12-13: v1.4 リード長とペアリードの向きの記入の不要化に対応
 * 2021-12-13: v1.3 BGISEQ 追加
 * 2021-07-13: v1.2 [xsd 1.5.9](https://github.com/ddbj/pub/tree/master/docs/dra#changes-to-common-xml-159-on-7-july-2021) に対応。xsd を [pub](https://github.com/ddbj/pub) から取得するように変更。
 * 2020-04-24: v1.1 初版
@@ -142,13 +143,15 @@ singularity exec /lustre6/public/app/submission-excel2xml/excel2xml.simg validat
 ## English  
 
 * Bioinformation and DDBJ Center
-* release: 2020-07-13  
-* version: v1.2
+* release: 2022-12-13    
+* version: v1.4
 
 These files are Excel, Singularity and Docker container images and SRA xsd for generation and validation of Submission, Experiment and Run XMLs for [DDBJ Sequence Read Archive (DRA)](https://www.ddbj.nig.ac.jp/dra/submission-e.html) submission. 
 
 ## History
 
+* 2022-12-13: v1.4 Read length and direction of paired reads were made optional  
+* 2021-12-13: v1.3 BGISEQ added  
 * 2021-07-13: v1.2 Update to [xsd 1.5.9](https://github.com/ddbj/pub/tree/master/docs/dra#changes-to-common-xml-159-on-7-july-2021). Download the xsd files from [pub](https://github.com/ddbj/pub).
 * 2020-04-24: v1.1 Initial release
 

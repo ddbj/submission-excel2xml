@@ -13,6 +13,7 @@ require 'date'
 # 2020-03-28 version 1.0 
 # 2020-04-24 version 1.1 allow PSUB and SSUB IDs
 # 2021-12-23 version 1.3 add bgiseq support
+# 2022-12-13 version 1.4 spot type changes
 #
 
 # Options
@@ -356,20 +357,15 @@ experiment_f.puts xml_experiment.EXPERIMENT_SET{|experiment_set|
 				end
 
 				design.LIBRARY_DESCRIPTOR{|lib_des|
+					
 					lib_des.LIBRARY_NAME(exp[3])					
 					lib_des.LIBRARY_STRATEGY(exp[6])
 					lib_des.LIBRARY_SOURCE(exp[4])
 					lib_des.LIBRARY_SELECTION(exp[5])
 
 					lib_des.LIBRARY_LAYOUT{|layout|
-						if exp[9] =~ /paired/ && exp[10] && exp[11]
-							layout.PAIRED("NOMINAL_LENGTH" => exp[10].to_i, "NOMINAL_SDEV" => exp[11])
-							paired_seq = "paired end sequencing"
-						elsif exp[9] =~ /paired/ && exp[10]
+						if exp[9] =~ /paired/ && exp[10]
 							layout.PAIRED("NOMINAL_LENGTH" => exp[10].to_i)
-							paired_seq = "paired end sequencing"
-						elsif exp[9] =~ /paired/ && exp[11]
-							layout.PAIRED("NOMINAL_SDEV" => exp[11])
 							paired_seq = "paired end sequencing"
 						elsif exp[9] =~ /paired/
 							layout.PAIRED
@@ -384,14 +380,13 @@ experiment_f.puts xml_experiment.EXPERIMENT_SET{|experiment_set|
 
 				} # lib_des
 
-				design.SPOT_DESCRIPTOR{|spot_des|
-					spot_des.SPOT_DECODE_SPEC{|decode|
+				# 454 paired
+				if exp[9] =~ /paired/ && exp[8] =~ /454/
+
+					design.SPOT_DESCRIPTOR{|spot_des|
 						
-						decode.SPOT_LENGTH(exp[12])
-
-						# 454 paired
-						if exp[9] =~ /paired/ && exp[8] =~ /454/
-
+						spot_des.SPOT_DECODE_SPEC{|decode|
+							
 							decode.READ_SPEC{|spec|
 								spec.READ_INDEX("0")
 								spec.READ_CLASS("Technical Read")
@@ -423,40 +418,13 @@ experiment_f.puts xml_experiment.EXPERIMENT_SET{|experiment_set|
 								spec.RELATIVE_ORDER("follows_read_index" => 2)
 							} # spec
 
-						# except 454 paired
-						else
-							
-							decode.READ_SPEC{|spec|
-								spec.READ_INDEX("0")
-								spec.READ_CLASS("Application Read")
-								spec.READ_TYPE("Forward")
-								spec.BASE_COORD("1")
-							} # spec
+						} # decode
 
-							if exp[9] =~ /paired/ && exp[9] =~ /FF/
-								base = (exp[12].to_i/2) + 1
-								decode.READ_SPEC{|spec|
-									spec.READ_INDEX("1")
-									spec.READ_CLASS("Application Read")
-									spec.READ_TYPE("Forward")
-									spec.BASE_COORD(base)
-								} # spec
-							elsif exp[9] =~ /paired/ && exp[9] =~ /FR/
-								base = (exp[12].to_i/2) + 1
-								decode.READ_SPEC{|spec|
-									spec.READ_INDEX("1")
-									spec.READ_CLASS("Application Read")
-									spec.READ_TYPE("Reverse")
-									spec.BASE_COORD(base)
-								} # spec
-							end
+					} # spot_des
 
-						end # if except 454 paired
+				end # if 454 paired
 
-					} # decode
-				} # spot_des
-
-			} # design
+				} # design
 
 			experiment.PLATFORM{|platform|
 
