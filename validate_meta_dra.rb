@@ -14,6 +14,7 @@ require 'optparse'
 # Most validation are done during XML registration process in D-way.
 # 2020-03-28 version 1.0 
 # 2020-04-24 version 1.1 check existence of nominal length for paired experiment
+# 2022-12-14 version 1.2 DRA separated
 #
 
 ## Options
@@ -52,16 +53,16 @@ end
 xsd_path = "/opt/submission-excel2xml/"
 
 puts "\n== XML validation against SRA xsd =="
-if FileTest.exist?("#{submission_id}_Submission.xml")
-	result = system("xmllint --schema #{xsd_path}SRA.submission.xsd --noout #{submission_id}_Submission.xml")
+if FileTest.exist?("#{submission_id}_dra_Submission.xml")
+	result = system("xmllint --schema #{xsd_path}SRA.submission.xsd --noout #{submission_id}_dra_Submission.xml")
 end
 
-if FileTest.exist?("#{submission_id}_Experiment.xml")
-	result = system("xmllint --schema #{xsd_path}SRA.experiment.xsd --noout #{submission_id}_Experiment.xml")
+if FileTest.exist?("#{submission_id}_dra_Experiment.xml")
+	result = system("xmllint --schema #{xsd_path}SRA.experiment.xsd --noout #{submission_id}_dra_Experiment.xml")
 end
 
-if FileTest.exist?("#{submission_id}_Run.xml")
-	result = system("xmllint --schema #{xsd_path}SRA.run.xsd --noout #{submission_id}_Run.xml")
+if FileTest.exist?("#{submission_id}_dra_Run.xml")
+	result = system("xmllint --schema #{xsd_path}SRA.run.xsd --noout #{submission_id}_dra_Run.xml")
 end
 
 ## object relation check
@@ -80,9 +81,9 @@ run_experiment_a = []
 puts "\n== XML content check =="
 
 # Submission
-if FileTest.exist?("#{submission_id}_Submission.xml")
+if FileTest.exist?("#{submission_id}_dra_Submission.xml")
 
-	doc_submission = Nokogiri::XML(open("#{submission_id}_Submission.xml"))
+	doc_submission = Nokogiri::XML(open("#{submission_id}_dra_Submission.xml"))
 
 	doc_submission.css('SUBMISSION').each do |submission|
 		
@@ -98,9 +99,9 @@ if FileTest.exist?("#{submission_id}_Submission.xml")
 end # if FileTest.exist?("#{submission_id}_Submission.xml")
 
 # Experiment
-if FileTest.exist?("#{submission_id}_Experiment.xml")
+if FileTest.exist?("#{submission_id}_dra_Experiment.xml")
 
-	doc_experiment = Nokogiri::XML(open("#{submission_id}_Experiment.xml"))
+	doc_experiment = Nokogiri::XML(open("#{submission_id}_dra_Experiment.xml"))
 
 	doc_experiment.css('EXPERIMENT').each do |experiment|
 	
@@ -131,9 +132,9 @@ end
 # Run
 run_file_number = 0
 run_files_checksums_a = []
-if FileTest.exist?("#{submission_id}_Run.xml")
+if FileTest.exist?("#{submission_id}_dra_Run.xml")
 
-	doc_run = Nokogiri::XML(open("#{submission_id}_Run.xml"))
+	doc_run = Nokogiri::XML(open("#{submission_id}_dra_Run.xml"))
 
 	doc_run.css('RUN').each do |run|
 	

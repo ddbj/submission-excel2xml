@@ -30,9 +30,9 @@ RUN gem install mini_portile2 -v "2.4.0" && \
     wget https://raw.githubusercontent.com/ddbj/pub/master/docs/dra/xsd/1-5/SRA.study.xsd && \
     wget https://raw.githubusercontent.com/ddbj/pub/master/docs/dra/xsd/1-5/SRA.submission.xsd
 
-COPY excel2xml.rb /usr/local/bin
-COPY validate_dra_meta.rb /usr/local/bin
+COPY excel2xml_dra.rb /usr/local/bin
+COPY validate_meta_dra.rb /usr/local/bin
 
-RUN chmod +x /usr/local/bin/excel2xml.rb && \
-    chmod +x /usr/local/bin/validate_dra_meta.rb
+RUN chmod +x /usr/local/bin/excel2xml_dra.rb && \
+    chmod +x /usr/local/bin/validate_meta_dra.rb
 

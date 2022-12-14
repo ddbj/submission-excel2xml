@@ -14,6 +14,7 @@ require 'date'
 # 2020-04-24 version 1.1 allow PSUB and SSUB IDs
 # 2021-12-23 version 1.3 add bgiseq support
 # 2022-12-13 version 1.4 spot type changes
+# 2022-12-14 version 1.5 DRA separated
 #
 
 # Options
@@ -229,19 +230,19 @@ prefix = submission_id + "_"
 # Submission
 xml_submission = Builder::XmlMarkup.new(:indent=>4)
 
-submission_f = open(prefix + "Submission.xml", "w")
+submission_f = open(prefix + "dra_Submission.xml", "w")
 submission_f.puts instruction
 
 # Experiment
 xml_experiment = Builder::XmlMarkup.new(:indent=>4)
 
-experiment_f = open(prefix + "Experiment.xml", "w")
+experiment_f = open(prefix + "dra_Experiment.xml", "w")
 experiment_f.puts instruction
 
 # Run
 xml_run = Builder::XmlMarkup.new(:indent=>4)
 
-run_f = open(prefix + "Run.xml", "w")
+run_f = open(prefix + "dra_Run.xml", "w")
 run_f.puts instruction
 
 # Output Submission XML

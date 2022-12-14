@@ -6,12 +6,12 @@ From: ubuntu:18.04
 
 %files
     # copying files from the host system to the container.
-    excel2xml.rb /usr/local/bin
-    validate_dra_meta.rb /usr/local/bin
+    excel2xml_dra.rb /usr/local/bin
+    validate_meta_dra.rb /usr/local/bin
 
 %labels
     Maintainer Bioinformation and DDBJ Center
-    Version    v1.2
+    Version    v1.5
 
 
 %runscript
@@ -33,8 +33,8 @@ From: ubuntu:18.04
     gem install builder -v "3.2.4"
     gem install date -v "3.0.0"
 
-    chmod +x /usr/local/bin/excel2xml.rb
-    chmod +x /usr/local/bin/validate_dra_meta.rb
+    chmod +x /usr/local/bin/excel2xml_dra.rb
+    chmod +x /usr/local/bin/validate_meta_dra.rb
     mkdir -p /opt/submission-excel2xml
     cd /opt/submission-excel2xml
     wget https://raw.githubusercontent.com/ddbj/pub/master/docs/dra/xsd/1-5/SRA.analysis.xsd
