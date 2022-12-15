@@ -18,6 +18,7 @@ RUN gem install mini_portile2 -v "2.4.0" && \
     gem install roo -v "2.8.3" && \
     gem install builder -v "3.2.4" && \
     gem install date -v "3.0.0" && \
+    gem install rexml -v "3.2.3" && \
     mkdir /opt/submission-excel2xml && \
     cd /opt/submission-excel2xml && \
     wget https://raw.githubusercontent.com/ddbj/pub/master/docs/dra/xsd/1-5/SRA.analysis.xsd && \
@@ -28,11 +29,24 @@ RUN gem install mini_portile2 -v "2.4.0" && \
     wget https://raw.githubusercontent.com/ddbj/pub/master/docs/dra/xsd/1-5/SRA.run.xsd && \
     wget https://raw.githubusercontent.com/ddbj/pub/master/docs/dra/xsd/1-5/SRA.sample.xsd && \
     wget https://raw.githubusercontent.com/ddbj/pub/master/docs/dra/xsd/1-5/SRA.study.xsd && \
-    wget https://raw.githubusercontent.com/ddbj/pub/master/docs/dra/xsd/1-5/SRA.submission.xsd
+    wget https://raw.githubusercontent.com/ddbj/pub/master/docs/dra/xsd/1-5/SRA.submission.xsd && \
+    wget https://raw.githubusercontent.com/ddbj/pub/master/docs/jga/xsd/1-2/JGA.analysis.xsd && \
+    wget https://raw.githubusercontent.com/ddbj/pub/master/docs/jga/xsd/1-2/JGA.common.xsd && \
+    wget https://raw.githubusercontent.com/ddbj/pub/master/docs/jga/xsd/1-2/JGA.dac.xsd && \
+    wget https://raw.githubusercontent.com/ddbj/pub/master/docs/jga/xsd/1-2/JGA.data.xsd && \
+    wget https://raw.githubusercontent.com/ddbj/pub/master/docs/jga/xsd/1-2/JGA.dataset.xsd && \
+    wget https://raw.githubusercontent.com/ddbj/pub/master/docs/jga/xsd/1-2/JGA.experiment.xsd && \
+    wget https://raw.githubusercontent.com/ddbj/pub/master/docs/jga/xsd/1-2/JGA.policy.xsd && \
+    wget https://raw.githubusercontent.com/ddbj/pub/master/docs/jga/xsd/1-2/JGA.sample.xsd && \
+    wget https://raw.githubusercontent.com/ddbj/pub/master/docs/jga/xsd/1-2/JGA.study.xsd && \
+    wget https://raw.githubusercontent.com/ddbj/pub/master/docs/jga/xsd/1-2/JGA.submission.xsd
 
 COPY excel2xml_dra.rb /usr/local/bin
 COPY validate_meta_dra.rb /usr/local/bin
+COPY excel2xml_jga.rb /usr/local/bin
+COPY validate_meta_jga.rb /usr/local/bin
 
 RUN chmod +x /usr/local/bin/excel2xml_dra.rb && \
-    chmod +x /usr/local/bin/validate_meta_dra.rb
-
+    chmod +x /usr/local/bin/validate_meta_dra.rb && \
+    chmod +x /usr/local/bin/excel2xml_jga.rb && \
+    chmod +x /usr/local/bin/validate_meta_jga.rb

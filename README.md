@@ -3,13 +3,16 @@
 ## 日本語  
 
 * 生命情報・DDBJ センター
-* 公開日: 2022-12-14
-* version: v1.5
+* 公開日: 2022-12-15
+* version: v1.6
 
-[DDBJ Sequence Read Archive (DRA)](https://www.ddbj.nig.ac.jp/dra/submission.html) に登録するための Submission、Experiment と Run XML を生成・チェックするためのエクセル、Singularity と Docker コンテナ、及び、SRA xsd。
+[Bioinformation and DDBJ Center](https://www.ddbj.nig.ac.jp/index-e.html) のデータベースに登録するためのメタデータ XML を生成、チェックするツール。
+* [DDBJ Sequence Read Archive (DRA)](https://www.ddbj.nig.ac.jp/dra/submission.html): Submission、Experiment と Run XML を生成・チェックするためのエクセルとスクリプト
+* [Japanese Genotype-phenotype Archive (JGA)](https://www.ddbj.nig.ac.jp/jga/submission.html): Submission、Study、Sample、Experiment、Data、Analysis と Dataset XML を生成・チェックするためのエクセルとスクリプト
 
 ## 履歴
 
+* 2022-12-15: v1.6 JGA を追加
 * 2022-12-14: v1.5 DRA を明確化
 * 2022-12-13: v1.4 リード長とペアリードの向きの記入の不要化に対応
 * 2021-12-13: v1.3 BGISEQ 追加
@@ -135,6 +138,89 @@ Run から参照されていない Experiment が存在する。
 
 ## JGA
 
+### エクセルにメタデータを記入  
+
+メタデータとデータファイルをエクセルの 'Submission'、'Study'、'Sample'、'Experiment'、'Data'、'Analysis' (該当する場合)、'Dataset' と 'File' シートに記入します。
+メタデータについては[ウェブサイト](https://www.ddbj.nig.ac.jp/jga/submission.html)と 'Readme' シートをご覧ください。  
+'JSUB999999_jga_metadata.xlsx' が記入例になります。  
+
+### XML 生成とチェック: Singularity  
+
+エクセルから Submission、Study、Sample、Experiment、Data、Analysis (該当する場合)、Dataset XML を生成します。
+JGA submission id を指定します。
+
+例
+* JGA Submission ID 'JSUB999999': -j JSUB999999
+```
+singularity exec excel2xml.simg excel2xml_jga.rb -j JSUB999999 JSUB999999_jga_metadata.xlsx
+```
+
+エクセルから七つの XML が生成されます。  
+* JSUB999999_Analysis.xml
+* JSUB999999_Data.xml
+* JSUB999999_Dataset.xml
+* JSUB999999_Experiment.xml
+* JSUB999999_Sample.xml
+* JSUB999999_Study.xml
+* JSUB999999_Submission.xml
+
+JGA Submission ID を指定して XML をチェックします。XML は submission-excel2xml ディレクトリ直下に配置されている必要があります。JGA xsd ファイルは build 中にコンテナー内の /opt/submission-excel2xml/ にダウンロードされています。          
+```
+singularity exec excel2xml.simg validate_meta_jga.rb -j JSUB999999
+```
+
+ここでは xsd に対するチェックと最低限のチェックが実施されます。  
+
+### XML 生成とチェック: Docker  
+
+エクセルから Submission、Study、Sample、Experiment、Data、Analysis (該当する場合)、Dataset XML を生成します。
+JGA submission id を指定します。
+
+例
+* JGA Submission ID 'JSUB999999': -j JSUB999999
+* 'path_to_excel_directory': エクセルを含むディレクトリのフルパス  
+```
+sudo docker run -v /path_to_excel_directory:/data -w /data excel2xml excel2xml_jga.rb -j JSUB999999 JSUB999999_jga_metadata.xlsx
+```
+
+エクセルから七つの XML が生成されます。  
+* JSUB999999_Analysis.xml
+* JSUB999999_Data.xml
+* JSUB999999_Dataset.xml
+* JSUB999999_Experiment.xml
+* JSUB999999_Sample.xml
+* JSUB999999_Study.xml
+* JSUB999999_Submission.xml
+
+Submission ID を指定して XML をチェックします。XML は submission-excel2xml ディレクトリ直下に配置されている必要があります。JGA xsd ファイルは build 中にコンテナー内の /opt/submission-excel2xml/ にダウンロードされています。        
+```
+sudo docker run -v /path_to_excel_directory:/data -w /data excel2xml validate_meta_jga.rb -j JSUB999999
+```
+
+ここでは xsd に対するチェックと最低限のチェックが実施されます。  
+
+### チェック
+
+#### JGA xsd に対する XML チェック  
+
+* メタデータ XML は [JGA xsd](https://github.com/ddbj/pub/tree/master/docs/jga/xsd/1-2) に対してチェックされます。メッセージに従って XML を修正してください。  
+
+#### XML の内容チェック  
+
+TBD
+
+#### オブジェクトの参照関係チェック
+
+TBD
+
+### XML を登録する  
+
+XML を JGA データ受付サーバにアップロードします。アップロードする前に [NBDC 事業推進部](https://humandbs.biosciencedbc.jp/en/data-submission) で提供申請が承認されている必要があります。
+
+### Github や XML 生成方法が分からない場合  
+
+[JGA メタデータエクセル](https://www.ddbj.nig.ac.jp/assets/files/submission/JGA_metadata.xlsx) をウェブサイトからダウンロード、内容を英語で記入し、メール (jga@ddbj.nig.ac.jp) 添付で JGA チームにお送りください。   
+
 ## NIG スパコンでの実施方法
 
 国立遺伝学研究所 生命情報・DDBJ センターが運営する [NIG スパコン](https://www.ddbj.nig.ac.jp/sc) では `/lustre6/public/app/submission-excel2xml/` 
@@ -154,18 +240,19 @@ XML のチェック。
 singularity exec /lustre6/public/app/submission-excel2xml/excel2xml.simg validate_meta_dra.rb -a example -i 0001
 ```
 
-### JGA
-
 ## English  
 
 * Bioinformation and DDBJ Center
-* release: 2022-12-14    
-* version: v1.5
+* release: 2022-12-15    
+* version: v1.6
 
-These files are Excel, Singularity and Docker container images and SRA xsd for generation and validation of Submission, Experiment and Run XMLs for [DDBJ Sequence Read Archive (DRA)](https://www.ddbj.nig.ac.jp/dra/submission-e.html) submission. 
+These files are Excel, container images and tools for generation and validation of metadata XML files for databases of [Bioinformation and DDBJ Center](https://www.ddbj.nig.ac.jp/index-e.html).
+* [DDBJ Sequence Read Archive (DRA)](https://www.ddbj.nig.ac.jp/dra/submission-e.html): generate and check Submission, Experiment and Run XML files.
+* [Japanese Genotype-phenotype Archive (JGA)](https://www.ddbj.nig.ac.jp/jga/submission-e.html): generate and check Submission, Study, Sample, Experiment, Data, Analysis and Dataset XML files.
 
 ## History
 
+* 2022-12-15: v1.6 JGA added
 * 2022-12-14: v1.5 DRA separated
 * 2022-12-13: v1.4 Read length and direction of paired reads were made optional  
 * 2021-12-13: v1.3 BGISEQ added  
@@ -295,6 +382,8 @@ Download [DRA metadata Excel](https://www.ddbj.nig.ac.jp/files/submission/dra_me
 
 ## JGA
 
+TBD
+
 ## NIG SuperComputer
 
 The singularity image is available at `/lustre6/public/app/submission-excel2xml/` in the [NIG SuperComputer](https://www.ddbj.nig.ac.jp/sc) operated by Bioinformation and DDBJ Center, National Institute of Genetics. The SuperComputer user can readily generate XMLs from the metadata excel file and check the XMLs.    
@@ -314,3 +403,5 @@ singularity exec /lustre6/public/app/submission-excel2xml/excel2xml.simg validat
 ```
 
 ### JGA
+
+TBD
