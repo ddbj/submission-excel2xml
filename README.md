@@ -219,7 +219,7 @@ XML を JGA データ受付サーバにアップロードします。アップ�
 
 ### Github や XML 生成方法が分からない場合  
 
-[JGA メタデータエクセル](https://www.ddbj.nig.ac.jp/assets/files/submission/JGA_metadata.xlsx) をウェブサイトからダウンロード、内容を英語で記入し、メール (jga@ddbj.nig.ac.jp) 添付で JGA チームにお送りください。   
+[JGA メタデータエクセル](https://github.com/ddbj/submission-excel2xml/raw/master/JGA_metadata.xlsx)をダウンロード、内容を英語で記入し、メール (jga@ddbj.nig.ac.jp) 添付で JGA チームにお送りください。   
 
 ## NIG スパコンでの実施方法
 
