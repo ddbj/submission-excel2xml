@@ -1,4 +1,4 @@
-# Excel and container images for DRA/JGA metadata XML submission  
+# Excel and container images for DRA/JGA metadata XML submissions  
 
 ## 日本語  
 
@@ -129,8 +129,7 @@ Run から参照されていない Experiment が存在する。
 
 ### DRA ウェブ画面から XML を登録する  
 
-メタデータ XML を登録する前に[登録ディレクトリに配列データファイルをアップロードします](https://www.ddbj.nig.ac.jp/dra/submission.html#upload-sequence-data)。D-way にログイン後、[Submission、Experiment と Run XML を DRA 登録ページででアップロード](https://www.ddbj.nig.ac.jp/dra/submission.html#create-metadata-in-xml-files) します。   
-ブラウザーがタイムアウトしても処理は続いておりますので、ブラウザーを閉じてしばらく放置しておくと登録が完了します。
+メタデータ XML を登録する前に[登録ディレクトリに配列データファイルをアップロードします](https://www.ddbj.nig.ac.jp/dra/submission.html#upload-sequence-data)。D-way にログイン後、[Submission、Experiment と Run XML を DRA 登録ページででアップロード](https://www.ddbj.nig.ac.jp/dra/submission.html#create-metadata-in-xml-files) します。通常5分以内に登録が完了します。   
 
 ### Github や XML 生成方法が分からない場合  
 
@@ -207,11 +206,19 @@ sudo docker run -v /path_to_excel_directory:/data -w /data excel2xml validate_me
 
 #### XML の内容チェック  
 
-TBD
-
 #### オブジェクトの参照関係チェック
 
-TBD
+以下のオブジェクト間の関係がチェックされます。
+
+* Data -> Experiment
+* Analysis -> Study
+* Analysis -> Data
+* Analysis -> Sample
+* Experiment -> Sample
+* Analysis -> Sample
+* Dataset -> Data
+* Dataset -> Analysis
+* Dataset -> Policy
 
 ### XML を登録する  
 

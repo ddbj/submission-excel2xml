@@ -242,11 +242,6 @@ if dataset_data_ref_a.sort.uniq != data_a.sort.uniq
 	puts "Error: Dataset to Data ref"
 end
 
-## Dataset -> Array
-#if dataset_array_ref_a.sort.uniq != array_a.sort.uniq
-#	puts "Error: Dataset to Array ref"
-#end
-
 # Dataset -> Analysis
 if dataset_analysis_ref_a.sort.uniq != analysis_a.sort.uniq
 	puts "Error: Dataset to Analysis ref"

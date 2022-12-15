@@ -1735,9 +1735,6 @@ end
 # checksum duplication check
 duplicated_checksums_a = []
 duplicated_checksums_a = checksums_a.select{|e| checksums_a.index(e) != checksums_a.rindex(e)}
-if duplicated_checksums_a.size > 0
-	#raise "#{duplicated_checksums_a.sort.uniq.join(",")} checksums in filelist are duplicated"
-end
 
 # Identical with files in Data and Analysis?
 data_analysis_files_a = []
