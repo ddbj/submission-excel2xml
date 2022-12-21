@@ -3,8 +3,8 @@
 ## 日本語  
 
 * 生命情報・DDBJ センター
-* 公開日: 2022-12-15
-* version: v1.6
+* 公開日: 2022-12-21
+* version: v1.7
 
 [Bioinformation and DDBJ Center](https://www.ddbj.nig.ac.jp/index-e.html) のデータベースに登録するためのメタデータ XML を生成、チェックするツール。
 * [DDBJ Sequence Read Archive (DRA)](https://www.ddbj.nig.ac.jp/dra/submission.html): Submission、Experiment と Run XML を生成・チェックするためのエクセルとスクリプト
@@ -12,6 +12,7 @@
 
 ## 履歴
 
+* 2022-12-21: v1.7 JGA Dataset reference 重複チェックを追加
 * 2022-12-15: v1.6 JGA を追加
 * 2022-12-14: v1.5 DRA を明確化
 * 2022-12-13: v1.4 リード長とペアリードの向きの記入の不要化に対応
@@ -250,8 +251,8 @@ singularity exec /lustre6/public/app/submission-excel2xml/excel2xml.simg validat
 ## English  
 
 * Bioinformation and DDBJ Center
-* release: 2022-12-15    
-* version: v1.6
+* release: 2022-12-21    
+* version: v1.7
 
 These files are Excel, container images and tools for generation and validation of metadata XML files for databases of [Bioinformation and DDBJ Center](https://www.ddbj.nig.ac.jp/index-e.html).
 * [DDBJ Sequence Read Archive (DRA)](https://www.ddbj.nig.ac.jp/dra/submission-e.html): generate and check Submission, Experiment and Run XML files.
@@ -259,6 +260,7 @@ These files are Excel, container images and tools for generation and validation 
 
 ## History
 
+* 2022-12-21: v1.7 Dataset reference duplication check added
 * 2022-12-15: v1.6 JGA added
 * 2022-12-14: v1.5 DRA separated
 * 2022-12-13: v1.4 Read length and direction of paired reads were made optional  
