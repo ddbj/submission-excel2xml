@@ -1,4 +1,4 @@
-# Excel and container images for DRA/JGA metadata XML submissions  
+# Excel and container images for DRA/JGA/AGD metadata XML submissions  
 
 ## 日本語  
 
