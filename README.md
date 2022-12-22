@@ -3,15 +3,17 @@
 ## 日本語  
 
 * 生命情報・DDBJ センター
-* 公開日: 2022-12-21
-* version: v1.7
+* 公開日: 2022-12-22
+* version: v1.8
 
 [Bioinformation and DDBJ Center](https://www.ddbj.nig.ac.jp/index-e.html) のデータベースに登録するためのメタデータ XML を生成、チェックするツール。
 * [DDBJ Sequence Read Archive (DRA)](https://www.ddbj.nig.ac.jp/dra/submission.html): Submission、Experiment と Run XML を生成・チェックするためのエクセルとスクリプト
 * [Japanese Genotype-phenotype Archive (JGA)](https://www.ddbj.nig.ac.jp/jga/submission.html): Submission、Study、Sample、Experiment、Data、Analysis と Dataset XML を生成・チェックするためのエクセルとスクリプト
+* [AMED Genome Group Sharing Database (AGD)](https://www.ddbj.nig.ac.jp/agd/submission.html): Submission、Study、Sample、Experiment、Data、Analysis と Dataset XML を生成・チェックするためのエクセルとスクリプト
 
 ## 履歴
 
+* 2022-12-22: v1.8 AGD 対応
 * 2022-12-21: v1.7 JGA Dataset reference 重複チェックを追加
 * 2022-12-15: v1.6 JGA を追加
 * 2022-12-14: v1.5 DRA を明確化
@@ -229,6 +231,10 @@ XML を JGA データ受付サーバにアップロードします。アップ�
 
 [JGA メタデータエクセル](https://github.com/ddbj/submission-excel2xml/raw/master/JGA_metadata.xlsx)をダウンロード、内容を英語で記入し、メール (jga@ddbj.nig.ac.jp) 添付で JGA チームにお送りください。   
 
+## AGD
+
+JGA と同様の手順になります。Submission ID には AGD Submission ID (例 ASUB000001) を指定します。
+
 ## NIG スパコンでの実施方法
 
 国立遺伝学研究所 生命情報・DDBJ センターが運営する [NIG スパコン](https://www.ddbj.nig.ac.jp/sc) では `/lustre6/public/app/submission-excel2xml/` 
@@ -248,18 +254,28 @@ XML のチェック。
 singularity exec /lustre6/public/app/submission-excel2xml/excel2xml.simg validate_meta_dra.rb -a example -i 0001
 ```
 
+### JGA
+
+TBD
+
+### AGD
+
+TBD
+
 ## English  
 
 * Bioinformation and DDBJ Center
-* release: 2022-12-21    
-* version: v1.7
+* release: 2022-12-22    
+* version: v1.8
 
 These files are Excel, container images and tools for generation and validation of metadata XML files for databases of [Bioinformation and DDBJ Center](https://www.ddbj.nig.ac.jp/index-e.html).
 * [DDBJ Sequence Read Archive (DRA)](https://www.ddbj.nig.ac.jp/dra/submission-e.html): generate and check Submission, Experiment and Run XML files.
 * [Japanese Genotype-phenotype Archive (JGA)](https://www.ddbj.nig.ac.jp/jga/submission-e.html): generate and check Submission, Study, Sample, Experiment, Data, Analysis and Dataset XML files.
+* [AMED Genome Group Sharing Database (AGD)](https://www.ddbj.nig.ac.jp/agd/submission-e.html): generate and check Submission, Study, Sample, Experiment, Data, Analysis and Dataset XML files.
 
 ## History
 
+* 2022-12-22: v1.8 AGD
 * 2022-12-21: v1.7 Dataset reference duplication check added
 * 2022-12-15: v1.6 JGA added
 * 2022-12-14: v1.5 DRA separated
@@ -393,6 +409,10 @@ Download [DRA metadata Excel](https://www.ddbj.nig.ac.jp/files/submission/dra_me
 
 TBD
 
+## AGD
+
+Same with JGA. Specify the AGD Submission ID (e.g. ASUB000001).
+
 ## NIG SuperComputer
 
 The singularity image is available at `/lustre6/public/app/submission-excel2xml/` in the [NIG SuperComputer](https://www.ddbj.nig.ac.jp/sc) operated by Bioinformation and DDBJ Center, National Institute of Genetics. The SuperComputer user can readily generate XMLs from the metadata excel file and check the XMLs.    
@@ -412,5 +432,9 @@ singularity exec /lustre6/public/app/submission-excel2xml/excel2xml.simg validat
 ```
 
 ### JGA
+
+TBD
+
+### AGD
 
 TBD

@@ -10,6 +10,7 @@ require 'optparse'
 #
 
 # Update history
+# 2022-12-22 AGD
 # 2022-12-21 Check duplicated references from Datasets to Data and Analysis
 # 2022-12-14 publicly released
 
@@ -18,10 +19,10 @@ account = ""
 submission_id = ""
 OptionParser.new{|opt|
 
-	opt.on('-j [JSUB ID]', 'JSUB submission ID'){|v|
-		raise "usage: -j JGA submission ID (JSUB000001)" if v.nil? || !(/^JSUB\d{6}$/ =~ v)
+	opt.on('-j [JSUB ID]', 'JSUB/ASUB submission ID'){|v|
+		raise "usage: -j JGA/AGD submission ID (JSUB000001 or ASUB000001)" if v.nil? || !(/^[JA]SUB\d{6}$/ =~ v)
 		submission_id = v
-		puts "JGA Submission ID: #{v}"
+		puts "JGA/AGD Submission ID: #{v}"
 	}
 
 	begin
@@ -75,11 +76,6 @@ dataset_a = Array.new
 dataset_data_ref_a = Array.new
 dataset_analysis_ref_a = Array.new
 dataset_policy_ref_a = Array.new
-dataset_data_ref_per_dataset_a = Array.new
-dataset_analysis_ref_per_dataset_a = Array.new
-datasets_data_ref_h = Hash.new
-datasets_analysis_ref_h = Hash.new
-
 policy_a = Array.new
 nbdc_policy = false
 
@@ -163,44 +159,38 @@ for meta in xml_a
 		doc = REXML::Document.new(open("#{submission_id}_#{meta}.xml"))
 		doc.elements.each("DATASETS/DATASET"){|dataset_e|
 			
-			dataset_alias = dataset_e.attributes["alias"]
-			dataset_data_ref_per_dataset_a = Array.new
-			dataset_analysis_ref_per_dataset_a = Array.new
-
-			dataset_a.push(dataset_alias)
+			dataset_a.push(dataset_e.attributes["alias"])
 			center_name_a.push(dataset_e.attributes["center_name"])
 		
 			# data_ref
 			dataset_e.elements.each("DATA_REFS/DATA_REF"){|data_ref|
 				dataset_data_ref_a.push(data_ref.attributes["refname"])
-				dataset_data_ref_per_dataset_a.push(data_ref.attributes["refname"])
 				center_name_a.push(data_ref.attributes["refcenter"])
 			}
 		
 			# analysis_ref
 			dataset_e.elements.each("ANALYSIS_REFS/ANALYSIS_REF"){|analysis_ref|
 				dataset_analysis_ref_a.push(analysis_ref.attributes["refname"])
-				dataset_analysis_ref_per_dataset_a.push(analysis_ref.attributes["refname"])
 				center_name_a.push(analysis_ref.attributes["refcenter"])
 			}
 
 			# policy_ref
-			if dataset_e.elements["POLICY_REF"].attributes["accession"] == "JGAP000001"
+			if (dataset_e.elements["POLICY_REF"].attributes["accession"] == "JGAP000001") || (dataset_e.elements["POLICY_REF"].attributes["accession"] == "AGDP_000001")
 				nbdc_policy = true
 			else
 				dataset_policy_ref_a.push(dataset_e.elements["POLICY_REF"].attributes["accession"])
 				center_name_a.push(dataset_e.elements["POLICY_REF"].attributes["refcenter"])
 			end
-
-			# more than one Dataset
-			datasets_data_ref_h.store(dataset_alias, dataset_data_ref_per_dataset_a.sort.uniq)
-			datasets_analysis_ref_h.store(dataset_alias, dataset_analysis_ref_per_dataset_a.sort.uniq)
 		
 		}
 		
 	end
 
 end
+
+##
+## Relationship checks
+##
 
 ## Experiment
 # Experiment -> Study
@@ -256,33 +246,26 @@ if dataset_data_ref_a.sort.uniq != data_a.sort.uniq
 	puts "Error: Dataset to Data ref"
 end
 
+# Dataset -> Data duplication
+if dataset_data_ref_a.select{|e| dataset_data_ref_a.count(e) > 1}.size > 0
+	puts "Error: Dataset to Data ref duplicated: #{dataset_data_ref_a.select{|e| dataset_data_ref_a.count(e) > 1}.sort.uniq.join(",")}"	
+end
+
 # Dataset -> Analysis
 if dataset_analysis_ref_a.sort.uniq != analysis_a.sort.uniq
 	puts "Error: Dataset to Analysis ref"
 end
 
+# Dataset -> Analysis duplication
+if dataset_analysis_ref_a.select{|e| dataset_analysis_ref_a.count(e) > 1}.size > 0
+	puts "Error: Dataset to Analysis ref duplicated: #{dataset_analysis_ref_a.select{|e| dataset_analysis_ref_a.count(e) > 1}.sort.uniq.join(",")}"	
+end
+
 # Dataset -> Policy
-if !nbdc_policy && dataset_policy_ref_a.sort.uniq[0] !~ /JGAP\d{11}/
+if submission_id =~ /^JSUB\d{6}$/ && !nbdc_policy && (dataset_policy_ref_a.sort.uniq[0] !~ /JGAP\d{6}/) 
 	puts "Error: Dataset to Policy ref"
 end
 
-## if there are more than one Dataset, check duplicated references to Data and Analysis.
-# Data
-datasets_data_ref_values_a = datasets_data_ref_h.values.flatten
-datasets_data_ref_duplicated_a = Array.new
-datasets_data_ref_duplicated_a = datasets_data_ref_values_a.select{|e| datasets_data_ref_values_a.count(e) > 1 }.sort.uniq
-
-# Dataset to Analysis references are duplicated.
-if datasets_data_ref_duplicated_a.size > 0
-	puts "Error: Dataset to Data ref duplicated among Datasets: #{datasets_data_ref_duplicated_a.join(",")}"	
-end
-
-# Analysis
-datasets_analysis_ref_values_a = datasets_analysis_ref_h.values.flatten
-datasets_analysis_ref_duplicated_a = Array.new
-datasets_analysis_ref_duplicated_a = datasets_analysis_ref_values_a.select{|e| datasets_analysis_ref_values_a.count(e) > 1 }.sort.uniq
-
-# Dataset to Analysis references are duplicated.
-if datasets_analysis_ref_duplicated_a.size > 0
-	puts "Error: Dataset to Analysis ref duplicated among Datasets: #{datasets_analysis_ref_duplicated_a.join(",")}"	
+if submission_id =~ /^ASUB\d{6}$/ && !nbdc_policy && (dataset_policy_ref_a.sort.uniq[0] !~ /AGDP_\d{6}/)
+	puts "Error: Dataset to Policy ref"
 end

@@ -12,6 +12,7 @@ require 'optparse'
 #
 
 # Update history
+# 2022-12-22 AGD
 # 2022-12-14 publicly released
 
 ### Options
@@ -21,16 +22,16 @@ submission_id = ""
 study_accession = ""
 OptionParser.new{|opt|
 
-	opt.on('-j [JSUB ID]', 'JSUB submission ID'){|v|
-		raise "usage: -j JGA submission ID (JSUB000001)" if v.nil? || !(/^JSUB\d{6}$/ =~ v)
+	opt.on('-j [JSUB ID]', 'JSUB/ASUB submission ID'){|v|
+		raise "usage: -j JGA/AGD submission ID (JSUB000001 or ASUB000001)" if v.nil? || !(/^[JA]SUB\d{6}$/ =~ v)
 		submission_id = v
-		puts "JGA Submission ID: #{v}"
+		puts "JGA/AGD Submission ID: #{v}"
 	}
 
-	opt.on('-s [study accession]', 'JGA study accession'){|v|
-		raise "usage: -j study accession (JGAS000001)" if !(/^JGAS\d{6}$/ =~ v)
+	opt.on('-s [study accession]', 'JGA/AGD study accession'){|v|
+		raise "usage: -j study accession (JGAS000001 or AGDS_000001)" if !(/^(JGAS|AGDS_)\d{6}$/ =~ v)
 		study_accession = v
-		puts "JGA Study Accession: #{v}"
+		puts "JGA/AGD Study Accession: #{v}"
 	}
 
 	begin
@@ -337,7 +338,7 @@ for num, line in experiment_a
 			
 			if line[1] =~ /Sample-\d{1,}/
 				sample_ref = submission_id + "_Sample_" + sprintf("%06d", line[1].split("-")[1].to_i)
-			elsif line[1] =~ /JGAN\d{9}/				
+			elsif line[1] =~ /(JGAN|AGDN_)\d{9}/				
 				sample_ref = line[1]
 			end
 
@@ -365,7 +366,7 @@ for num, line in data_a
 
 			if line[1] =~ /Experiment-\d{1,}/
 				experiment_ref = submission_id + "_Experiment_" + sprintf("%06d", line[1].split("-")[1].to_i)
-			elsif line[1] =~ /JGAX\d{9}/				
+			elsif line[1] =~ /(JGAX|AGDX_)\d{9}/				
 				experiment_ref = line[1]
 			end
 			
@@ -392,7 +393,7 @@ for num, line in analysis_a
 			# STUDY_REF
 			if line[1] =~ /Study-\d{1,}/
 				study_ref = submission_id + "_Study_" + sprintf("%06d", line[1].split("-")[1].to_i)				
-			elsif line[1] =~ /JGAS\d{6}/
+			elsif line[1] =~ /(JGAS|AGDS_)\d{6}/
 				study_ref = line[1]
 			else
 				study_ref = nil
@@ -409,7 +410,7 @@ for num, line in analysis_a
 					if sample_ref =~ /Sample-\d{1,}/
 						sample_ref = submission_id + "_Sample_" + sprintf("%06d", sample_ref.split("-")[1].to_i)
 						sample_ref_a.push(sample_ref)
-					elsif sample_ref =~ /JGAN\d{9}/
+					elsif sample_ref =~ /(JGAN|AGDN_)\d{9}/
 						sample_ref_a.push(sample_ref)
 					else
 						raise "Invalid sample ref from Analysis: #{sample_ref}"
@@ -429,7 +430,7 @@ for num, line in analysis_a
 					if data_ref =~ /Data-\d{1,}/
 						data_ref = submission_id + "_Data_" + sprintf("%06d", data_ref.split("-")[1].to_i)
 						data_ref_a.push(data_ref)
-					elsif data_ref =~ /JGAR\d{9}/
+					elsif data_ref =~ /(JGAR|AGDR_)\d{9}/
 						data_ref_a.push(data_ref)
 					else
 						raise "Invalid data ref from Analysis: #{data_ref}"
@@ -478,7 +479,7 @@ for num, line in dataset_a
 					if data_ref =~ /Data-\d{1,}/
 						data_ref = submission_id + "_Data_" + sprintf("%06d", data_ref.split("-")[1].to_i)
 						data_ref_a.push(data_ref)
-					elsif data_ref =~ /JGAR\d{9}/
+					elsif data_ref =~ /(JGAR|AGDR_)\d{9}/
 						data_ref_a.push(data_ref)
 					else
 						raise "Invalid data ref from Dataset: #{data_ref}"
@@ -499,7 +500,7 @@ for num, line in dataset_a
 					if analysis_ref =~ /Analysis-\d{1,}/
 						analysis_ref = submission_id + "_Analysis_" + sprintf("%06d", analysis_ref.split("-")[1].to_i)
 						analysis_ref_a.push(analysis_ref)
-					elsif analysis_ref =~ /JGAZ\d{9}/
+					elsif analysis_ref =~ /(JGAZ|AGDZ_)\d{9}/
 						analysis_ref_a.push(analysis_ref)
 					else
 						raise "Invalid analysis ref from Dataset: #{analysis_ref}"
@@ -940,7 +941,7 @@ experiment_f.puts xml_experiment.EXPERIMENT_SET{|experiment_set|
 		experiment_set.EXPERIMENT("accession" => "", "center_name" => center_name, "alias" => exp[0]){|experiment|
 			experiment.TITLE(exp[2])
 			
-			if study_accession =~ /JGAS\d{6}/
+			if study_accession =~ /(JGAS|AGDS_)\d{6}/
 				experiment.STUDY_REF("accession" => study_accession, "refcenter" => center_name, "refname" => study_accession)
 			else
 				experiment.STUDY_REF("accession" => "", "refcenter" => center_name, "refname" => submission_id + "_Study_000001")
@@ -948,7 +949,7 @@ experiment_f.puts xml_experiment.EXPERIMENT_SET{|experiment_set|
 			
 			if exp[1] =~ /_Sample_\d{4}/
 				experiment.SAMPLE_REF("accession" => "", "refcenter" => center_name, "refname" => exp[1])
-			elsif exp[1] =~ /JGAN\d{9}/
+			elsif exp[1] =~ /(JGAN|AGDN_)\d{9}/
 				experiment.SAMPLE_REF("accession" => exp[1], "refcenter" => center_name, "refname" => exp[1])
 			end
 			
@@ -1077,7 +1078,7 @@ if not datas_a.empty?
 
 				if data[1] =~ /_Experiment_\d{4,6}/
 					data_e.EXPERIMENT_REF("accession" => "", "refcenter" => center_name, "refname" => data[1])					
-				elsif data[1] =~ /JGAX\d{9}/
+				elsif data[1] =~ /(JGAX|AGDX_)\d{9}/
 					data_e.EXPERIMENT_REF("accession" => data[1], "refcenter" => center_name, "refname" => data[1])
 				end
 
@@ -1217,7 +1218,7 @@ if not analyses_a.empty?
 					analysis_e.STUDY_REFS{|study_refs|
 						study_refs.STUDY_REF("accession" => "", "refcenter" => center_name, "refname" => ana[1])
 					}
-				elsif ana[1] =~ /^JGAS\d{6}$/
+				elsif ana[1] =~ /^(JGAS|AGDS_)\d{6}$/
 					analysis_e.STUDY_REFS{|study_refs|
 						study_refs.STUDY_REF("accession" => ana[1], "refcenter" => center_name, "refname" => ana[1])
 					}
@@ -1228,7 +1229,7 @@ if not analyses_a.empty?
 						ana[2].each{|ref|
 							if ref =~ /^#{submission_id}_Sample_\d{4,6}$/
 								sample_refs.SAMPLE_REF("accession" => "", "refcenter" => center_name, "refname" => ref)
-							elsif ref =~ /^JGAN\d{9}$/
+							elsif ref =~ /^(JGAN|AGDN_)\d{9}$/
 								sample_refs.SAMPLE_REF("accession" => ref, "refcenter" => center_name, "refname" => ref)
 							else
 								raise "Invalid sample ref from Dataset: #{ref}"
@@ -1242,7 +1243,7 @@ if not analyses_a.empty?
 						ana[3].each{|ref|
 							if ref =~ /^#{submission_id}_Data_\d{4,6}$/
 								data_refs.DATA_REF("accession" => "", "refcenter" => center_name, "refname" => ref)
-							elsif ref =~ /^JGAR\d{9}$/
+							elsif ref =~ /^(JGAR|AGDR_)\d{9}$/
 								data_refs.DATA_REF("accession" => ref, "refcenter" => center_name, "refname" => ref)
 							else
 								raise "Invalid data ref from Dataset: #{ref}"
@@ -1485,6 +1486,7 @@ raise "Files #{combined_files_duplicated_a.join("\n")}: duplicated between Data 
 
 # Data set
 if not datasets_a.empty?
+	
 	dataset_f.puts xml_dataset.DATASETS{|dataset_set|
 
 		for dataset in datasets_a
@@ -1499,8 +1501,8 @@ if not datasets_a.empty?
 				# Single policy is associated with a data set.
 				if dataset[1].empty? && dataset[2].empty?
 					
-					# A default NBDC policy is associated.
-					if dataset[3].nil? || dataset[3] == "JGAP000001"
+					# A default NBDC policy is associated. JGA
+					if (dataset[3].nil? || dataset[3] == "JGAP000001") && submission_id =~ /^JSUB\d{6}$/
 
 						dataset_e.DATA_REFS{|data_refs|
 							for data in datas_a
@@ -1534,7 +1536,7 @@ if not datasets_a.empty?
 						dataset_e.POLICY_REF("accession" => dataset[3], "refcenter" => "nbdc", "refname" => dataset[3])
 
 					# AGD default
-					elsif dataset[3] && dataset[3] == "AGDP_00000000001"
+					elsif (dataset[3].nil? || dataset[3] == "AGDP_000001") && submission_id =~ /^ASUB\d{6}$/
 
 						dataset_e.DATA_REFS{|data_refs|
 							for data in datas_a
@@ -1548,10 +1550,10 @@ if not datasets_a.empty?
 							end
 						}
 
-						dataset_e.POLICY_REF("accession" => dataset[3], "refcenter" => "nbdc", "refname" => dataset[3])
+						dataset_e.POLICY_REF("accession" => "AGDP_000001", "refcenter" => "nbdc", "refname" => dataset[3])
 
-					# AGD
-					elsif dataset[3] && /^AGDP_\d{6}$/ =~ dataset[3] && dataset[3] != "AGDP_00000000001"
+					# AGD original policy
+					elsif dataset[3] && /^AGDP_\d{6}$/ =~ dataset[3] && dataset[3] != "AGDP_000001"
 
 						dataset_e.DATA_REFS{|data_refs|
 							for data in datas_a
@@ -1577,7 +1579,7 @@ if not datasets_a.empty?
 							dataset[1].each{|ref|
 								if ref =~ /_Data_\d{4,6}/
 									data_refs.DATA_REF("accession" => "", "refcenter" => center_name, "refname" => ref)
-								elsif ref =~ /JGAR\d{9}/
+								elsif ref =~ /(JGAR|AGDR_)\d{9}/
 									data_refs.DATA_REF("accession" => ref, "refcenter" => center_name, "refname" => ref)
 								else
 									raise "Invalid data ref from Dataset: #{ref}"
@@ -1591,7 +1593,7 @@ if not datasets_a.empty?
 							dataset[2].each{|ref|
 								if ref =~ /_Analysis_\d{4,6}/
 									analysis_refs.ANALYSIS_REF("accession" => "", "refcenter" => center_name, "refname" => ref)
-								elsif ref =~ /JGAZ\d{9}/
+								elsif ref =~ /(JGAZ|AGDZ_)\d{9}/
 									analysis_refs.ANALYSIS_REF("accession" => ref, "refcenter" => center_name, "refname" => ref)
 								else
 									raise "Invalid analysis ref from Dataset: #{ref}"
@@ -1600,16 +1602,18 @@ if not datasets_a.empty?
 						}
 					end
 
-					# A default NBDC policy is associated.
-					if dataset[3].nil? || dataset[3] == "JGAP000001"
-						
+					# A default NBDC policy is associated. JGA
+					if (dataset[3].nil? || dataset[3] == "JGAP000001") && submission_id =~ /^JSUB\d{6}$/
 						dataset_e.POLICY_REF("accession" => "JGAP000001", "refcenter" => "nbdc", "refname" => "JGAP000001")
-					
 					# A submitter's policy approved by NBDC is associated.
 					elsif dataset[3] && /^JGAP\d{6}$/ =~ dataset[3] && dataset[3] != "JGAP000001"
-					
 						dataset_e.POLICY_REF("accession" => dataset[3], "refcenter" => "nbdc", "refname" => dataset[3])
-					
+					# AGD default
+					elsif (dataset[3].nil? || dataset[3] == "AGDP_000001") && submission_id =~ /^ASUB\d{6}$/
+						dataset_e.POLICY_REF("accession" => "AGDP_000001", "refcenter" => "nbdc", "refname" => dataset[3])
+					# AGD original policy
+					elsif dataset[3] && /^AGDP_\d{6}$/ =~ dataset[3] && dataset[3] != "AGDP_000001"
+						dataset_e.POLICY_REF("accession" => dataset[3], "refcenter" => "nbdc", "refname" => dataset[3])
 					end
 
 				end
@@ -1619,7 +1623,8 @@ if not datasets_a.empty?
 
 	}
 
-# Data set
+# Data set 
+# if not datasets_a.empty?
 else
 
 	dataset_f.puts xml_dataset.DATASETS{|dataset_set|
@@ -1632,7 +1637,7 @@ else
 			dataset_e.DATASET_TYPE(dataset[6].strip) if dataset[6]
 
 			# only the NBDC guideline is associated to a dataset.
-			if dataset[1].empty? && dataset[2].empty? && dataset[3].nil? &&  policies_a.empty?
+			if dataset[1].empty? && dataset[2].empty? && dataset[3].nil? && policies_a.empty?
 
 				dataset_e.DATA_REFS{|data_refs|
 					for data in datas_a
@@ -1646,8 +1651,12 @@ else
 					end
 				}
 
-				dataset_e.POLICY_REF("accession" => "JGAP000001", "refcenter" => "nbdc", "refname" => "JGAP000001")
-
+				if submission_id =~ /^JSUB\d{6}$/
+					dataset_e.POLICY_REF("accession" => "JGAP000001", "refcenter" => "nbdc", "refname" => "JGAP000001")
+				elsif submission_id =~ /^ASUB\d{6}$/
+					dataset_e.POLICY_REF("accession" => "AGDP_000001", "refcenter" => "nbdc", "refname" => "AGDP_000001")
+				end
+					
 			# only a submitter's policy is associated to a dataset.
 			elsif dataset[1].empty? && dataset[2].empty? && dataset[3] && !policies_a.empty?
 
@@ -1674,7 +1683,7 @@ else
 						dataset[1].each{|ref|
 							if ref =~ /_Data_\d{4,6}/
 								data_refs.DATA_REF("accession" => "", "refcenter" => center_name, "refname" => ref)
-							elsif ref =~ /JGAR\d{9}/
+							elsif ref =~ /(JGAR|AGDR_)\d{9}/
 								data_refs.DATA_REF("accession" => ref, "refcenter" => center_name, "refname" => ref)
 							else
 								raise "Invalid data ref from Dataset: #{ref}"
@@ -1688,7 +1697,7 @@ else
 						dataset[2].each{|ref|
 							if ref =~ /_Analysis_\d{4,6}/
 								analysis_refs.ANALYSIS_REF("accession" => "", "refcenter" => center_name, "refname" => ref)
-							elsif ref =~ /JGAZ\d{9}/
+							elsif ref =~ /(JGAZ|AGDZ_)\d{9}/
 								analysis_refs.ANALYSIS_REF("accession" => ref, "refcenter" => center_name, "refname" => ref)
 							else
 								raise "Invalid analysis ref from Dataset: #{ref}"
@@ -1699,7 +1708,6 @@ else
 
 				if dataset[3]
 					ref = dataset[3]
-					#ref = submission_id + "_Policy_" + sprintf("%06d", policy_ref.strip.split("-")[1].to_i)
 					dataset_e.POLICY_REF("accession" => ref, "refcenter" => "nbdc", "refname" => "")
 				end
 			
