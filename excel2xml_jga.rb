@@ -12,6 +12,7 @@ require 'optparse'
 #
 
 # Update history
+# 2022-12-23 change handling of submission date 
 # 2022-12-22 AGD
 # 2022-12-14 publicly released
 
@@ -156,7 +157,12 @@ for num, line in submission_a
 	end
 
 	if line[0] == "Submission Date"
-		submission_h.store("submission_date", submission_a[i+1][1][0].strftime("%Y-%m-%dT00:00:00+09:00"))
+		if submission_a[i+1] && submission_a[i+1][1] && submission_a[i+1][1][0] && submission_a[i+1][1][0].strftime("%Y-%m-%dT00:00:00+09:00")
+			submission_h.store("submission_date", submission_a[i+1][1][0].strftime("%Y-%m-%dT00:00:00+09:00"))
+		else
+			submission_h.store("submission_date", Date.today.strftime("%Y-%m-%dT00:00:00+09:00"))
+			puts "Warning: The submission date is empty. Today #{Date.today.strftime("%Y-%m-%dT00:00:00+09:00")} is used."
+		end
 	end
 
 	i += 1
