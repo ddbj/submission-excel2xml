@@ -4,7 +4,7 @@
 
 * 生命情報・DDBJ センター
 * 公開日: 2022-12-22
-* version: v1.8
+* version: v1.9
 
 [Bioinformation and DDBJ Center](https://www.ddbj.nig.ac.jp/index-e.html) のデータベースに登録するためのメタデータ XML を生成、チェックするツール。
 * [DDBJ Sequence Read Archive (DRA)](https://www.ddbj.nig.ac.jp/dra/submission.html): Submission、Experiment と Run XML を生成・チェックするためのエクセルとスクリプト
@@ -13,6 +13,7 @@
 
 ## 履歴
 
+* 2022-12-23: v1.9 JGA メタデータエクセルに AGD を統合
 * 2022-12-22: v1.8 AGD 対応
 * 2022-12-21: v1.7 JGA Dataset reference 重複チェックを追加
 * 2022-12-15: v1.6 JGA を追加
@@ -51,7 +52,7 @@ sudo docker build -t excel2xml .
 
 ### エクセルにメタデータを記入  
 
-メタデータとデータファイルをエクセルの 'Submission'、'Experiment'、'Run' と 'Run-file' シートに記入します。メタデータについては[ウェブサイト](https://www.ddbj.nig.ac.jp/dra/submission.html#metadata)と 'Readme' シートをご覧ください。  
+メタデータとデータファイルをエクセル metadata_dra.xlsx の 'Submission'、'Experiment'、'Run' と 'Run-file' シートに記入します。メタデータについては[ウェブサイト](https://www.ddbj.nig.ac.jp/dra/submission.html#metadata)と 'Readme' シートをご覧ください。  
 'example-0001_dra_metadata.xlsx' が記入例になります。  
 
 ### XML 生成とチェック: Singularity  
@@ -142,7 +143,7 @@ Run から参照されていない Experiment が存在する。
 
 ### エクセルにメタデータを記入  
 
-メタデータとデータファイルをエクセルの 'Submission'、'Study'、'Sample'、'Experiment'、'Data'、'Analysis' (該当する場合)、'Dataset' と 'File' シートに記入します。
+メタデータとデータファイルをエクセル JGA_metadata.xlsx の 'Submission'、'Study'、'Sample'、'Experiment'、'Data'、'Analysis' (該当する場合)、'Dataset' と 'File' シートに記入します。
 メタデータについては[ウェブサイト](https://www.ddbj.nig.ac.jp/jga/submission.html)と 'Readme' シートをご覧ください。  
 'JSUB999999_jga_metadata.xlsx' が記入例になります。  
 
@@ -233,7 +234,8 @@ XML を JGA データ受付サーバにアップロードします。アップ�
 
 ## AGD
 
-JGA と同様の手順になります。Submission ID には AGD Submission ID (例 ASUB000001) を指定します。
+JGA と同様の手順になります。AGD のメタデータも JGA_metadata.xlsx に記入します。   
+Submission ID には AGD Submission ID (例 ASUB000001) を指定します。
 
 ## NIG スパコンでの実施方法
 
@@ -265,8 +267,8 @@ TBD
 ## English  
 
 * Bioinformation and DDBJ Center
-* release: 2022-12-22    
-* version: v1.8
+* release: 2022-12-23    
+* version: v1.9
 
 These files are Excel, container images and tools for generation and validation of metadata XML files for databases of [Bioinformation and DDBJ Center](https://www.ddbj.nig.ac.jp/index-e.html).
 * [DDBJ Sequence Read Archive (DRA)](https://www.ddbj.nig.ac.jp/dra/submission-e.html): generate and check Submission, Experiment and Run XML files.
@@ -275,6 +277,7 @@ These files are Excel, container images and tools for generation and validation 
 
 ## History
 
+* 2022-12-23: v1.9 AGD merged to the JGA excel
 * 2022-12-22: v1.8 AGD
 * 2022-12-21: v1.7 Dataset reference duplication check added
 * 2022-12-15: v1.6 JGA added
@@ -313,7 +316,7 @@ sudo docker build -t excel2xml .
 
 ### Enter metadata in the excel
 
-Enter metadata and data files in the 'Submission', 'Experiment', 'Run' and 'Run-file' sheets of the excel.  
+Enter metadata and data files in the 'Submission', 'Experiment', 'Run' and 'Run-file' sheets of the excel "metadata_dra.xlsx".  
 See our [website](https://www.ddbj.nig.ac.jp/dra/submission-e.html#metadata) for metadata and 'Readme' sheet of the excel for details.   
 See 'example-0001_dra_metadata.xlsx' for example.
 
@@ -411,7 +414,8 @@ TBD
 
 ## AGD
 
-Same with JGA. Specify the AGD Submission ID (e.g. ASUB000001).
+Same with JGA. Enter AGD metadata to the JGA excel "JGA_metadata.xlsx".   
+Specify the AGD Submission ID (e.g. ASUB000001).
 
 ## NIG SuperComputer
 
