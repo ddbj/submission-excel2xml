@@ -15,6 +15,7 @@ require 'optparse'
 # 2020-03-28 version 1.0 
 # 2020-04-24 version 1.1 check existence of nominal length for paired experiment
 # 2022-12-14 version 1.2 DRA separated
+# 2022-12-14 version 1.3 Nominal length was made optional for paired.
 #
 
 ## Options
@@ -113,9 +114,9 @@ if FileTest.exist?("#{submission_id}_dra_Experiment.xml")
 			experiment_paired_alias_a.push(exp_aliase)
 
 			# nominal length
-			unless experiment.at_css('PAIRED')['NOMINAL_LENGTH']
-				puts "Error: Experiment: #{exp_aliase} NOMINAL_LENGTH is required for paired library."
-			end
+			# unless experiment.at_css('PAIRED')['NOMINAL_LENGTH']
+				# puts "Error: Experiment: #{exp_aliase} NOMINAL_LENGTH is required for paired library."
+			# end
 
 		end
 	

@@ -3,8 +3,8 @@
 ## 日本語  
 
 * 生命情報・DDBJ センター
-* 公開日: 2022-12-22
-* version: v1.9
+* 公開日: 2023-01-17
+* version: v1.91
 
 [Bioinformation and DDBJ Center](https://www.ddbj.nig.ac.jp/index-e.html) のデータベースに登録するためのメタデータ XML を生成、チェックするツール。
 * [DDBJ Sequence Read Archive (DRA)](https://www.ddbj.nig.ac.jp/dra/submission.html): Submission、Experiment と Run XML を生成・チェックするためのエクセルとスクリプト
@@ -13,6 +13,7 @@
 
 ## 履歴
 
+* 2023-01-17: v1.9.1 PAIRED で NOMINAL_LENGTH を任意化
 * 2022-12-23: v1.9 JGA メタデータエクセルに AGD を統合
 * 2022-12-22: v1.8 AGD 対応
 * 2022-12-21: v1.7 JGA Dataset reference 重複チェックを追加
@@ -267,8 +268,8 @@ TBD
 ## English  
 
 * Bioinformation and DDBJ Center
-* release: 2022-12-23    
-* version: v1.9
+* release: 2023-01-17   
+* version: v1.9.1
 
 These files are Excel, container images and tools for generation and validation of metadata XML files for databases of [Bioinformation and DDBJ Center](https://www.ddbj.nig.ac.jp/index-e.html).
 * [DDBJ Sequence Read Archive (DRA)](https://www.ddbj.nig.ac.jp/dra/submission-e.html): generate and check Submission, Experiment and Run XML files.
@@ -277,6 +278,7 @@ These files are Excel, container images and tools for generation and validation 
 
 ## History
 
+* 2023-01-17: v1.9.1 NOMINAL_LENGTH was made optional for PAIRED
 * 2022-12-23: v1.9 AGD merged to the JGA excel
 * 2022-12-22: v1.8 AGD
 * 2022-12-21: v1.7 Dataset reference duplication check added
