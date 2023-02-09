@@ -15,6 +15,7 @@ require 'date'
 # 2021-12-23 version 1.3 add bgiseq support
 # 2022-12-13 version 1.4 spot type changes
 # 2022-12-14 version 1.5 DRA separated
+# 2023-02-09 version 1.92 Run title
 #
 
 # Options
@@ -521,11 +522,17 @@ if not runs_a.empty?
 
 			run_set.RUN("accession" => "", "center_name" => center_name, "alias" => run[0]){|run_e|
 				
-				if exp_title_h[run[2]]
-					run_e.TITLE(exp_title_h[run[2]])
+				run_title = ""
+				if (run[1].nil? || run[1] == "") && exp_title_h[run[2]]
+					run_title = exp_title_h[run[2]]
 				else
-					run_e.TITLE("")
+					run_title = run[1]
 				end
+
+				raise "Run title is empty. Enter the Run title. #{run[1]}" if run_title.nil? || run_title == ""
+
+				# title
+				run_e.TITLE(run_title)
 
 				run_e.EXPERIMENT_REF("accession" => "", "refcenter" => center_name, "refname" => run[2])
 				
