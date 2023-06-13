@@ -241,7 +241,7 @@ Submission ID には AGD Submission ID (例 ASUB000001) を指定します。
 
 ## NIG スパコンでの実施方法
 
-国立遺伝学研究所 生命情報・DDBJ センターが運営する [NIG スパコン](https://www.ddbj.nig.ac.jp/sc) では `/lustre6/public/app/submission-excel2xml/` 
+国立遺伝学研究所 生命情報・DDBJ センターが運営する [NIG スパコン](https://www.ddbj.nig.ac.jp/sc) では `/lustre9/open/public/app/submission-excel2xml/` 
 に Singularity イメージが設置されています。ダウンロードや build 作業をすることなく、メタデータエクセルファイルがあれば XML 生成や XML のチェックを実施することができます。    
 
 ### DRA
@@ -250,12 +250,14 @@ Submission ID には AGD Submission ID (例 ASUB000001) を指定します。
 
 エクセルから Submission、Experiment と Run XML を生成。
 ```
-singularity exec /lustre6/public/app/submission-excel2xml/excel2xml.simg excel2xml_dra.rb -a example -i 0001 -p PRJDB7252 example-0001_dra_metadata.xlsx
+cp /lustre9/open/public/app/submission-excel2xml/excel2xml.simg ~/
+cd
+singularity exec excel2xml.simg excel2xml_dra.rb -a example -i 0001 -p PRJDB7252 example-0001_dra_metadata.xlsx
 ```
 
 XML のチェック。
 ```
-singularity exec /lustre6/public/app/submission-excel2xml/excel2xml.simg validate_meta_dra.rb -a example -i 0001
+singularity exec excel2xml.simg validate_meta_dra.rb -a example -i 0001
 ```
 
 ### JGA
@@ -423,7 +425,7 @@ Specify the AGD Submission ID (e.g. ASUB000001).
 
 ## NIG SuperComputer
 
-The singularity image is available at `/lustre6/public/app/submission-excel2xml/` in the [NIG SuperComputer](https://www.ddbj.nig.ac.jp/sc) operated by Bioinformation and DDBJ Center, National Institute of Genetics. The SuperComputer user can readily generate XMLs from the metadata excel file and check the XMLs.    
+The singularity image is available at `/lustre9/open/public/app/submission-excel2xml/` in the [NIG SuperComputer](https://www.ddbj.nig.ac.jp/sc) operated by Bioinformation and DDBJ Center, National Institute of Genetics. The SuperComputer user can readily generate XMLs from the metadata excel file and check the XMLs.    
 
 ### DRA
 
@@ -431,12 +433,14 @@ The user can create DRA metadata XMLs and transfer corresponding data files to t
 
 Generate Submission, Experiment and Run XMLs from the excel.
 ```
-singularity exec /lustre6/public/app/submission-excel2xml/excel2xml.simg excel2xml.rb -a example -i 0001 -p PRJDB7252 example-0001_dra_metadata.xlsx
+cp /lustre9/open/public/app/submission-excel2xml/excel2xml.simg ~/
+cd
+singularity exec excel2xml.simg excel2xml.rb -a example -i 0001 -p PRJDB7252 example-0001_dra_metadata.xlsx
 ```
 
 Validate the XMLs.
 ```
-singularity exec /lustre6/public/app/submission-excel2xml/excel2xml.simg validate_meta_dra.rb -a example -i 0001
+singularity exec excel2xml.simg validate_meta_dra.rb -a example -i 0001
 ```
 
 ### JGA
