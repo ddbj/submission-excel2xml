@@ -1,24 +1,31 @@
-FROM ubuntu:18.04
+FROM ubuntu:22.04
+ENV RUBYOPT -EUTF-8
+
 MAINTAINER Bioinformation and DDBJ Center
 RUN sed -i.bak -e "s%http://archive.ubuntu.com/ubuntu/%http://ftp.jaist.ac.jp/pub/Linux/ubuntu/%g" /etc/apt/sources.list && \
     sed -i.bak -e "s%http://security.ubuntu.com/ubuntu/%http://ftp.jaist.ac.jp/pub/Linux/ubuntu/%g" /etc/apt/sources.list
-RUN apt-get -y update && \
+RUN export DEBIAN_FRONTEND="noninteractive" && \
+    apt-get -y update && \
     apt-get -y upgrade && \
-    apt-get -y install vim \
-                       less \
-                       build-essential \
-                       libxml2-dev \
-                       zlib1g-dev \
-                       libxml2-utils \
-                       wget \
-                       ruby-full=1:2.5.1
-RUN gem install mini_portile2 -v "2.4.0" && \
-    gem install nokogiri -v "1.10.9" && \
-    gem install rubyzip -v "2.3.0" && \
-    gem install roo -v "2.8.3" && \
+    apt -y install locales && \
+    locale-gen en_US.UTF-8 && \
+    update-locale && \
+    apt -y install vim less build-essential autoconf automake wget git zlib1g-dev libbz2-dev libncurses5-dev curl unzip liblzma-dev libcurl4-openssl-dev software-properties-common apt-transport-https libyaml-dev libffi-dev libssl-dev libreadline-dev libxml2-dev libxml2-utils software-properties-common python2-dev && \
+    cd /usr/local/src && \
+    wget https://cache.ruby-lang.org/pub/ruby/3.2/ruby-3.2.2.tar.gz && \
+    tar xzf ruby-3.2.2.tar.gz && \
+    cd ruby-3.2.2 && \
+    ./configure --prefix=/usr && \
+    make && \
+    make install
+RUN gem install open3 -v "0.1.2" && \
+    gem install mini_portile2 -v "2.4.0" && \
+    gem install nokogiri -v "1.15.3" && \
+    gem install rubyzip -v "2.3.2" && \
+    gem install roo -v "2.10.0" && \
     gem install builder -v "3.2.4" && \
     gem install date -v "3.0.0" && \
-    gem install rexml -v "3.2.3" && \
+    gem install rexml -v "3.2.5" && \
     mkdir /opt/submission-excel2xml && \
     cd /opt/submission-excel2xml && \
     wget https://raw.githubusercontent.com/ddbj/pub/master/docs/dra/xsd/1-5/SRA.analysis.xsd && \
