@@ -37,7 +37,7 @@ git clone https://github.com/ddbj/submission-excel2xml.git
 
 ### Singularity
 
-Singularity イメージを[ダウンロード](https://drive.google.com/drive/u/3/folders/1Qrqpgjw_No5q6mO6rcihNwVCyMBVytzL)、もしくは、以下の手順でローカル環境で構築します。
+Singularity イメージを[ダウンロード](https://ddbj.nig.ac.jp/public/software/submission-excel2xml/)、もしくは、以下の手順でローカル環境で構築します。
 ```
 cd submission-excel2xml
 sudo singularity build excel2xml.simg Singularity
@@ -45,7 +45,7 @@ sudo singularity build excel2xml.simg Singularity
 
 ### Docker
 
-Docker イメージを構築します。
+Docker イメージを[ダウンロード](https://ddbj.nig.ac.jp/public/software/submission-excel2xml/)、もしくは、以下の手順でローカル環境で構築します。
 ```
 cd submission-excel2xml
 sudo docker build -t excel2xml .
@@ -281,7 +281,7 @@ Submission ID には AGD Submission ID (例 ASUB000001) を指定します。
 
 ## NIG スパコンでの実施方法
 
-国立遺伝学研究所 生命情報・DDBJ センターが運営する [NIG スパコン](https://www.ddbj.nig.ac.jp/sc) では `/lustre9/open/public/app/submission-excel2xml/`
+国立遺伝学研究所 生命情報・DDBJ センターが運営する [NIG スパコン](https://www.ddbj.nig.ac.jp/sc) では `/lustre9/open/shared_data/software/submission-excel2xml/`
 に Singularity イメージが設置されています。ダウンロードや build 作業をすることなく、メタデータエクセルファイルがあれば XML 生成や XML のチェックを実施することができます。
 
 ### DRA
@@ -290,7 +290,7 @@ Submission ID には AGD Submission ID (例 ASUB000001) を指定します。
 
 エクセルから Submission、Experiment と Run XML を生成。
 ```
-cp /lustre9/open/public/app/submission-excel2xml/excel2xml.simg ~/
+cp /lustre9/open/shared_data/software/submission-excel2xml/excel2xml.simg ~/
 cd
 singularity exec excel2xml.simg excel2xml_dra.rb -a example -i 0001 -p PRJDB7252 example-0001_dra_metadata.xlsx
 ```
@@ -345,7 +345,7 @@ git clone https://github.com/ddbj/submission-excel2xml.git
 
 ### Singularity
 
-[Download](https://drive.google.com/drive/u/3/folders/1Qrqpgjw_No5q6mO6rcihNwVCyMBVytzL) the Singularity image or build the Singularity image as follows.
+[Download](https://ddbj.nig.ac.jp/public/software/submission-excel2xml/) the Singularity image or build the Singularity image as follows.
 ```
 cd submission-excel2xml
 sudo singularity build excel2xml.simg Singularity
@@ -353,7 +353,7 @@ sudo singularity build excel2xml.simg Singularity
 
 ### Docker
 
-Build the Docker image.
+[Download](https://ddbj.nig.ac.jp/public/software/submission-excel2xml/) the Docker image or build the Docker image as follows.
 ```
 cd submission-excel2xml
 sudo docker build -t excel2xml .
@@ -505,7 +505,7 @@ Specify the AGD Submission ID (e.g. ASUB000001).
 
 ## NIG SuperComputer
 
-The singularity image is available at `/lustre9/open/public/app/submission-excel2xml/` in the [NIG SuperComputer](https://www.ddbj.nig.ac.jp/sc) operated by Bioinformation and DDBJ Center, National Institute of Genetics. The SuperComputer user can readily generate XMLs from the metadata excel file and check the XMLs.
+The singularity image is available at `/lustre9/open/shared_data/software/submission-excel2xml/` in the [NIG SuperComputer](https://www.ddbj.nig.ac.jp/sc) operated by Bioinformation and DDBJ Center, National Institute of Genetics. The SuperComputer user can readily generate XMLs from the metadata excel file and check the XMLs.
 
 ### DRA
 
@@ -513,7 +513,7 @@ The user can create DRA metadata XMLs and transfer corresponding data files to t
 
 Generate Submission, Experiment and Run XMLs from the excel.
 ```
-cp /lustre9/open/public/app/submission-excel2xml/excel2xml.simg ~/
+cp /lustre9/open/shared_data/software/submission-excel2xml/excel2xml.simg ~/
 cd
 singularity exec excel2xml.simg excel2xml.rb -a example -i 0001 -p PRJDB7252 example-0001_dra_metadata.xlsx
 ```
