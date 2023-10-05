@@ -45,7 +45,7 @@ sudo singularity build excel2xml.simg Singularity
 
 ### Docker
 
-Docker イメージを[ダウンロード](https://ddbj.nig.ac.jp/public/software/submission-excel2xml/)、もしくは、以下の手順でローカル環境で構築します。
+Docker イメージを以下の手順でローカル環境で構築します。
 ```
 cd submission-excel2xml
 sudo docker build -t excel2xml .
