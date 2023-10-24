@@ -1,4 +1,4 @@
-#! /usr/bin/ruby
+#! /usr/bin/env ruby
 # -*- coding: utf-8 -*-
 
 require 'rubygems'
@@ -12,7 +12,7 @@ require 'optparse'
 #
 
 # Update history
-# 2022-12-23 change handling of submission date 
+# 2022-12-23 change handling of submission date
 # 2022-12-22 AGD
 # 2022-12-14 publicly released
 
@@ -288,7 +288,7 @@ for num, line in study_a
 
 	if line[0] == "Attributes"
 		j = num
-		attribute_a = Array.new		
+		attribute_a = Array.new
 		while study_a[j] && study_a[j][1] && study_a[j][1][0] && /\d/ =~ study_a[j][1][0].to_s # if number and not at last line
 			if !(study_a[j][1][1].nil? && study_a[j][1][2].nil?) # if both are not nil
 				attribute_a.push(study_a[j][1][1..2])
@@ -341,14 +341,14 @@ for num, line in experiment_a
 
 		# NGS
 		if (line[1] && line[2] && line[3] && line[4] && line[5] && line[6]) && line[7] && line[8] && line[9] && line[10]
-			
+
 			if line[1] =~ /Sample-\d{1,}/
 				sample_ref = submission_id + "_Sample_" + sprintf("%06d", line[1].split("-")[1].to_i)
-			elsif line[1] =~ /(JGAN|AGDN_)\d{9}/				
+			elsif line[1] =~ /(JGAN|AGDN_)\d{9}/
 				sample_ref = line[1]
 			end
 
-			experiments_a.push([experiment_alias, sample_ref, line[2], line[3], line[4], line[5], line[6], line[7], line[8], line[9], line[10], clean_number(line[11]), clean_number(line[12]), line[13], clean_number(line[14]), line[15], clean_number(line[16]), line[17], line[18], line[19], line[20], line[21], line[22], line[23]])		
+			experiments_a.push([experiment_alias, sample_ref, line[2], line[3], line[4], line[5], line[6], line[7], line[8], line[9], line[10], clean_number(line[11]), clean_number(line[12]), line[13], clean_number(line[14]), line[15], clean_number(line[16]), line[17], line[18], line[19], line[20], line[21], line[22], line[23]])
 
 		end
 
@@ -372,10 +372,10 @@ for num, line in data_a
 
 			if line[1] =~ /Experiment-\d{1,}/
 				experiment_ref = submission_id + "_Experiment_" + sprintf("%06d", line[1].split("-")[1].to_i)
-			elsif line[1] =~ /(JGAX|AGDX_)\d{9}/				
+			elsif line[1] =~ /(JGAX|AGDX_)\d{9}/
 				experiment_ref = line[1]
 			end
-			
+
 			datas_a.push([data_alias, experiment_ref, line[2], line[3], line[4], line[5], "data_ngs"])
 
 		end
@@ -398,17 +398,17 @@ for num, line in analysis_a
 
 			# STUDY_REF
 			if line[1] =~ /Study-\d{1,}/
-				study_ref = submission_id + "_Study_" + sprintf("%06d", line[1].split("-")[1].to_i)				
+				study_ref = submission_id + "_Study_" + sprintf("%06d", line[1].split("-")[1].to_i)
 			elsif line[1] =~ /(JGAS|AGDS_)\d{6}/
 				study_ref = line[1]
 			else
 				study_ref = nil
 			end
-			
+
 			# SAMPLE_REF
 			sample_ref_a = []
 			if line[2]
- 				
+
  				line[2].split(",").each{|sample_ref|
 
  					sample_ref = sample_ref.strip
@@ -450,7 +450,7 @@ for num, line in analysis_a
 				analyses_a.push([analysis_alias, study_ref, sample_ref_a, data_ref_a, line[4], line[5], line[6], line[7], line[8], line[9], line[10], line[11], line[12], line[13], line[14], line[15], "", "", "", "", line[20]])
 			# variation
 			elsif (line[6] == "SEQUENCE_VARIATION") && (line[16] && line[17] && line[18])
-				analyses_a.push([analysis_alias, study_ref, sample_ref_a, data_ref_a, line[4], line[5], line[6], line[7], line[8], line[9], line[10], "", "", "", "", "", line[16], line[17], line[18], line[19], line[20]])			
+				analyses_a.push([analysis_alias, study_ref, sample_ref_a, data_ref_a, line[4], line[5], line[6], line[7], line[8], line[9], line[10], "", "", "", "", "", line[16], line[17], line[18], line[19], line[20]])
 			# non-array
 			else
 				analyses_a.push([analysis_alias, study_ref, sample_ref_a, data_ref_a, line[4], line[5], line[6], line[7], line[8], line[9], line[10], "", "", "", "", "", "", "", "", "", line[20]])
@@ -473,11 +473,11 @@ for num, line in dataset_a
 		dataset_aliases_a.push(dataset_alias)
 
 		if line[4] && line[5]
-		
+
 			# DATA_REF
 			data_ref_a = []
 			if line[1]
- 				
+
  				line[1].split(",").each{|data_ref|
 
  					data_ref = data_ref.strip
@@ -498,7 +498,7 @@ for num, line in dataset_a
 			# ANALYSIS_REF
 			analysis_ref_a = []
 			if line[2]
- 				
+
  				line[2].split(",").each{|analysis_ref|
 
  					analysis_ref = analysis_ref.strip
@@ -712,7 +712,7 @@ study_f.puts xml_study.STUDY_SET{|study_set|
 				end
 			}
 		end
-		
+
 		# Output the submission content to attributes
 		study.STUDY_ATTRIBUTES{|study_attributes|
 			study_attributes.STUDY_ATTRIBUTE{|study_attribute|
@@ -723,7 +723,7 @@ study_f.puts xml_study.STUDY_SET{|study_set|
 				study_attribute.TAG("Registration date")
 				study_attribute.VALUE(submission_date.sub(/T.*/, ""))
 			}
-			
+
 			# Extract PI information
 			if submission_h["pi"]
 				for first_name, last_name, mail, tel, organization in submission_h["pi"]
@@ -731,13 +731,13 @@ study_f.puts xml_study.STUDY_SET{|study_set|
 					study_attributes.STUDY_ATTRIBUTE{|study_attribute|
 						study_attribute.TAG("Submitting organization")
 						study_attribute.VALUE(organization)
-					}			
+					}
 
 					# PI name
 					study_attributes.STUDY_ATTRIBUTE{|study_attribute|
 						study_attribute.TAG("Principal Investigator")
 						study_attribute.VALUE("#{first_name} #{last_name}")
-					}			
+					}
 
 				end
 			end
@@ -745,19 +745,19 @@ study_f.puts xml_study.STUDY_SET{|study_set|
 			# molecular_data_type
 			if study_h["molecular_data_type"]
 				for type, platform, vendor, comment in study_h["molecular_data_type"]
-					
+
 					# molecular_data_type
 					study_attributes.STUDY_ATTRIBUTE{|study_attribute|
 						study_attribute.TAG("Molecular Data Type")
 						study_attribute.VALUE(type)
 					}
-					
+
 					study_attributes.STUDY_ATTRIBUTE{|study_attribute|
 						study_attribute.TAG("Platform")
 						study_attribute.VALUE(platform)
 					}
 
-					study_attributes.STUDY_ATTRIBUTE{|study_attribute|	
+					study_attributes.STUDY_ATTRIBUTE{|study_attribute|
 						study_attribute.TAG("Vendor")
 						study_attribute.VALUE(vendor)
 					}
@@ -774,20 +774,20 @@ study_f.puts xml_study.STUDY_SET{|study_set|
 			if study_h["phenotype_disease_terms"]
 				first = true
 				for phenotype_disease_term in study_h["phenotype_disease_terms"]
-					
+
 					if first
 						# primary phenotype term
 						study_attributes.STUDY_ATTRIBUTE{|study_attribute|
 							study_attribute.TAG("Primary Phenotype")
 							study_attribute.VALUE(phenotype_disease_term)
-						}					
+						}
 						first = false
-					else						
+					else
 						# phenotype term
 						study_attributes.STUDY_ATTRIBUTE{|study_attribute|
 							study_attribute.TAG("Phenotype")
 							study_attribute.VALUE(phenotype_disease_term)
-						}					
+						}
 					end
 
 				end
@@ -795,7 +795,7 @@ study_f.puts xml_study.STUDY_SET{|study_set|
 
 			# Inclusion/Exclusion Criteria
 			if study_h["inclusion_exclusion_criteria"]
-								
+
 				# Inclusion/Exclusion Criteria
 				study_attributes.STUDY_ATTRIBUTE{|study_attribute|
 					study_attribute.TAG("Study Inclusion/Exclusion Criteria")
@@ -817,8 +817,8 @@ study_f.puts xml_study.STUDY_SET{|study_set|
 							study_attribute.VALUE("#{disease_classification}")
 						end
 					}
-				end				
-				
+				end
+
 			end
 
 			# Output the study content to attributes.
@@ -829,13 +829,13 @@ study_f.puts xml_study.STUDY_SET{|study_set|
 							study_attributes.STUDY_ATTRIBUTE{|study_attribute|
 								study_attribute.TAG(attribute[0])
 								study_attribute.VALUE(attribute[1])
-							}			
+							}
 						end
 					end
 			end
 
 		}
-		
+
 	}
 }
 
@@ -857,7 +857,7 @@ sample_f.puts xml_sample.SAMPLE_SET{|sample_set|
 
 			sample.SAMPLE_GROUP_TYPE(sam[6])
 			sample.DESCRIPTION(sam[5])
-			
+
 			# attributes
 			sample.SAMPLE_ATTRIBUTES{|sample_attributes|
 
@@ -872,7 +872,7 @@ sample_f.puts xml_sample.SAMPLE_SET{|sample_set|
 					sample_attributes.SAMPLE_ATTRIBUTE{|sample_attribute|
 						sample_attribute.TAG("gender")
 						sample_attribute.VALUE(sam[3].strip)
-						
+
 						first = false
 					}
 				end
@@ -916,11 +916,11 @@ sample_f.puts xml_sample.SAMPLE_SET{|sample_set|
 						sample_attribute.VALUE(sam[10])
 					}
 				end
-			
+
 				# phenotypes
 				if sam[11] && sam[11].split(";")
-				
-					sam[11].split(";").each{|phenotype|						
+
+					sam[11].split(";").each{|phenotype|
 						sample_attributes.SAMPLE_ATTRIBUTE{|sample_attribute|
 							pp phenotype if phenotype.strip.split(":")[0].nil?
 
@@ -932,7 +932,7 @@ sample_f.puts xml_sample.SAMPLE_SET{|sample_set|
 				end
 
 			}
-				
+
 		}
 
 	end
@@ -946,33 +946,33 @@ experiment_f.puts xml_experiment.EXPERIMENT_SET{|experiment_set|
 
 		experiment_set.EXPERIMENT("accession" => "", "center_name" => center_name, "alias" => exp[0]){|experiment|
 			experiment.TITLE(exp[2])
-			
+
 			if study_accession =~ /(JGAS|AGDS_)\d{6}/
 				experiment.STUDY_REF("accession" => study_accession, "refcenter" => center_name, "refname" => study_accession)
 			else
 				experiment.STUDY_REF("accession" => "", "refcenter" => center_name, "refname" => submission_id + "_Study_000001")
 			end
-			
+
 			if exp[1] =~ /_Sample_\d{4}/
 				experiment.SAMPLE_REF("accession" => "", "refcenter" => center_name, "refname" => exp[1])
 			elsif exp[1] =~ /(JGAN|AGDN_)\d{9}/
 				experiment.SAMPLE_REF("accession" => exp[1], "refcenter" => center_name, "refname" => exp[1])
 			end
-			
+
 			experiment.DESIGN{|design|
-				
+
 				design.DESIGN_DESCRIPTION(exp[3])
 
 				design.LIBRARY_DESCRIPTOR{|lib_des|
 					lib_des.LIBRARY_NAME(exp[4])
-					
-					lib_des.LIBRARY_STRATEGY{|lib_strategy|						
+
+					lib_des.LIBRARY_STRATEGY{|lib_strategy|
 						lib_strategy.SEQUENCING_LIBRARY_STRATEGY(exp[8])
 					}
-										
+
 					design.LIBRARY_SOURCE(exp[5])
-					design.LIBRARY_SELECTION(exp[6])					
-										
+					design.LIBRARY_SELECTION(exp[6])
+
 					# NGS
 					design.LIBRARY_LAYOUT{|layout|
 						if exp[10] == "PAIRED" && exp[11] && exp[12]
@@ -987,8 +987,8 @@ experiment_f.puts xml_experiment.EXPERIMENT_SET{|experiment_set|
 							layout.SINGLE
 						end
 					} # layout
-				
-					design.LIBRARY_CONSTRUCTION_PROTOCOL(exp[9])				
+
+					design.LIBRARY_CONSTRUCTION_PROTOCOL(exp[9])
 
 				} # lib_des
 
@@ -1028,7 +1028,7 @@ experiment_f.puts xml_experiment.EXPERIMENT_SET{|experiment_set|
 								platform_e.INSTRUMENT_MODEL(exp[7])
 							}
 
-						when /illumina|NextSeq|HiSeq/i 
+						when /illumina|NextSeq|HiSeq/i
 							seq2_platform.ILLUMINA{|platform_e|
 								platform_e.INSTRUMENT_MODEL(exp[7])
 							}
@@ -1052,8 +1052,8 @@ experiment_f.puts xml_experiment.EXPERIMENT_SET{|experiment_set|
 							seq2_platform.OXFORD_NANOPORE{|platform_e|
 								platform_e.INSTRUMENT_MODEL(exp[7])
 							}
-						
-						when /bgiseq|dnbseq|mgiseq/i				
+
+						when /bgiseq|dnbseq|mgiseq/i
 							seq2_platform.BGISEQ{|platform_e|
 								platform_e.INSTRUMENT_MODEL(exp[7])
 							}
@@ -1075,7 +1075,7 @@ experiment_f.puts xml_experiment.EXPERIMENT_SET{|experiment_set|
 # Data
 data_files_a = []
 if not datas_a.empty?
-	
+
 	data_f.puts xml_data.DATA_CONTAINER{|data_container|
 
 		for data in datas_a
@@ -1083,17 +1083,17 @@ if not datas_a.empty?
 			data_container.DATA("accession" => "", "center_name" => center_name, "alias" => data[0]){|data_e|
 
 				if data[1] =~ /_Experiment_\d{4,6}/
-					data_e.EXPERIMENT_REF("accession" => "", "refcenter" => center_name, "refname" => data[1])					
+					data_e.EXPERIMENT_REF("accession" => "", "refcenter" => center_name, "refname" => data[1])
 				elsif data[1] =~ /(JGAX|AGDX_)\d{9}/
 					data_e.EXPERIMENT_REF("accession" => data[1], "refcenter" => center_name, "refname" => data[1])
 				end
 
 				# Data type
 				case data[-1]
-				
+
 				# ngs
 				when "data_ngs"
-					
+
 					# filetype is bam
 					if data[3] == "bam" && ( data[4] || data[5] )
 						data_e.DATA_TYPE{|data_type|
@@ -1101,32 +1101,32 @@ if not datas_a.empty?
 								alignment.SEQUENCE("refname" => data[4], "accession" => data[5])
 							}
 						}
-					
+
 					# not bam
 					elsif data[3] != "bam"
 						data_e.DATA_TYPE{|data_type|
 							data_type.SEQUENCING
 						}
-					end			
-				
+					end
+
 				end
-				
+
 				data_e.DATA_BLOCK{|block|
-					
+
 					block.FILES{|files|
 
 						if data[2] && data[2].include?(",")
-						
+
 							for filename in data[2].split(/,\s*/)
-								
+
 								# spaces in filename
 								raise "Filename contains space: #{filename}" if filename.include?(" ")
 
 								filename = filename.strip.gsub("\n", "")
 								data_files_a.push(filename) unless filename.empty?
-	
-								unless filename.empty?															
-									
+
+								unless filename.empty?
+
 									md5 = ""
 									if files_h[filename]
 										md5 = files_h[filename]
@@ -1142,12 +1142,12 @@ if not datas_a.empty?
 								end
 
 							end
-						
+
 						else
 
 							filename = data[2].strip.gsub("\n", "") unless data[2].empty?
 							data_files_a.push(filename) unless filename.empty?
-						
+
 							unless filename.empty?
 
 								md5 = ""
@@ -1163,7 +1163,7 @@ if not datas_a.empty?
 									files.FILE("checksum" => "", "unencrypted_checksum" => md5, "checksum_method" => "MD5", "filetype" => data[3], "filename" => filename)
 								end
 							end
-													
+
 						end
 
 					} # files
@@ -1193,7 +1193,7 @@ if not analyses_a.empty?
 			analysis_center = ""
 			analysis_date = ""
 			if ana[20] && ana[20].split(";")
-				ana[20].split(";").each{|attribute|			
+				ana[20].split(";").each{|attribute|
 					if attribute.strip.split(/:(?!\/)/)[0].strip == "analysis_center"
 						analysis_center = attribute.strip.split(/:(?!\/)/)[1].strip
 					end
@@ -1269,19 +1269,19 @@ if not analyses_a.empty?
 
 						# if specified by refname
 						if ana[9] || ana[10]
-							
+
 							reference_alignment.ASSEMBLY{|assembly|
 								if ana[9] && ana[10]
-									assembly.STANDARD("refname" => ana[9], "accession" => ana[10]) 
+									assembly.STANDARD("refname" => ana[9], "accession" => ana[10])
 								elsif ana[9]
-									assembly.STANDARD("refname" => ana[9]) 
+									assembly.STANDARD("refname" => ana[9])
 								elsif ana[10]
-									assembly.STANDARD("accession" => ana[10]) 
+									assembly.STANDARD("accession" => ana[10])
 								end
 							}
-							
+
 						end
-						
+
 						}
 
 					when "SEQUENCE_VARIATION"
@@ -1289,38 +1289,38 @@ if not analyses_a.empty?
 
 							# if specified by refname
 							if ana[9] || ana[10]
-								
+
 								sequence_variation.ASSEMBLY{|assembly|
 									if ana[9] && ana[10]
-										assembly.STANDARD("refname" => ana[9], "accession" => ana[10]) 
+										assembly.STANDARD("refname" => ana[9], "accession" => ana[10])
 									elsif ana[9]
-										assembly.STANDARD("refname" => ana[9]) 
+										assembly.STANDARD("refname" => ana[9])
 									elsif ana[10]
-										assembly.STANDARD("accession" => ana[10]) 
+										assembly.STANDARD("accession" => ana[10])
 									end
 								}
-								
+
 							end
 
 							# experiment type
 							if ana[16]
 								sequence_variation.EXPERIMENT_TYPE(ana[16])
-							end								
+							end
 
 							# program
-							if ana[18]							
+							if ana[18]
 								sequence_variation.PROGRAM(ana[18])
-							end								
+							end
 
 							# platform
-							if ana[17]							
+							if ana[17]
 								sequence_variation.PLATFORM(ana[17])
-							end								
+							end
 
 							# imputation
 							if ana[19]
 								sequence_variation.IMPUTATION("true")
-							end								
+							end
 
 						} # sequence_variation
 
@@ -1340,11 +1340,11 @@ if not analyses_a.empty?
 
 						# array
 						if ana[11] && ana[12] && ana[13] && ana[14]
-						
+
 							analysis_type.MICROARRAY{|microarray|
-							
+
 								microarray.EXPERIMENT_TYPE(ana[11])
-								
+
 								microarray.PLATFORM(ana[12]) if ana[12]
 								microarray.PLATFORM_VENDOR(ana[13]) if ana[13]
 								microarray.PLATFORM_DESCRIPTION(ana[14]) if ana[14]
@@ -1368,7 +1368,7 @@ if not analyses_a.empty?
 
 					when "DOCUMENT"
 						analysis_type.DOCUMENT
-					
+
 					when "OTHER"
 						analysis_type.OTHER
 
@@ -1390,7 +1390,7 @@ if not analyses_a.empty?
 						raise "File is archived by zip: #{filename}" if filename =~ /\.zip$/
 
 						analysis_files_a.push(filename)
-							
+
 						md5 = ""
 						if files_h[filename]
 							md5 = files_h[filename]
@@ -1409,7 +1409,7 @@ if not analyses_a.empty?
 							raise "Filename contains space: #{filename}" if filename.include?(" ")
 							# compression format
 							raise "File is archived by zip: #{filename}" if filename =~ /\.zip$/
-								
+
 							analysis_files_a.push(filename)
 
 							md5 = ""
@@ -1435,7 +1435,7 @@ if not analyses_a.empty?
 							raise "Filename contains space: #{filename}" if filename.include?(" ")
 							# compression format
 							raise "File is archived by zip: #{filename}" if filename =~ /\.zip$/
-								
+
 							analysis_files_a.push(filename)
 
 							md5 = ""
@@ -1461,7 +1461,7 @@ if not analyses_a.empty?
 
 				# attributes
 				if ana[20] && ana[20].split(";")
-				
+
 					analysis_e.ANALYSIS_ATTRIBUTES{|analysis_attributes|
 
 						ana[20].split(";").each{|attribute|
@@ -1492,7 +1492,7 @@ raise "Files #{combined_files_duplicated_a.join("\n")}: duplicated between Data 
 
 # Data set
 if not datasets_a.empty?
-	
+
 	dataset_f.puts xml_dataset.DATASETS{|dataset_set|
 
 		for dataset in datasets_a
@@ -1506,7 +1506,7 @@ if not datasets_a.empty?
 
 				# Single policy is associated with a data set.
 				if dataset[1].empty? && dataset[2].empty?
-					
+
 					# A default NBDC policy is associated. JGA
 					if (dataset[3].nil? || dataset[3] == "JGAP000001") && submission_id =~ /^JSUB\d{6}$/
 
@@ -1574,9 +1574,9 @@ if not datasets_a.empty?
 						}
 
 						dataset_e.POLICY_REF("accession" => dataset[3], "refcenter" => "nbdc", "refname" => dataset[3])
-								
+
 					end
-				
+
 				# Data/Analysis refs are set for this data set.
 				else
 
@@ -1629,7 +1629,7 @@ if not datasets_a.empty?
 
 	}
 
-# Data set 
+# Data set
 # if not datasets_a.empty?
 else
 
@@ -1662,7 +1662,7 @@ else
 				elsif submission_id =~ /^ASUB\d{6}$/
 					dataset_e.POLICY_REF("accession" => "AGDP_000001", "refcenter" => "nbdc", "refname" => "AGDP_000001")
 				end
-					
+
 			# only a submitter's policy is associated to a dataset.
 			elsif dataset[1].empty? && dataset[2].empty? && dataset[3] && !policies_a.empty?
 
@@ -1716,7 +1716,7 @@ else
 					ref = dataset[3]
 					dataset_e.POLICY_REF("accession" => ref, "refcenter" => "nbdc", "refname" => "")
 				end
-			
+
 			end
 
 		}
@@ -1729,13 +1729,13 @@ end
 duplicated_data_files_a = []
 duplicated_data_files_a = data_files_a.select{|e| data_files_a.index(e) != data_files_a.rindex(e)}
 if duplicated_data_files_a.size > 0
-	raise "#{duplicated_data_files_a.sort.uniq.join(",")} data files are duplicated" 
+	raise "#{duplicated_data_files_a.sort.uniq.join(",")} data files are duplicated"
 end
 
 duplicated_analysis_files_a = []
 duplicated_analysis_files_a = analysis_files_a.select{|e| analysis_files_a.index(e) != analysis_files_a.rindex(e)}
 if duplicated_analysis_files_a.size > 0
-	raise "#{duplicated_analysis_files_a.sort.uniq.join(",")} analysis files are duplicated" 
+	raise "#{duplicated_analysis_files_a.sort.uniq.join(",")} analysis files are duplicated"
 end
 
 ## md5 list check

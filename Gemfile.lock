@@ -1,0 +1,29 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    builder (3.2.4)
+    date (3.3.3)
+    nokogiri (1.15.4-x86_64-linux)
+      racc (~> 1.4)
+    open3 (0.1.2)
+    racc (1.7.1)
+    rexml (3.2.6)
+    roo (2.10.0)
+      nokogiri (~> 1)
+      rubyzip (>= 1.3.0, < 3.0.0)
+    rubyzip (2.3.2)
+
+PLATFORMS
+  x86_64-linux
+
+DEPENDENCIES
+  builder
+  date
+  nokogiri
+  open3
+  rexml
+  roo
+  rubyzip
+
+BUNDLED WITH
+   2.4.19

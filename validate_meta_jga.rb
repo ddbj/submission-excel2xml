@@ -1,4 +1,4 @@
-#! /usr/bin/ruby
+#! /usr/bin/env ruby
 # -*- coding: utf-8 -*-
 
 require 'rexml/document'
@@ -48,7 +48,7 @@ xml_a = []
 Dir.glob("#{submission_id}*xml").each{|xml|
 	meta = xml.match(/#{submission_id}\_(\w+?)\.xml/)[1]
 	xml_a.push(meta)
-	
+
 	# filepath to xsd
 	result = system("xmllint --schema #{xsd_path}JGA.#{meta.downcase}.xsd --noout #{submission_id}_#{meta}.xml")
 }
@@ -102,28 +102,28 @@ for meta in xml_a
 			sample_a.push(sample_e.attributes["alias"])
 			center_name_a.push(sample_e.attributes["center_name"])
 		}
-	
+
 	when "experiment"
 		doc = REXML::Document.new(open("#{submission_id}_#{meta}.xml"))
 		doc.elements.each("EXPERIMENT_SET/EXPERIMENT"){|experiment_e|
 			experiment_a.push(experiment_e.attributes["alias"])
 			center_name_a.push(experiment_e.attributes["center_name"])
-			
+
 			# study_ref
 			experiment_study_ref_a.push(experiment_e.elements["STUDY_REF"].attributes["refname"])
 			center_name_a.push(experiment_e.elements["STUDY_REF"].attributes["refcenter"])
 
 			# sample_ref
 			experiment_sample_ref_a.push(experiment_e.elements["SAMPLE_REF"].attributes["refname"])
-			center_name_a.push(experiment_e.elements["SAMPLE_REF"].attributes["refcenter"])			
+			center_name_a.push(experiment_e.elements["SAMPLE_REF"].attributes["refcenter"])
 		}
-		
+
 	when "data"
 		doc = REXML::Document.new(open("#{submission_id}_#{meta}.xml"))
 		doc.elements.each("DATA_CONTAINER/DATA"){|data_e|
 			data_a.push(data_e.attributes["alias"])
 			center_name_a.push(data_e.attributes["center_name"])
-			
+
 			# experiment_ref
 			data_experiment_ref_a.push(data_e.elements["EXPERIMENT_REF"].attributes["refname"])
 			center_name_a.push(data_e.elements["EXPERIMENT_REF"].attributes["refcenter"])
@@ -134,19 +134,19 @@ for meta in xml_a
 		doc.elements.each("ANALYSIS_SET/ANALYSIS"){|analysis_e|
 			analysis_a.push(analysis_e.attributes["alias"])
 			center_name_a.push(analysis_e.attributes["center_name"])
-			
+
 			# study_ref
 			analysis_e.elements.each("STUDY_REFS/STUDY_REF"){|study_ref|
 				analysis_study_ref_a.push(study_ref.attributes["refname"])
 				center_name_a.push(study_ref.attributes["refcenter"])
 			}
-			
+
 			# sample_ref
 			analysis_e.elements.each("SAMPLE_REFS/SAMPLE_REF"){|sample_ref|
 				analysis_sample_ref_a.push(sample_ref.attributes["refname"])
 				center_name_a.push(sample_ref.attributes["refcenter"])
 			}
-			
+
 			# data_ref
 			analysis_e.elements.each("DATA_REFS/DATA_REF"){|data_ref|
 				analysis_data_ref_a.push(data_ref.attributes["refname"])
@@ -158,16 +158,16 @@ for meta in xml_a
 	when "dataset"
 		doc = REXML::Document.new(open("#{submission_id}_#{meta}.xml"))
 		doc.elements.each("DATASETS/DATASET"){|dataset_e|
-			
+
 			dataset_a.push(dataset_e.attributes["alias"])
 			center_name_a.push(dataset_e.attributes["center_name"])
-		
+
 			# data_ref
 			dataset_e.elements.each("DATA_REFS/DATA_REF"){|data_ref|
 				dataset_data_ref_a.push(data_ref.attributes["refname"])
 				center_name_a.push(data_ref.attributes["refcenter"])
 			}
-		
+
 			# analysis_ref
 			dataset_e.elements.each("ANALYSIS_REFS/ANALYSIS_REF"){|analysis_ref|
 				dataset_analysis_ref_a.push(analysis_ref.attributes["refname"])
@@ -181,9 +181,9 @@ for meta in xml_a
 				dataset_policy_ref_a.push(dataset_e.elements["POLICY_REF"].attributes["accession"])
 				center_name_a.push(dataset_e.elements["POLICY_REF"].attributes["refcenter"])
 			end
-		
+
 		}
-		
+
 	end
 
 end
@@ -248,7 +248,7 @@ end
 
 # Dataset -> Data duplication
 if dataset_data_ref_a.select{|e| dataset_data_ref_a.count(e) > 1}.size > 0
-	puts "Error: Dataset to Data ref duplicated: #{dataset_data_ref_a.select{|e| dataset_data_ref_a.count(e) > 1}.sort.uniq.join(",")}"	
+	puts "Error: Dataset to Data ref duplicated: #{dataset_data_ref_a.select{|e| dataset_data_ref_a.count(e) > 1}.sort.uniq.join(",")}"
 end
 
 # Dataset -> Analysis
@@ -258,11 +258,11 @@ end
 
 # Dataset -> Analysis duplication
 if dataset_analysis_ref_a.select{|e| dataset_analysis_ref_a.count(e) > 1}.size > 0
-	puts "Error: Dataset to Analysis ref duplicated: #{dataset_analysis_ref_a.select{|e| dataset_analysis_ref_a.count(e) > 1}.sort.uniq.join(",")}"	
+	puts "Error: Dataset to Analysis ref duplicated: #{dataset_analysis_ref_a.select{|e| dataset_analysis_ref_a.count(e) > 1}.sort.uniq.join(",")}"
 end
 
 # Dataset -> Policy
-if submission_id =~ /^JSUB\d{6}$/ && !nbdc_policy && (dataset_policy_ref_a.sort.uniq[0] !~ /JGAP\d{6}/) 
+if submission_id =~ /^JSUB\d{6}$/ && !nbdc_policy && (dataset_policy_ref_a.sort.uniq[0] !~ /JGAP\d{6}/)
 	puts "Error: Dataset to Policy ref"
 end
 
