@@ -41,8 +41,7 @@ meta_object = ['Submission', 'Study', 'Sample', 'Experiment', 'Data', 'Analysis'
 ##
 
 ## Validate XMLs against JGA xsd
-xsd_path = "/opt/submission-excel2xml/"
-#xsd_path = "xsd/"
+xsd_path = File.join(__dir__, 'xsd')
 
 xml_a = []
 Dir.glob("#{submission_id}*xml").each{|xml|

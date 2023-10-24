@@ -60,8 +60,7 @@ if !(account == "" || submission_no == "")
 end
 
 ## Validate DRA XML against xsd
-xsd_path = "/opt/submission-excel2xml/"
-#xsd_path = "xsd/"
+xsd_path = File.join(__dir__, 'xsd')
 
 puts "\n== XML validation against SRA xsd ==" unless machine_readable
 
