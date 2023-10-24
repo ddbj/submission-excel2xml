@@ -7,7 +7,7 @@
 * version: v2.0
 
 [Bioinformation and DDBJ Center](https://www.ddbj.nig.ac.jp/index-e.html) のデータベースに登録するためのメタデータ XML を生成、チェックするツール。
-* [DDBJ Sequence Read Archive (DRA)](https://www.ddbj.nig.ac.jp/dra/submission.html): Submission、Experiment、Run と Analysi (任意) XML を生成・チェックするためのエクセルとスクリプト
+* [DDBJ Sequence Read Archive (DRA)](https://www.ddbj.nig.ac.jp/dra/submission.html): Submission、Experiment、Run と Analysis (任意) XML を生成・チェックするためのエクセルとスクリプト
 * [Japanese Genotype-phenotype Archive (JGA)](https://www.ddbj.nig.ac.jp/jga/submission.html): Submission、Study、Sample、Experiment、Data、Analysis と Dataset XML を生成・チェックするためのエクセルとスクリプト
 * [AMED Genome Group Sharing Database (AGD)](https://www.ddbj.nig.ac.jp/agd/submission.html): Submission、Study、Sample、Experiment、Data、Analysis と Dataset XML を生成・チェックするためのエクセルとスクリプト
 
