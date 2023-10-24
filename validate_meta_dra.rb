@@ -52,8 +52,8 @@ if !(account == "" || submission_no == "")
 end
 
 ## Validate DRA XML against xsd
-#xsd_path = "/opt/submission-excel2xml/"
-xsd_path = "xsd/"
+xsd_path = "/opt/submission-excel2xml/"
+#xsd_path = "xsd/"
 
 puts "\n== XML validation against SRA xsd =="
 if FileTest.exist?("#{submission_id}_dra_Submission.xml")
