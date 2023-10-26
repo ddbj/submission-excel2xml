@@ -69,25 +69,21 @@ xsd_path = Submission::Excel2xml.xsd_path
 puts "\n== XML validation against SRA xsd ==" unless machine_readable
 
 errors = []
-%w(Submission Experiment Run Analysis).each do |obj|
-  xsd = Pathname.new(xsd_path).join("SRA.#{obj.downcase}.xsd")
-  xml = Pathname.new("#{submission_id}_dra_#{obj}.xml")
+
+%w(Submission Experiment Run Analysis).each do |obj_id|
+  xsd = Pathname.new(xsd_path).join("SRA.#{obj_id.downcase}.xsd")
+  xml = Pathname.new("#{submission_id}_dra_#{obj_id}.xml")
 
   next unless xml.exist?
 
   if machine_readable
-    schema = Nokogiri::XML::Schema.new(xsd.open)
+    schema   = Nokogiri::XML::Schema.new(xsd.open)
     document = Nokogiri::XML::Document.parse(xml.open)
-    errors.concat document.errors.map {|error|
+
+    errors.concat (document.errors + schema.validate(document)).map {|error|
       {
-        file:    error.file,
-        message: error.to_s
-      }
-    }
-    errors.concat schema.validate(document).map {|error|
-      {
-        file:    error.file,
-        message: error.to_s
+        object_id: obj_id,
+        message:   error.to_s
       }
     }
   else
@@ -122,7 +118,7 @@ if FileTest.exist?("#{submission_id}_dra_Submission.xml")
     # check: hold date >= today
     if Date.parse(hold) < Date.today
       if machine_readable
-        errors << {file: "#{submission_id}_dra_Submission.xml", message: 'Past hold date'}
+        errors << {object_id: 'Submission', message: 'Past hold date'}
       else
         puts "Error: Submission: Past hold date"
       end
@@ -161,7 +157,7 @@ end
 experiment_alias_dup_a = experiment_alias_a.select{|e| experiment_alias_a.count(e) > 1 }.uniq
 unless experiment_alias_dup_a.empty?
   if machine_readable
-    errors << {file: "#{submission_id}_dra_Experiment.xml", message: "Alias not unique: #{experiment_alias_dup_a.join(",")}" }
+    errors << {object_id: 'Experiment', message: "Alias not unique: #{experiment_alias_dup_a.join(",")}" }
   else
     puts "Error: Experiment: Alias not unique: #{experiment_alias_dup_a.join(",")}"
   end
@@ -202,7 +198,7 @@ if FileTest.exist?("#{submission_id}_dra_Run.xml")
     # paired file number check
     if experiment_paired_alias_a.include?(exp_ref) && run_file_number == 1
       if machine_readable
-        errors << {file: "#{submission_id}_dra_Run.xml", message: "#{run_alias} Paired library only has one file."}
+        errors << {object_id: 'Run', message: "#{run_alias} Paired library only has one file."}
       else
         puts "Error: Run: #{run_alias} Paired library only has one file."
       end
@@ -216,7 +212,7 @@ end
 run_alias_dup_a = run_alias_a.select{|e| run_alias_a.count(e) > 1 }.uniq
 unless run_alias_dup_a.empty?
   if machine_readable
-    errors << {file: "#{submission_id}_dra_Run.xml", message: "Alias not unique: #{run_alias_dup_a.join(",")}"}
+    errors << {object_id: 'Run', message: "Alias not unique: #{run_alias_dup_a.join(",")}"}
   else
     puts "Error: Run: Alias not unique: #{run_alias_dup_a.join(",")}"
   end
@@ -226,7 +222,7 @@ end
 run_files_dup_a = run_files_a.select{|e| run_files_a.count(e) > 1 }.uniq
 unless run_files_dup_a.empty?
   if machine_readable
-    errors << {file: "#{submission_id}_dra_Run.xml", message: "Filename not unique: #{run_files_dup_a.join(",")}"}
+    errors << {object_id: 'Run', message: "Filename not unique: #{run_files_dup_a.join(",")}"}
   else
     puts "Error: Run: Filename not unique: #{run_files_dup_a.join(",")}"
   end
@@ -241,21 +237,21 @@ experiment_to_run_a = (experiment_alias_a - run_experiment_a).reject{|c| c.empty
 if !run_to_experiment_a.empty? || !experiment_to_run_a.empty?
 
   if machine_readable
-    errors << {file: "#{submission_id}_dra_Run.xml", message: 'Run to Experiment reference error'}
+    errors << {object_id: 'Run', message: 'Run to Experiment reference error'}
   else
     puts "Error: Run to Experiment reference error"
   end
 
   unless run_to_experiment_a.empty?
     if machine_readable
-      errors << {file: "#{submission_id}_dra_Run.xml", message: "#{run_experiment_a.join(", ")}: experiment not exist."}
+      errors << {object_id: 'Run', message: "#{run_experiment_a.join(", ")}: experiment not exist."}
     else
       puts "#{run_experiment_a.join(", ")}: experiment not exist."
     end
   end
   unless experiment_to_run_a.empty?
     if machine_readable
-      errors << {file: "#{submission_id}_dra_Run.xml", message: "#{experiment_to_run_a.join(", ")}: unreferenced."}
+      errors << {object_id: 'Run', message: "#{experiment_to_run_a.join(", ")}: unreferenced."}
     else
       puts "#{experiment_to_run_a.join(", ")}: unreferenced."
     end
@@ -270,7 +266,7 @@ for filename, checksum in run_files_checksums_a
 
   if checksum !~ /^[a-f0-9]{32}$/i
     if machine_readable
-      errors << {file: filename, message: "#{checksum} Invalid md5 checksum value."}
+      errors << {object_id: 'Run', message: "#{filename}:#{checksum} Invalid md5 checksum value."}
     else
       puts "#{filename}:#{checksum} Invalid md5 checksum value."
     end
@@ -307,7 +303,7 @@ if FileTest.exist?("#{submission_id}_dra_Analysis.xml")
     if analysis.at_css("REFERENCE_ALIGNMENT")
       unless analysis.at_css("STANDARD") && analysis.at_css("STANDARD").attribute("short_name") && analysis.at_css("STANDARD").attribute("short_name").value != ""
         if machine_readable
-          errors << {file: "#{submission_id}_dra_Analysis.xml", message: "Reference is required for analysis type REFERENCE_ALIGNMENT. #{analysis_alias}"}
+          errors << {object_id: 'Analysis', message: "Reference is required for analysis type REFERENCE_ALIGNMENT. #{analysis_alias}"}
         else
           puts "Reference is required for analysis type REFERENCE_ALIGNMENT. #{analysis_alias}"
         end
@@ -328,7 +324,7 @@ if FileTest.exist?("#{submission_id}_dra_Analysis.xml")
   analysis_alias_dup_a = analysis_alias_a.select{|e| analysis_alias_a.count(e) > 1 }.sort.uniq
   unless analysis_alias_dup_a.empty?
     if machine_readable
-      errors << {file: "#{submission_id}_dra_Analysis.xml", message: "Analysis alias not unique: #{analysis_alias_dup_a.join(",")}"}
+      errors << {object_id: 'Analysis', message: "Analysis alias not unique: #{analysis_alias_dup_a.join(",")}"}
     else
       puts "Error: Analysis alias not unique: #{analysis_alias_dup_a.join(",")}"
     end
@@ -338,7 +334,7 @@ if FileTest.exist?("#{submission_id}_dra_Analysis.xml")
   analysis_files_dup_a = analysis_files_a.select{|e| analysis_files_a.count(e) > 1 }.sort.uniq
   unless analysis_files_dup_a.empty?
     if machine_readable
-      errors << {file: "#{submission_id}_dra_Analysis.xml", message: "Analysis data filename not unique: #{analysis_files_dup_a.join(",")}"}
+      errors << {object_id: 'Analysis', message: "Analysis data filename not unique: #{analysis_files_dup_a.join(",")}"}
     else
       puts "Error: Analysis data filename not unique: #{analysis_files_dup_a.join(",")}"
     end
@@ -348,7 +344,7 @@ if FileTest.exist?("#{submission_id}_dra_Analysis.xml")
   analysis_checksums_a = analysis_checksums_a.select{|e| analysis_checksums_a.count(e) > 1 }.sort.uniq
   unless analysis_checksums_a.empty?
     if machine_readable
-      errors << {file: "#{submission_id}_dra_Analysis.xml", message: "Analysis checksum of data file not unique: #{analysis_checksums_a.join(",")}"}
+      errors << {object_id: 'Analysis', message: "Analysis checksum of data file not unique: #{analysis_checksums_a.join(",")}"}
     else
       puts "Error: Analysis checksum of data file not unique: #{analysis_checksums_a.join(",")}"
     end
@@ -361,7 +357,7 @@ if FileTest.exist?("#{submission_id}_dra_Analysis.xml")
     puts "Analysis to BioProject reference OK" unless machine_readable
   else
     if machine_readable
-      errors << {file: "#{submission_id}_dra_Analysis.xml", message: 'Analysis refers to more than one BioProject'}
+      errors << {object_id: 'Analysis', message: 'Analysis refers to more than one BioProject'}
     else
       puts "Error: Analysis refers to more than one BioProject"
     end
@@ -371,13 +367,12 @@ if FileTest.exist?("#{submission_id}_dra_Analysis.xml")
   for checksum in analysis_checksums_a
     if checksum !~ /^[a-f0-9]{32}$/i
       if machine_readable
-        errors << {file: "#{submission_id}_dra_Analysis.xml", message: "#{checksum} Invalid md5 checksum value."}
+        errors << {object_id: 'Analysis', message: "#{checksum} Invalid md5 checksum value."}
       else
         puts "#{checksum} Invalid md5 checksum value."
       end
     end
   end
-
 end
 
 puts JSON.pretty_generate(errors) if machine_readable
