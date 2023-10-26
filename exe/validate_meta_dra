@@ -8,7 +8,7 @@ require 'optparse'
 require 'open3'
 require 'json'
 
-require 'submission/excel2xml'
+require 'excel2xml'
 
 #
 # Bioinformation and DDBJ Center
@@ -50,7 +50,7 @@ OptionParser.new{|opt|
 
 }
 
-Submission::Excel2xml.download_xsd_if_necessary
+Excel2xml.download_xsd_if_necessary
 
 unless machine_readable
   puts "D-way account ID: #{account}"
@@ -64,7 +64,7 @@ if !(account == "" || submission_no == "")
 end
 
 ## Validate DRA XML against xsd
-xsd_path = Submission::Excel2xml.xsd_path
+xsd_path = Excel2xml.xsd_path
 
 puts "\n== XML validation against SRA xsd ==" unless machine_readable
 

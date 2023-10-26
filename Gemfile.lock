@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    submission-excel2xml (0.1.0)
+    excel2xml (0.1.0)
       builder (~> 3)
       date (~> 3)
       nokogiri (~> 1)
@@ -45,8 +45,8 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
+  excel2xml!
   rspec
-  submission-excel2xml!
 
 BUNDLED WITH
    2.4.19

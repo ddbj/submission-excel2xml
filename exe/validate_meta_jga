@@ -4,7 +4,7 @@
 require 'rexml/document'
 require 'optparse'
 
-require 'submission/excel2xml'
+require 'excel2xml'
 
 #
 # Bioinformation and DDBJ Center
@@ -34,7 +34,7 @@ OptionParser.new{|opt|
   end
 }
 
-Submission::Excel2xml.download_xsd_if_necessary
+Excel2xml.download_xsd_if_necessary
 
 # metadata objects
 meta_object = ['Submission', 'Study', 'Sample', 'Experiment', 'Data', 'Analysis', 'Dataset', 'Policy', 'Dac']
@@ -44,7 +44,7 @@ meta_object = ['Submission', 'Study', 'Sample', 'Experiment', 'Data', 'Analysis'
 ##
 
 ## Validate XMLs against JGA xsd
-xsd_path = Submission::Excel2xml.xsd_path
+xsd_path = Excel2xml.xsd_path
 
 xml_a = []
 Dir.glob("#{submission_id}*xml").each{|xml|
