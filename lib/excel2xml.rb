@@ -16,11 +16,11 @@ module Excel2xml
     base_uri = 'https://raw.githubusercontent.com/ddbj/pub/master/docs'
 
     %w(analysis annotation common experiment package run sample study submission).each do |name|
-      xsd_path.join("SRA.#{name}.xsd").write URI.open("#{base_uri}/dra/xsd/1-5/SRA.#{name}.xsd")
+      xsd_path.join("SRA.#{name}.xsd").write URI.open("#{base_uri}/dra/xsd/1-5/SRA.#{name}.xsd").read
     end
 
     %w(analysis common dac data dataset experiment policy sample study submission).each do |name|
-      xsd_path.join("JGA.#{name}.xsd").write URI.open("#{base_uri}/jga/xsd/1-2/JGA.#{name}.xsd")
+      xsd_path.join("JGA.#{name}.xsd").write URI.open("#{base_uri}/jga/xsd/1-2/JGA.#{name}.xsd").read
     end
   end
 
