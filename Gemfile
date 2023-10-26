@@ -1,10 +1,5 @@
 source 'https://rubygems.org'
 
-gem 'builder'
-gem 'date'
-gem 'nokogiri'
-gem 'open3'
-gem 'rake'
-gem 'rexml'
-gem 'roo'
-gem 'rubyzip'
+gemspec
+
+gem 'rspec'

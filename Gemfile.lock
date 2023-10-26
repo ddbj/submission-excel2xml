@@ -1,31 +1,52 @@
+PATH
+  remote: .
+  specs:
+    submission-excel2xml (0.1.0)
+      builder (~> 3)
+      date (~> 3)
+      nokogiri (~> 1)
+      open3 (~> 0)
+      rexml (~> 3)
+      roo (~> 2)
+      rubyzip (~> 2)
+      xdg (~> 7)
+
 GEM
   remote: https://rubygems.org/
   specs:
     builder (3.2.4)
     date (3.3.3)
+    diff-lcs (1.5.0)
     nokogiri (1.15.4-x86_64-linux)
       racc (~> 1.4)
     open3 (0.1.2)
     racc (1.7.1)
-    rake (13.0.6)
     rexml (3.2.6)
     roo (2.10.0)
       nokogiri (~> 1)
       rubyzip (>= 1.3.0, < 3.0.0)
+    rspec (3.12.0)
+      rspec-core (~> 3.12.0)
+      rspec-expectations (~> 3.12.0)
+      rspec-mocks (~> 3.12.0)
+    rspec-core (3.12.2)
+      rspec-support (~> 3.12.0)
+    rspec-expectations (3.12.3)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.12.0)
+    rspec-mocks (3.12.6)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.12.0)
+    rspec-support (3.12.1)
     rubyzip (2.3.2)
+    xdg (7.1.2)
 
 PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
-  builder
-  date
-  nokogiri
-  open3
-  rake
-  rexml
-  roo
-  rubyzip
+  rspec
+  submission-excel2xml!
 
 BUNDLED WITH
    2.4.19

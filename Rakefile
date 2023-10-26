@@ -1,18 +1,8 @@
-require 'fileutils'
-require 'open-uri'
+# frozen_string_literal: true
 
-task :download_xsd do
-  FileUtils.mkdir_p 'xsd'
+require "bundler/gem_tasks"
+require "rspec/core/rake_task"
 
-  %w(analysis annotation common experiment package run sample study submission).each do |name|
-    URI.open "https://raw.githubusercontent.com/ddbj/pub/master/docs/dra/xsd/1-5/SRA.#{name}.xsd" do |f|
-      IO.copy_stream f, "xsd/SRA.#{name}.xsd"
-    end
-  end
+RSpec::Core::RakeTask.new(:spec)
 
-  %w(analysis common dac data dataset experiment policy sample study submission).each do |name|
-    URI.open "https://raw.githubusercontent.com/ddbj/pub/master/docs/jga/xsd/1-2/JGA.#{name}.xsd" do |f|
-      IO.copy_stream f, "xsd/JGA.#{name}.xsd"
-    end
-  end
-end
+task default: :spec
