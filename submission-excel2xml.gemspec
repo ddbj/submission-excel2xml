@@ -1,8 +1,8 @@
-require_relative 'lib/excel2xml/version'
+require_relative 'lib/submission_excel2xml/version'
 
 Gem::Specification.new do |spec|
   spec.name    = 'submission-excel2xml'
-  spec.version = Excel2xml::VERSION
+  spec.version = SubmissionExcel2xml::VERSION
   spec.authors = ['Bioinformation and DDBJ Center']
 
   spec.summary  = 'Tools for XML submission'

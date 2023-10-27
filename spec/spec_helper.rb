@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'excel2xml'
+require 'submission-excel2xml'
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure

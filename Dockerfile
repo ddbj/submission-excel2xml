@@ -10,4 +10,4 @@ COPY . ./
 RUN bundle install && \
     bundle exec rake install && \
     bundle exec rake clobber
-RUN excel2xml download_xsd
+RUN submission-excel2xml download_xsd

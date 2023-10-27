@@ -1,0 +1,5 @@
+#!/usr/bin/env ruby
+
+require 'submission_excel2xml/cli'
+
+SubmissionExcel2xml::CLI.start

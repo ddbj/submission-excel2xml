@@ -1,8 +1,8 @@
 require 'thor'
 
-require 'excel2xml'
+require 'submission_excel2xml'
 
-module Excel2xml
+module SubmissionExcel2xml
   class CLI < Thor
     include Thor::Actions
 
@@ -15,13 +15,13 @@ module Excel2xml
       %w(analysis annotation common experiment package run sample study submission).each do |part|
         url = "#{base}/dra/xsd/1-5/SRA.#{part}.xsd"
 
-        get url, Excel2xml.xsd_path.join(File.basename(url))
+        get url, SubmissionExcel2xml.xsd_path.join(File.basename(url))
       end
 
       %w(analysis common dac data dataset experiment policy sample study submission).each do |part|
         url = "#{base}/jga/xsd/1-2/JGA.#{part}.xsd"
 
-        get url, Excel2xml.xsd_path.join(File.basename(url))
+        get url, SubmissionExcel2xml.xsd_path.join(File.basename(url))
       end
     end
   end

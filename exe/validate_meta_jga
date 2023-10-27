@@ -4,7 +4,7 @@
 require 'rexml/document'
 require 'optparse'
 
-require 'excel2xml'
+require 'submission-excel2xml'
 
 #
 # Bioinformation and DDBJ Center
@@ -42,7 +42,7 @@ meta_object = ['Submission', 'Study', 'Sample', 'Experiment', 'Data', 'Analysis'
 ##
 
 ## Validate XMLs against JGA xsd
-xsd_path = Excel2xml.xsd_path
+xsd_path = SubmissionExcel2xml.xsd_path
 
 xml_a = []
 Dir.glob("#{submission_id}*xml").each{|xml|

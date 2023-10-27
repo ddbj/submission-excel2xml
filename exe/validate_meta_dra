@@ -8,7 +8,7 @@ require 'optparse'
 require 'open3'
 require 'json'
 
-require 'excel2xml'
+require 'submission-excel2xml'
 
 #
 # Bioinformation and DDBJ Center
@@ -62,7 +62,7 @@ if !(account == "" || submission_no == "")
 end
 
 ## Validate DRA XML against xsd
-xsd_path = Excel2xml.xsd_path
+xsd_path = SubmissionExcel2xml.xsd_path
 
 puts "\n== XML validation against SRA xsd ==" unless machine_readable
 
