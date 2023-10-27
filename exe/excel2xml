@@ -1,0 +1,5 @@
+#!/usr/bin/env ruby
+
+require 'excel2xml/cli'
+
+Excel2xml::CLI.start

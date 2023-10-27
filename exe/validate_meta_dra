@@ -50,8 +50,6 @@ OptionParser.new{|opt|
 
 }
 
-Excel2xml.download_xsd_if_necessary
-
 unless machine_readable
   puts "D-way account ID: #{account}"
   puts "Submission number: #{submission_no}"

@@ -34,8 +34,6 @@ OptionParser.new{|opt|
   end
 }
 
-Excel2xml.download_xsd_if_necessary
-
 # metadata objects
 meta_object = ['Submission', 'Study', 'Sample', 'Experiment', 'Data', 'Analysis', 'Dataset', 'Policy', 'Dac']
 
