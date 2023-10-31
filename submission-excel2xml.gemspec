@@ -28,5 +28,4 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'roo',      '~> 2'
   spec.add_dependency 'rubyzip',  '~> 2'
   spec.add_dependency 'thor',     '~> 1'
-  spec.add_dependency 'xdg',      '~> 7'
 end

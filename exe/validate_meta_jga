@@ -50,7 +50,7 @@ Dir.glob("#{submission_id}*xml").each{|xml|
     xml_a.push(meta)
 
   # filepath to xsd
-  result = system("xmllint --schema #{xsd_path}JGA.#{meta.downcase}.xsd --noout #{submission_id}_#{meta}.xml")
+  result = system("xmllint --schema #{xsd_path}/JGA.#{meta.downcase}.xsd --noout #{submission_id}_#{meta}.xml")
 }
 
 ##
