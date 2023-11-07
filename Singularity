@@ -1,15 +1,15 @@
 BootStrap: docker
 From: ruby:3.2
 
-%environment
-    export XDG_DATA_HOME=/opt/submission-excel2xml/data
+%labels
+    Maintainer Bioinformation and DDBJ Center
+    Version    v2.0
 
 %files
     . /opt/submission-excel2xml
 
-%labels
-    Maintainer Bioinformation and DDBJ Center
-    Version    v2.0
+%environment
+    export XDG_DATA_HOME=/opt/submission-excel2xml/data
 
 %post
     apt-get update
