@@ -991,15 +991,21 @@ unless analyses_a.empty?
 						if ana[5] && ana[5].split(",")
 							for run_acc in ana[5].split(",")
 								# range
-								if run_acc =~ /^DRR(\d{6})-DRR(\d{6})$/
+								if run_acc =~ /^DRR(\d{6})-DRR(\d{6})$/ || run_acc =~ /^SRR(\d{6,})-SRR(\d{6,})$/ || run_acc =~ /^ERR(\d{6,})-ERR(\d{6,})$/
+
+									sra_prefix = run_acc[0, 3]
 									min = $1.to_i
 									max = $2.to_i
+									digit_one = $1.size.to_i
+									digit_two = $2.size.to_i
+
+									raise "Invalid accession range: #{run_acc}" unless digit_one == digit_two
 
 									[*min..max].each{|j|
-										targets.TARGET("sra_object_type" => "RUN", "accession" => "DRR#{j.to_s.rjust(6, "0")}")
-										run_accs_a.push("DRR#{j.to_s.rjust(6, "0")}")
+										targets.TARGET("sra_object_type" => "RUN", "accession" => "#{sra_prefix}#{j.to_s.rjust(digit_one, "0")}")
+										run_accs_a.push("#{sra_prefix}#{j.to_s.rjust(digit_one, "0")}")
 									}
-								elsif run_acc =~ /^DRR\d{6}$/
+								elsif run_acc =~ /^DRR(\d{6})$/ || run_acc =~ /^SRR(\d{6,})$/ || run_acc =~ /^ERR(\d{6,})$/
 									targets.TARGET("sra_object_type" => "RUN", "accession" => run_acc)
 									run_accs_a.push(run_acc)
 								else
