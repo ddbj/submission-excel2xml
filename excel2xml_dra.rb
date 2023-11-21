@@ -17,6 +17,7 @@ require 'date'
 # 2022-12-14 version 1.5 DRA separated
 # 2023-02-09 version 1.92 Run title
 # 2023-09-04 version 2.0 Analysis support
+# 2023-11-21 version 2.1 Analysis reference to Run
 #
 
 # Options
@@ -659,9 +660,9 @@ unless analyses_a.empty?
 								de_novo_assembly.PROCESSING{|processing|
 									processing.PIPELINE{|pipeline|
 
-									if ana[9] && ana[9].split(",") && ana[9].split(",").size > 0
+									if ana[11] && ana[11].split(",") && ana[11].split(",").size > 0
 
-										ana_steps_a = ana[9].split(",")
+										ana_steps_a = ana[11].split(",")
 
 										s = 1
 										for ana_step in ana_steps_a
@@ -729,9 +730,9 @@ unless analyses_a.empty?
 								sequence_annotation.PROCESSING{|processing|
 									processing.PIPELINE{|pipeline|
 
-									if ana[9] && ana[9].split(",") && ana[9].split(",").size > 0
+									if ana[11] && ana[11].split(",") && ana[11].split(",").size > 0
 
-										ana_steps_a = ana[9].split(",")
+										ana_steps_a = ana[11].split(",")
 
 										s = 1
 										for ana_step in ana_steps_a
@@ -797,16 +798,16 @@ unless analyses_a.empty?
 						analysis_type.REFERENCE_ALIGNMENT{|reference_alignment|
 
 							reference_alignment.ASSEMBLY{|assembly|
-								assembly.STANDARD("short_name" => ana[8])
+								assembly.STANDARD("short_name" => ana[9])
 							}
 
 								# pipeline section
 								reference_alignment.PROCESSING{|processing|
 									processing.PIPELINE{|pipeline|
 
-									if ana[9] && ana[9].split(",") && ana[9].split(",").size > 0
+									if ana[10] && ana[10].split(",") && ana[10].split(",").size > 0
 
-										ana_steps_a = ana[9].split(",")
+										ana_steps_a = ana[10].split(",")
 
 										s = 1
 										for ana_step in ana_steps_a
@@ -881,9 +882,9 @@ unless analyses_a.empty?
 								abundance_measurement.PROCESSING{|processing|
 									processing.PIPELINE{|pipeline|
 
-									if ana[9] && ana[9].split(",") && ana[9].split(",").size > 0
+									if ana[10] && ana[10].split(",") && ana[10].split(",").size > 0
 
-										ana_steps_a = ana[9].split(",")
+										ana_steps_a = ana[10].split(",")
 
 										s = 1
 										for ana_step in ana_steps_a
@@ -945,51 +946,97 @@ unless analyses_a.empty?
 
 				end
 
-				# Targets - BioSample accessions
-				samples_a = []
-				analysis_e.TARGETS{|targets|
-					if ana[4] && ana[4].split(",")
-						for sample in ana[4].split(",")
-							# range
-							if sample =~ /^SAMD(\d{8,})-SAMD(\d{8,})$/
-								min = $1.to_i
-								max = $2.to_i
+				## TARGETS
+				# If there is sample or run
+				if (ana[4] && !ana[4].empty?) || (ana[5] && !ana[5].empty?)
 
-								[*min..max].each{|j|
-									targets.TARGET("sra_object_type" => "SAMPLE", "accession" => "SAMD#{j.to_s.rjust(8, "0")}")
-									samples_a.push("SAMD#{j.to_s.rjust(8, "0")}")
-								}
-							elsif sample =~ /^SAMD\d{8,}$/
-								targets.TARGET("sra_object_type" => "SAMPLE", "accession" => sample)
-								samples_a.push(sample)
-							else
-								puts "Invalid BioSample accession: #{sample}"
+					analysis_e.TARGETS{|targets|
+
+					# SAMPLE TARGET
+					if ana[4] && !ana[4].empty?
+
+						# Targets - BioSample accessions
+						samples_a = []
+							if ana[4] && ana[4].split(",")
+								for sample in ana[4].split(",")
+									# range
+									if sample =~ /^SAMD(\d{8})-SAMD(\d{8})$/
+										min = $1.to_i
+										max = $2.to_i
+
+										[*min..max].each{|j|
+											targets.TARGET("sra_object_type" => "SAMPLE", "accession" => "SAMD#{j.to_s.rjust(8, "0")}")
+											samples_a.push("SAMD#{j.to_s.rjust(8, "0")}")
+										}
+									elsif sample =~ /^SAMD\d{8}$/
+										targets.TARGET("sra_object_type" => "SAMPLE", "accession" => sample)
+										samples_a.push(sample)
+									else
+										puts "Invalid BioSample accession: #{sample}"
+									end
+								end
+							end
+
+							# BioSample accession uniqueness check
+							unless samples_a.select{|e| samples_a.count(e) > 1}.empty?
+								puts "Duplicated BioSample accession references from an Analysis: #{samples_a.select{|e| samples_a.count(e) > 1}.sort.uniq.join(",")}"
+							end
+
+					end # if (ana[4] && !ana[4].empty?)
+
+					# Targets - Run accessions
+					run_accs_a = []
+					if ana[5] && !ana[5].empty?
+
+						if ana[5] && ana[5].split(",")
+							for run_acc in ana[5].split(",")
+								# range
+								if run_acc =~ /^DRR(\d{6})-DRR(\d{6})$/
+									min = $1.to_i
+									max = $2.to_i
+
+									[*min..max].each{|j|
+										targets.TARGET("sra_object_type" => "RUN", "accession" => "DRR#{j.to_s.rjust(6, "0")}")
+										run_accs_a.push("DRR#{j.to_s.rjust(6, "0")}")
+									}
+								elsif run_acc =~ /^DRR\d{6}$/
+									targets.TARGET("sra_object_type" => "RUN", "accession" => run_acc)
+									run_accs_a.push(run_acc)
+								else
+									puts "Invalid Run accession: #{run_acc}"
+								end
 							end
 						end
-					end
-				}
 
-				# BioSample accession uniqueness check
-				unless samples_a.select{|e| samples_a.count(e) > 1}.empty?
-					puts "Duplicated BioSample accession references from an Analysis: #{samples_a.select{|e| samples_a.count(e) > 1}.sort.uniq.join(",")}"
-				end
+						# Run accession uniqueness check
+						unless run_accs_a.select{|e| run_accs_a.count(e) > 1}.empty?
+							puts "Duplicated Run accession references from an Analysis: #{run_accs_a.select{|e| run_accs_a.count(e) > 1}.sort.uniq.join(",")}"
+						end
+
+					end # if (ana[5] && !ana[5].empty?)
+
+					} # close TARGETS element
+
+				end # if targets to sample and/or run
+
+				## TARGET ends
 
 				# Data block
-				# File Name/ana[5], File Type/ana[6], MD5 Checksum/ana[7]
+				# File Name/ana[6], File Type/ana[7], MD5 Checksum/ana[8]
 				analysis_e.DATA_BLOCK{|data_block|
-					if ana[5] && ana[6] && ana[7] && ana[5].split(",").size == ana[7].split(",").size
+					if ana[6] && ana[7] && ana[8] && ana[6].split(",").size == ana[8].split(",").size
 						# A filetype for all files
-						if ana[6].split(",").size == 1
+						if ana[7].split(",").size == 1
 							data_block.FILES{|files|
-								0.upto(ana[5].split(",").size - 1){|j|
-									files.FILE("filename" => ana[5].split(",")[j], "filetype" => ana[6], "checksum_method" => "MD5", "checksum" => ana[7].split(",")[j])
+								0.upto(ana[6].split(",").size - 1){|j|
+									files.FILE("filename" => ana[6].split(",")[j], "filetype" => ana[7], "checksum_method" => "MD5", "checksum" => ana[8].split(",")[j])
 								}
 							}
 						# each filetype for each file
-						elsif ana[6].split(",").size == ana[5].split(",").size
+						elsif ana[7].split(",").size == ana[6].split(",").size
 							data_block.FILES{|files|
-								0.upto(ana[5].split(",").size - 1){|j|
-									files.FILE("filename" => ana[5].split(",")[j], "filetype" => ana[6].split(",")[j], "checksum_method" => "MD5", "checksum" => ana[7].split(",")[j])
+								0.upto(ana[6].split(",").size - 1){|j|
+									files.FILE("filename" => ana[6].split(",")[j], "filetype" => ana[7].split(",")[j], "checksum_method" => "MD5", "checksum" => ana[8].split(",")[j])
 								}
 							}
 						else
@@ -1001,9 +1048,9 @@ unless analyses_a.empty?
 				}
 
 			# Attributes
-			if ana[10] && ana[10].split(",") && ana[10].split(",").size > 0
+			if ana[11] && ana[11].split(",") && ana[11].split(",").size > 0
 
-				ana_attrs_a = ana[10].split(",")
+				ana_attrs_a = ana[11].split(",")
 
 				analysis_e.ANALYSIS_ATTRIBUTES{|analysis_attributes|
 
@@ -1028,7 +1075,7 @@ unless analyses_a.empty?
 
 				} # analysis_e.ANALYSIS_ATTRIBUTES{|analysis_attributes|
 
-			end # if ana[10] && ana[10].split(",") && ana[10].split(",").size > 0
+			end # if ana[11] && ana[11].split(",") && ana[11].split(",").size > 0
 
 		} # analysis_set.ANALYSIS("accession" => "", "center_name" => center_name, "alias" => ana[0]){|analysis_e|
 

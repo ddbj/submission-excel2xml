@@ -3,8 +3,8 @@
 ## 日本語
 
 * 生命情報・DDBJ センター
-* 公開日: 2023-09-04
-* version: v2.0
+* 公開日: 2023-11-21
+* version: v2.1
 
 [Bioinformation and DDBJ Center](https://www.ddbj.nig.ac.jp/index-e.html) のデータベースに登録するためのメタデータ XML を生成、チェックするツール。
 * [DDBJ Sequence Read Archive (DRA)](https://www.ddbj.nig.ac.jp/dra/submission.html): Submission、Experiment、Run と Analysis (任意) XML を生成・チェックするためのエクセルとスクリプト
@@ -13,6 +13,7 @@
 
 ## 履歴
 
+* 2023-11-21: v2.1 Analysis に Run カラム追加
 * 2023-09-04: v2.0 Analysis 対応
 * 2023-02-09: v1.9.2 Run title
 * 2023-01-17: v1.9.1 PAIRED で NOMINAL_LENGTH を任意化
@@ -311,8 +312,8 @@ TBD
 ## English
 
 * Bioinformation and DDBJ Center
-* release: 2023-09-04
-* version: v2.0
+* release: 2023-11-21
+* version: v2.1
 
 These files are Excel, container images and tools for generation and validation of metadata XML files for databases of [Bioinformation and DDBJ Center](https://www.ddbj.nig.ac.jp/index-e.html).
 * [DDBJ Sequence Read Archive (DRA)](https://www.ddbj.nig.ac.jp/dra/submission-e.html): generate and check Submission, Experiment and Run XML files.
@@ -321,6 +322,7 @@ These files are Excel, container images and tools for generation and validation 
 
 ## History
 
+* 2023-11-21: v2.1 Run column added to Analysis
 * 2023-02-09: v2.0 Analysis support
 * 2023-02-09: v1.9.2 Run Title
 * 2023-01-17: v1.9.1 NOMINAL_LENGTH was made optional for PAIRED
