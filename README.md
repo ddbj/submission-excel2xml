@@ -52,12 +52,21 @@ cd submission-excel2xml
 sudo docker build -t excel2xml .
 ```
 
+## 開発環境構築
+
+```
+cd submission-excel2xml
+bundle install
+bundle exec submission-excel2xml download_xsd
+bundle exec excel2xml_dra # or excel2xml_jga, etc.
+```
+
 ## DRA
 
 ### エクセルにメタデータを記入
 
 メタデータとデータファイルをエクセル metadata_dra.xlsx の 'Submission'、'Experiment'、'Run' と 'Run-file' シートに記入します。メタデータについては[ウェブサイト](https://www.ddbj.nig.ac.jp/dra/submission.html#metadata)と 'Readme' シートをご覧ください。
-'example-0001_dra_metadata.xlsx' が記入例になります。
+'example/example-0001_dra_metadata.xlsx' が記入例になります。
 
 Analysis (任意) を登録する場合は 'Analysis' シートに記入します。Analysis のみを新規登録することはできず、Run を持った Submission に登録します。
 'example-0002_dra_metadata.xlsx' が記入例になります。
@@ -71,7 +80,7 @@ D-way アカウント ID、submission 番号と BioProject アクセッション
 * DRA submission id 'example-0001': -a example -i 0001
 * BioProject 'PRJDB7252' : -p PRJDB7252
 ```
-singularity exec excel2xml.simg excel2xml_dra.rb -a example -i 0001 -p PRJDB7252 example-0001_dra_metadata.xlsx
+singularity exec excel2xml.simg excel2xml_dra -a example -i 0001 -p PRJDB7252 example-0001_dra_metadata.xlsx
 ```
 
 エクセルから三つの XML が生成されます。
@@ -84,7 +93,7 @@ Analysis シートが記入されている場合は Analysis XML も生成され
 
 Submission ID を指定して XML をチェックします。XML は submission-excel2xml ディレクトリ直下に配置されている必要があります。SRA xsd ファイルは build 中にコンテナー内の /opt/submission-excel2xml/ にダウンロードされています。
 ```
-singularity exec excel2xml.simg validate_meta_dra.rb -a example -i 0001
+singularity exec excel2xml.simg validate_meta_dra -a example -i 0001
 ```
 
 ここでは xsd に対するチェックと最低限のチェックが実施されます。
@@ -99,7 +108,7 @@ DRA の登録サイトではより詳細なチェックが実施されるため�
 * BioProject 'PRJDB7252' : -p PRJDB7252
 * Center name: NIG
 ```
-singularity exec excel2xml.simg excel2xml_dra.rb -a example -i 0001 -p PRJDB7252 -c NIG example-0001_dra_metadata.xlsx
+singularity exec excel2xml.simg excel2xml_dra -a example -i 0001 -p PRJDB7252 -c NIG example-0001_dra_metadata.xlsx
 ```
 
 エクセルから Analysis XML が生成されます。
@@ -115,7 +124,7 @@ D-way アカウント ID、submission 番号、BioProject アクセッション�
 * BioProject 'PRJDB7252' : -p PRJDB7252
 * 'path_to_excel_directory': エクセルを含むディレクトリのフルパス
 ```
-sudo docker run -v /path_to_excel_directory:/data -w /data excel2xml excel2xml_dra.rb -a example -i 0001 -p PRJDB7252 example-0001_dra_metadata.xlsx
+sudo docker run -v /path_to_excel_directory:/data -w /data excel2xml excel2xml_dra -a example -i 0001 -p PRJDB7252 example-0001_dra_metadata.xlsx
 ```
 
 エクセルから三つの XML が生成されます。
@@ -128,7 +137,7 @@ Analysis シートが記入されている場合は Analysis XML も生成され
 
 Submission ID を指定して XML をチェックします。XML は submission-excel2xml ディレクトリ直下に配置されている必要があります。SRA xsd ファイルは build 中にコンテナー内の /opt/submission-excel2xml/ にダウンロードされています。
 ```
-sudo docker run -v /path_to_excel_directory:/data -w /data excel2xml validate_meta_dra.rb -a example -i 0001
+sudo docker run -v /path_to_excel_directory:/data -w /data excel2xml validate_meta_dra -a example -i 0001
 ```
 
 ここでは xsd に対するチェックと最低限のチェックが実施されます。
@@ -143,7 +152,7 @@ DRA の登録サイトではより詳細なチェックが実施されるため�
 * BioProject 'PRJDB7252' : -p PRJDB7252
 * Center name: NIG
 ```
-sudo docker run -v /path_to_excel_directory:/data -w /data excel2xml excel2xml_dra.rb -a example -i 0001 -p PRJDB7252 -c NIG example-0001_dra_metadata.xlsx
+sudo docker run -v /path_to_excel_directory:/data -w /data excel2xml excel2xml_dra -a example -i 0001 -p PRJDB7252 -c NIG example-0001_dra_metadata.xlsx
 ```
 
 エクセルから Analysis XML が生成されます。
@@ -198,7 +207,7 @@ JGA submission id を指定します。
 例
 * JGA Submission ID 'JSUB999999': -j JSUB999999
 ```
-singularity exec excel2xml.simg excel2xml_jga.rb -j JSUB999999 JSUB999999_jga_metadata.xlsx
+singularity exec excel2xml.simg excel2xml_jga -j JSUB999999 JSUB999999_jga_metadata.xlsx
 ```
 
 エクセルから七つの XML が生成されます。
@@ -212,7 +221,7 @@ singularity exec excel2xml.simg excel2xml_jga.rb -j JSUB999999 JSUB999999_jga_me
 
 JGA Submission ID を指定して XML をチェックします。XML は submission-excel2xml ディレクトリ直下に配置されている必要があります。JGA xsd ファイルは build 中にコンテナー内の /opt/submission-excel2xml/ にダウンロードされています。
 ```
-singularity exec excel2xml.simg validate_meta_jga.rb -j JSUB999999
+singularity exec excel2xml.simg validate_meta_jga -j JSUB999999
 ```
 
 ここでは xsd に対するチェックと最低限のチェックが実施されます。
@@ -226,7 +235,7 @@ JGA submission id を指定します。
 * JGA Submission ID 'JSUB999999': -j JSUB999999
 * 'path_to_excel_directory': エクセルを含むディレクトリのフルパス
 ```
-sudo docker run -v /path_to_excel_directory:/data -w /data excel2xml excel2xml_jga.rb -j JSUB999999 JSUB999999_jga_metadata.xlsx
+sudo docker run -v /path_to_excel_directory:/data -w /data excel2xml excel2xml_jga -j JSUB999999 JSUB999999_jga_metadata.xlsx
 ```
 
 エクセルから七つの XML が生成されます。
@@ -240,7 +249,7 @@ sudo docker run -v /path_to_excel_directory:/data -w /data excel2xml excel2xml_j
 
 Submission ID を指定して XML をチェックします。XML は submission-excel2xml ディレクトリ直下に配置されている必要があります。JGA xsd ファイルは build 中にコンテナー内の /opt/submission-excel2xml/ にダウンロードされています。
 ```
-sudo docker run -v /path_to_excel_directory:/data -w /data excel2xml validate_meta_jga.rb -j JSUB999999
+sudo docker run -v /path_to_excel_directory:/data -w /data excel2xml validate_meta_jga -j JSUB999999
 ```
 
 ここでは xsd に対するチェックと最低限のチェックが実施されます。
@@ -293,12 +302,12 @@ Submission ID には AGD Submission ID (例 ASUB000001) を指定します。
 ```
 cp /lustre9/open/shared_data/software/submission-excel2xml/excel2xml.simg ~/
 cd
-singularity exec excel2xml.simg excel2xml_dra.rb -a example -i 0001 -p PRJDB7252 example-0001_dra_metadata.xlsx
+singularity exec excel2xml.simg excel2xml_dra -a example -i 0001 -p PRJDB7252 example-0001_dra_metadata.xlsx
 ```
 
 XML のチェック。
 ```
-singularity exec excel2xml.simg validate_meta_dra.rb -a example -i 0001
+singularity exec excel2xml.simg validate_meta_dra -a example -i 0001
 ```
 
 ### JGA
@@ -361,6 +370,15 @@ cd submission-excel2xml
 sudo docker build -t excel2xml .
 ```
 
+## Development
+
+```
+cd submission-excel2xml
+bundle install
+bundle exec submission-excel2xml download_xsd
+bundle exec excel2xml_dra # or excel2xml_jga, etc.
+```
+
 ## DRA
 
 ### Enter metadata in the excel
@@ -381,7 +399,7 @@ For example,
 * DRA submission id 'example-0001': -a example -i 0001
 * BioProject 'PRJDB7252' : -p PRJDB7252
 ```
-singularity exec excel2xml.simg excel2xml_dra.rb -a example -i 0001 -p PRJDB7252 example-0001_dra_metadata.xlsx
+singularity exec excel2xml.simg excel2xml_dra -a example -i 0001 -p PRJDB7252 example-0001_dra_metadata.xlsx
 ```
 
 Three XMLs are generated from the excel.
@@ -394,7 +412,7 @@ When an Analysis sheet is filled, an Analysis XML is generated.
 
 Validate the XMLs by specifying the submission ID. The XML files must be under the submission-excel2xml directory. The SRA xsd files have been downloaded to /opt/submission-excel2xml/ from [pub](https://github.com/ddbj/pub) in the container during the build.
 ```
-singularity exec excel2xml.simg validate_meta_dra.rb -a example -i 0001
+singularity exec excel2xml.simg validate_meta_dra -a example -i 0001
 ```
 
 Please note that this validator only performs xsd validation and minimum checks.
@@ -410,7 +428,7 @@ Example
 * BioProject 'PRJDB7252' : -p PRJDB7252
 * Center name: NIG
 ```
-singularity exec excel2xml.simg excel2xml_dra.rb -a example -i 0001 -p PRJDB7252 -c NIG example-0001_dra_metadata.xlsx
+singularity exec excel2xml.simg excel2xml_dra -a example -i 0001 -p PRJDB7252 -c NIG example-0001_dra_metadata.xlsx
 ```
 
 An Analysis XML is generated from the excel.
@@ -426,7 +444,7 @@ For example,
 * BioProject 'PRJDB7252' : -p PRJDB7252
 * 'path_to_excel_directory': full path of the directory which contains the excel.
 ```
-sudo docker run -v /path_to_excel_directory:/data -w /data excel2xml excel2xml_dra.rb -a example -i 0001 -p PRJDB7252 example-0001_dra_metadata.xlsx
+sudo docker run -v /path_to_excel_directory:/data -w /data excel2xml excel2xml_dra -a example -i 0001 -p PRJDB7252 example-0001_dra_metadata.xlsx
 ```
 
 Three XMLs are generated from the excel.
@@ -439,7 +457,7 @@ When an Analysis sheet is filled, an Analysis XML is generated.
 
 Validate the XMLs by specifying the submission ID. The XML files must be under the submission-excel2xml directory. The SRA xsd files have been downloaded to /opt/submission-excel2xml/ from [pub](https://github.com/ddbj/pub) in the container during the build.
 ```
-sudo docker run -v /path_to_excel_directory:/data -w /data excel2xml validate_meta_dra.rb -a example -i 0001
+sudo docker run -v /path_to_excel_directory:/data -w /data excel2xml validate_meta_dra -a example -i 0001
 ```
 
 Please note that this validator only performs xsd validation and minimum checks.
@@ -455,7 +473,7 @@ Example
 * BioProject 'PRJDB7252' : -p PRJDB7252
 * Center name: NIG
 ```
-singularity exec excel2xml.simg excel2xml_dra.rb -a example -i 0001 -p PRJDB7252 -c NIG example-0001_dra_metadata.xlsx
+singularity exec excel2xml.simg excel2xml_dra -a example -i 0001 -p PRJDB7252 -c NIG example-0001_dra_metadata.xlsx
 ```
 
 An Analysis XML is generated from the excel.
@@ -517,12 +535,12 @@ Generate Submission, Experiment and Run XMLs from the excel.
 ```
 cp /lustre9/open/shared_data/software/submission-excel2xml/excel2xml.simg ~/
 cd
-singularity exec excel2xml.simg excel2xml.rb -a example -i 0001 -p PRJDB7252 example-0001_dra_metadata.xlsx
+singularity exec excel2xml.simg excel2xml -a example -i 0001 -p PRJDB7252 example-0001_dra_metadata.xlsx
 ```
 
 Validate the XMLs.
 ```
-singularity exec excel2xml.simg validate_meta_dra.rb -a example -i 0001
+singularity exec excel2xml.simg validate_meta_dra -a example -i 0001
 ```
 
 ### JGA

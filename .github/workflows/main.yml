@@ -1,0 +1,26 @@
+name: Ruby
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: Ruby ${{ matrix.ruby }}
+
+    strategy:
+      matrix:
+        ruby:
+          - '3.2.2'
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: ${{ matrix.ruby }}
+        bundler-cache: true
+
+    - run: bundle exec submission-excel2xml download_xsd
+    - run: bundle exec rake
