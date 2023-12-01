@@ -111,16 +111,20 @@ if FileTest.exist?("#{submission_id}_dra_Submission.xml")
 
   doc_submission.css('SUBMISSION').each do |submission|
 
-    hold = submission.at_css('HOLD').attribute("HoldUntilDate").value
+		if submission.at_css('HOLD') && submission.at_css('HOLD').attribute("HoldUntilDate") && submission.at_css('HOLD').attribute("HoldUntilDate").value
 
-    # check: hold date >= today
-    if Date.parse(hold) < Date.today
-      if machine_readable
-        errors << {object_id: 'Submission', message: 'Past hold date'}
-      else
-        puts "Error: Submission: Past hold date"
-      end
-    end
+			hold = submission.at_css('HOLD').attribute("HoldUntilDate").value
+
+			# check: hold date >= today
+			if Date.parse(hold) < Date.today
+				if machine_readable
+					errors << {object_id: 'Submission', message: 'Past hold date'}
+				else
+					puts "Error: Submission: Past hold date"
+				end
+			end
+
+		end # if HOLD
 
   end # doc_submission.css('SUBMISSION')
 
