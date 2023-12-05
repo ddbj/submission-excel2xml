@@ -97,15 +97,15 @@ DRA の登録サイトではより詳細なチェックが実施されるため�
 既存 Submission に Analysis を追加する場合、'Analysis' シートのみを記入し、Analysis XML を生成します。XML 生成時に -c で center name を指定します。
 
 例
-* DRA submission id 'example-0001': -a example -i 0001
+* DRA submission id 'example-0002': -a example -i 0002
 * BioProject 'PRJDB7252' : -p PRJDB7252
 * Center name: NIG
 ```
-singularity exec excel2xml.simg excel2xml_dra -a example -i 0001 -p PRJDB7252 -c NIG example/example-0001_dra_metadata.xlsx
+singularity exec excel2xml.simg excel2xml_dra -a example -i 0002 -p PRJDB7252 -c NIG example/example-0002_dra_metadata.xlsx
 ```
 
 エクセルから Analysis XML が生成されます。
-* example-0001_dra_Analysis.xml
+* example-0002_dra_Analysis.xml
 
 ### XML 生成とチェック: Docker
 
@@ -141,15 +141,15 @@ DRA の登録サイトではより詳細なチェックが実施されるため�
 既存 Submission に Analysis を追加する場合、'Analysis' シートのみを記入し、Analysis XML を生成します。XML 生成時に -c で center name を指定します。
 
 例
-* DRA submission id 'example-0001': -a example -i 0001
+* DRA submission id 'example-0002': -a example -i 0002
 * BioProject 'PRJDB7252' : -p PRJDB7252
 * Center name: NIG
 ```
-sudo docker run -v /path_to_excel_directory:/data -w /data excel2xml excel2xml_dra -a example -i 0001 -p PRJDB7252 -c NIG example/example-0001_dra_metadata.xlsx
+sudo docker run -v /path_to_excel_directory:/data -w /data excel2xml excel2xml_dra -a example -i 0002 -p PRJDB7252 -c NIG example/example-0002_dra_metadata.xlsx
 ```
 
 エクセルから Analysis XML が生成されます。
-* example-0001_dra_Analysis.xml
+* example-0002_dra_Analysis.xml
 
 ### チェック
 
@@ -410,11 +410,11 @@ so the checked XMLs may be failed in the DRA submission system.
 To add Analysis object(s) to an existing Submission, you may enter an 'Analysis' sheet only and generate only an Analysis XML. Specify a center name by -c option.
 
 Example
-* DRA submission id 'example-0001': -a example -i 0001
+* DRA submission id 'example-0002': -a example -i 0002
 * BioProject 'PRJDB7252' : -p PRJDB7252
 * Center name: NIG
 ```
-singularity exec excel2xml.simg excel2xml_dra -a example -i 0001 -p PRJDB7252 -c NIG example/example-0001_dra_metadata.xlsx
+singularity exec excel2xml.simg excel2xml_dra -a example -i 0002 -p PRJDB7252 -c NIG example/example-0002_dra_metadata.xlsx
 ```
 
 An Analysis XML is generated from the excel.
@@ -455,15 +455,15 @@ so the checked XMLs may be failed in the DRA submission system.
 To add Analysis object(s) to an existing Submission, you may enter an 'Analysis' sheet only and generate only an Analysis XML. Specify a center name by -c option.
 
 Example
-* DRA submission id 'example-0001': -a example -i 0001
+* DRA submission id 'example-0002': -a example -i 0002
 * BioProject 'PRJDB7252' : -p PRJDB7252
 * Center name: NIG
 ```
-singularity exec excel2xml.simg excel2xml_dra -a example -i 0001 -p PRJDB7252 -c NIG example/example-0001_dra_metadata.xlsx
+singularity exec excel2xml.simg excel2xml_dra -a example -i 0002 -p PRJDB7252 -c NIG example/example-0002_dra_metadata.xlsx
 ```
 
 An Analysis XML is generated from the excel.
-* example-0001_dra_Analysis.xml
+* example-0002_dra_Analysis.xml
 
 ### Validation results
 
