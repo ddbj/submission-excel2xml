@@ -61,7 +61,7 @@ sudo docker build -t excel2xml .
 'example/example-0001_dra_metadata.xlsx' が記入例になります。
 
 Analysis (任意) を登録する場合は 'Analysis' シートに記入します。Analysis のみを新規登録することはできず、Run を持った Submission に登録します。
-'example-0002_dra_metadata.xlsx' が記入例になります。
+'example/example-0002_dra_metadata.xlsx' が記入例になります。
 
 ### XML 生成とチェック: Singularity
 
@@ -72,7 +72,7 @@ D-way アカウント ID、submission 番号と BioProject アクセッション
 * DRA submission id 'example-0001': -a example -i 0001
 * BioProject 'PRJDB7252' : -p PRJDB7252
 ```
-singularity exec excel2xml.simg excel2xml_dra -a example -i 0001 -p PRJDB7252 example-0001_dra_metadata.xlsx
+singularity exec excel2xml.simg excel2xml_dra -a example -i 0001 -p PRJDB7252 example/example-0001_dra_metadata.xlsx
 ```
 
 エクセルから三つの XML が生成されます。
@@ -100,7 +100,7 @@ DRA の登録サイトではより詳細なチェックが実施されるため�
 * BioProject 'PRJDB7252' : -p PRJDB7252
 * Center name: NIG
 ```
-singularity exec excel2xml.simg excel2xml_dra -a example -i 0001 -p PRJDB7252 -c NIG example-0001_dra_metadata.xlsx
+singularity exec excel2xml.simg excel2xml_dra -a example -i 0001 -p PRJDB7252 -c NIG example/example-0001_dra_metadata.xlsx
 ```
 
 エクセルから Analysis XML が生成されます。
@@ -116,7 +116,7 @@ D-way アカウント ID、submission 番号、BioProject アクセッション�
 * BioProject 'PRJDB7252' : -p PRJDB7252
 * 'path_to_excel_directory': エクセルを含むディレクトリのフルパス
 ```
-sudo docker run -v /path_to_excel_directory:/data -w /data excel2xml excel2xml_dra -a example -i 0001 -p PRJDB7252 example-0001_dra_metadata.xlsx
+sudo docker run -v /path_to_excel_directory:/data -w /data excel2xml excel2xml_dra -a example -i 0001 -p PRJDB7252 example/example-0001_dra_metadata.xlsx
 ```
 
 エクセルから三つの XML が生成されます。
@@ -144,7 +144,7 @@ DRA の登録サイトではより詳細なチェックが実施されるため�
 * BioProject 'PRJDB7252' : -p PRJDB7252
 * Center name: NIG
 ```
-sudo docker run -v /path_to_excel_directory:/data -w /data excel2xml excel2xml_dra -a example -i 0001 -p PRJDB7252 -c NIG example-0001_dra_metadata.xlsx
+sudo docker run -v /path_to_excel_directory:/data -w /data excel2xml excel2xml_dra -a example -i 0001 -p PRJDB7252 -c NIG example/example-0001_dra_metadata.xlsx
 ```
 
 エクセルから Analysis XML が生成されます。
@@ -181,7 +181,7 @@ Run から参照されていない Experiment が存在する。
 
 ### Github や XML 生成方法が分からない場合
 
-[DRA メタデータエクセル](https://www.ddbj.nig.ac.jp/files/submission/dra_metadata.xlsx) をウェブサイトからダウンロード、内容を英語で記入し、メール (trace@ddbj.nig.ac.jp) 添付で DRA チームにお送りください。
+[DRA メタデータエクセル](https://github.com/ddbj/submission-excel2xml/blob/main/metadata_dra.xlsx) をダウンロード、内容を英語で記入し、メール (trace@ddbj.nig.ac.jp) 添付で DRA チームにお送りください。
 
 ## JGA
 
@@ -189,7 +189,7 @@ Run から参照されていない Experiment が存在する。
 
 メタデータとデータファイルをエクセル JGA_metadata.xlsx の 'Submission'、'Study'、'Sample'、'Experiment'、'Data'、'Analysis' (該当する場合)、'Dataset' と 'File' シートに記入します。
 メタデータについては[ウェブサイト](https://www.ddbj.nig.ac.jp/jga/submission.html)と 'Readme' シートをご覧ください。
-'JSUB999999_jga_metadata.xlsx' が記入例になります。
+'example/JSUB999999_jga_metadata.xlsx' が記入例になります。
 
 ### XML 生成とチェック: Singularity
 
@@ -199,7 +199,7 @@ JGA submission id を指定します。
 例
 * JGA Submission ID 'JSUB999999': -j JSUB999999
 ```
-singularity exec excel2xml.simg excel2xml_jga -j JSUB999999 JSUB999999_jga_metadata.xlsx
+singularity exec excel2xml.simg excel2xml_jga -j JSUB999999 example/JSUB999999_jga_metadata.xlsx
 ```
 
 エクセルから七つの XML が生成されます。
@@ -227,7 +227,7 @@ JGA submission id を指定します。
 * JGA Submission ID 'JSUB999999': -j JSUB999999
 * 'path_to_excel_directory': エクセルを含むディレクトリのフルパス
 ```
-sudo docker run -v /path_to_excel_directory:/data -w /data excel2xml excel2xml_jga -j JSUB999999 JSUB999999_jga_metadata.xlsx
+sudo docker run -v /path_to_excel_directory:/data -w /data excel2xml excel2xml_jga -j JSUB999999 example/JSUB999999_jga_metadata.xlsx
 ```
 
 エクセルから七つの XML が生成されます。
@@ -274,7 +274,7 @@ XML を JGA データ受付サーバにアップロードします。アップ�
 
 ### Github や XML 生成方法が分からない場合
 
-[JGA メタデータエクセル](https://github.com/ddbj/submission-excel2xml/raw/master/JGA_metadata.xlsx)をダウンロード、内容を英語で記入し、メール (jga@ddbj.nig.ac.jp) 添付で JGA チームにお送りください。
+[JGA メタデータエクセル](https://github.com/ddbj/submission-excel2xml/raw/main/JGA_metadata.xlsx)をダウンロード、内容を英語で記入し、メール (jga@ddbj.nig.ac.jp) 添付で JGA チームにお送りください。
 
 ## AGD
 
@@ -294,7 +294,7 @@ Submission ID には AGD Submission ID (例 ASUB000001) を指定します。
 ```
 cp /lustre9/open/shared_data/software/submission-excel2xml/excel2xml.simg ~/
 cd
-singularity exec excel2xml.simg excel2xml_dra -a example -i 0001 -p PRJDB7252 example-0001_dra_metadata.xlsx
+singularity exec excel2xml.simg excel2xml_dra -a example -i 0001 -p PRJDB7252 example/example-0001_dra_metadata.xlsx
 ```
 
 XML のチェック。
@@ -357,19 +357,10 @@ sudo singularity build excel2xml.simg Singularity
 
 ### Docker
 
-[Download](https://ddbj.nig.ac.jp/public/software/submission-excel2xml/) the Docker image or build the Docker image as follows.
+Build the Docker image as follows.
 ```
 cd submission-excel2xml
 sudo docker build -t excel2xml .
-```
-
-## Development
-
-```
-cd submission-excel2xml
-bundle install
-bundle exec submission-excel2xml download_xsd
-bundle exec excel2xml_dra # or excel2xml_jga, etc.
 ```
 
 ## DRA
@@ -381,7 +372,7 @@ See our [website](https://www.ddbj.nig.ac.jp/dra/submission-e.html#metadata) for
 See 'example-0001_dra_metadata.xlsx' for example.
 
 To submit Analysis (optional) object(s), enter an 'Analysis' sheet. Analysis-only submission is not acceptable. Submit Analysis to a Submission having Run(s).
-See 'example-0002_dra_metadata.xlsx' for example.
+See 'example/example-0002_dra_metadata.xlsx' for example.
 
 ### Generate XMLs: Singularity
 
@@ -392,7 +383,7 @@ For example,
 * DRA submission id 'example-0001': -a example -i 0001
 * BioProject 'PRJDB7252' : -p PRJDB7252
 ```
-singularity exec excel2xml.simg excel2xml_dra -a example -i 0001 -p PRJDB7252 example-0001_dra_metadata.xlsx
+singularity exec excel2xml.simg excel2xml_dra -a example -i 0001 -p PRJDB7252 example/example-0001_dra_metadata.xlsx
 ```
 
 Three XMLs are generated from the excel.
@@ -421,7 +412,7 @@ Example
 * BioProject 'PRJDB7252' : -p PRJDB7252
 * Center name: NIG
 ```
-singularity exec excel2xml.simg excel2xml_dra -a example -i 0001 -p PRJDB7252 -c NIG example-0001_dra_metadata.xlsx
+singularity exec excel2xml.simg excel2xml_dra -a example -i 0001 -p PRJDB7252 -c NIG example/example-0001_dra_metadata.xlsx
 ```
 
 An Analysis XML is generated from the excel.
@@ -437,7 +428,7 @@ For example,
 * BioProject 'PRJDB7252' : -p PRJDB7252
 * 'path_to_excel_directory': full path of the directory which contains the excel.
 ```
-sudo docker run -v /path_to_excel_directory:/data -w /data excel2xml excel2xml_dra -a example -i 0001 -p PRJDB7252 example-0001_dra_metadata.xlsx
+sudo docker run -v /path_to_excel_directory:/data -w /data excel2xml excel2xml_dra -a example -i 0001 -p PRJDB7252 example/example-0001_dra_metadata.xlsx
 ```
 
 Three XMLs are generated from the excel.
@@ -466,7 +457,7 @@ Example
 * BioProject 'PRJDB7252' : -p PRJDB7252
 * Center name: NIG
 ```
-singularity exec excel2xml.simg excel2xml_dra -a example -i 0001 -p PRJDB7252 -c NIG example-0001_dra_metadata.xlsx
+singularity exec excel2xml.simg excel2xml_dra -a example -i 0001 -p PRJDB7252 -c NIG example/example-0001_dra_metadata.xlsx
 ```
 
 An Analysis XML is generated from the excel.
@@ -505,7 +496,7 @@ Your web browser may time out, however, submission processes are ongoing on the 
 
 ### When Github and XML generation are not clear for you
 
-Download [DRA metadata Excel](https://www.ddbj.nig.ac.jp/files/submission/dra_metadata.xlsx) from website, fill in and send it to the DRA team by Email (trace@ddbj.nig.ac.jp).
+Download [DRA metadata Excel](https://github.com/ddbj/submission-excel2xml/blob/main/metadata_dra.xlsx), fill in and send it to the DRA team by Email (trace@ddbj.nig.ac.jp).
 
 ## JGA
 
@@ -528,7 +519,7 @@ Generate Submission, Experiment and Run XMLs from the excel.
 ```
 cp /lustre9/open/shared_data/software/submission-excel2xml/excel2xml.simg ~/
 cd
-singularity exec excel2xml.simg excel2xml -a example -i 0001 -p PRJDB7252 example-0001_dra_metadata.xlsx
+singularity exec excel2xml.simg excel2xml -a example -i 0001 -p PRJDB7252 example/example-0001_dra_metadata.xlsx
 ```
 
 Validate the XMLs.
