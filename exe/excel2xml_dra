@@ -659,9 +659,9 @@ unless analyses_a.empty?
               de_novo_assembly.PROCESSING{|processing|
                 processing.PIPELINE{|pipeline|
 
-                  if ana[11] && ana[11].split(",") && ana[11].split(",").size > 0
+                  if ana[10] && ana[10].split(";") && ana[10].split(";").size > 0
 
-                    ana_steps_a = ana[11].split(",")
+                    ana_steps_a = ana[10].split(";")
 
                     s = 1
                     for ana_step in ana_steps_a
@@ -729,9 +729,9 @@ unless analyses_a.empty?
               sequence_annotation.PROCESSING{|processing|
                 processing.PIPELINE{|pipeline|
 
-                  if ana[11] && ana[11].split(",") && ana[11].split(",").size > 0
+                  if ana[10] && ana[10].split(";") && ana[10].split(";").size > 0
 
-                    ana_steps_a = ana[11].split(",")
+                    ana_steps_a = ana[10].split(";")
 
                     s = 1
                     for ana_step in ana_steps_a
@@ -804,9 +804,9 @@ unless analyses_a.empty?
               reference_alignment.PROCESSING{|processing|
                 processing.PIPELINE{|pipeline|
 
-                  if ana[10] && ana[10].split(",") && ana[10].split(",").size > 0
+                  if ana[10] && ana[10].split(";") && ana[10].split(";").size > 0
 
-                    ana_steps_a = ana[10].split(",")
+                    ana_steps_a = ana[10].split(";")
 
                     s = 1
                     for ana_step in ana_steps_a
@@ -881,9 +881,9 @@ unless analyses_a.empty?
               abundance_measurement.PROCESSING{|processing|
                 processing.PIPELINE{|pipeline|
 
-                  if ana[10] && ana[10].split(",") && ana[10].split(",").size > 0
+                  if ana[10] && ana[10].split(";") && ana[10].split(";").size > 0
 
-                    ana_steps_a = ana[10].split(",")
+                    ana_steps_a = ana[10].split(";")
 
                     s = 1
                     for ana_step in ana_steps_a
@@ -1053,9 +1053,9 @@ unless analyses_a.empty?
         }
 
         # Attributes
-        if ana[11] && ana[11].split(",") && ana[11].split(",").size > 0
+        if ana[11] && ana[11].split(";") && ana[11].split(";").size > 0
 
-          ana_attrs_a = ana[11].split(",")
+          ana_attrs_a = ana[11].split(";")
 
           analysis_e.ANALYSIS_ATTRIBUTES{|analysis_attributes|
 
@@ -1080,7 +1080,7 @@ unless analyses_a.empty?
 
           } # analysis_e.ANALYSIS_ATTRIBUTES{|analysis_attributes|
 
-        end # if ana[11] && ana[11].split(",") && ana[11].split(",").size > 0
+        end # if ana[11] && ana[11].split(";") && ana[11].split(";").size > 0
 
       } # analysis_set.ANALYSIS("accession" => "", "center_name" => center_name, "alias" => ana[0]){|analysis_e|
 
