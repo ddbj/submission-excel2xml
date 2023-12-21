@@ -100,9 +100,9 @@ DRA の登録サイトではより詳細なチェックが実施されるため�
 例
 * DRA submission id 'example-0002': -a example -i 0002
 * BioProject 'PRJDB7252' : -p PRJDB7252
-* Center name: NIG
+* Center name: National Institute of Genetics
 ```
-singularity exec excel2xml.simg excel2xml_dra -a example -i 0002 -p PRJDB7252 -c NIG example/example-0002_dra_metadata.xlsx
+singularity exec excel2xml.simg excel2xml_dra -a example -i 0002 -p PRJDB7252 -c "National Institute of Genetics" example/example-0002_dra_metadata.xlsx
 ```
 
 エクセルから Analysis XML が生成されます。
@@ -144,9 +144,9 @@ DRA の登録サイトではより詳細なチェックが実施されるため�
 例
 * DRA submission id 'example-0002': -a example -i 0002
 * BioProject 'PRJDB7252' : -p PRJDB7252
-* Center name: NIG
+* Center name: National Institute of Genetics
 ```
-sudo docker run -v /path_to_excel_directory:/data -w /data excel2xml excel2xml_dra -a example -i 0002 -p PRJDB7252 -c NIG example/example-0002_dra_metadata.xlsx
+sudo docker run -v /path_to_excel_directory:/data -w /data excel2xml excel2xml_dra -a example -i 0002 -p PRJDB7252 -c "National Institute of Genetics" example/example-0002_dra_metadata.xlsx
 ```
 
 エクセルから Analysis XML が生成されます。
@@ -414,9 +414,9 @@ To add Analysis object(s) to an existing Submission, you may enter an 'Analysis'
 Example
 * DRA submission id 'example-0002': -a example -i 0002
 * BioProject 'PRJDB7252' : -p PRJDB7252
-* Center name: NIG
+* Center name: National Institute of Genetics
 ```
-singularity exec excel2xml.simg excel2xml_dra -a example -i 0002 -p PRJDB7252 -c NIG example/example-0002_dra_metadata.xlsx
+singularity exec excel2xml.simg excel2xml_dra -a example -i 0002 -p PRJDB7252 -c "National Institute of Genetics" example/example-0002_dra_metadata.xlsx
 ```
 
 An Analysis XML is generated from the excel.
@@ -459,9 +459,9 @@ To add Analysis object(s) to an existing Submission, you may enter an 'Analysis'
 Example
 * DRA submission id 'example-0002': -a example -i 0002
 * BioProject 'PRJDB7252' : -p PRJDB7252
-* Center name: NIG
+* Center name: National Institute of Genetics
 ```
-singularity exec excel2xml.simg excel2xml_dra -a example -i 0002 -p PRJDB7252 -c NIG example/example-0002_dra_metadata.xlsx
+singularity exec excel2xml.simg excel2xml_dra -a example -i 0002 -p PRJDB7252 -c "National Institute of Genetics" example/example-0002_dra_metadata.xlsx
 ```
 
 An Analysis XML is generated from the excel.
