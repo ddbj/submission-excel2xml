@@ -17,6 +17,7 @@ require 'date'
 # 2023-02-09 version 1.92 Run title
 # 2023-09-04 version 2.0 Analysis support
 # 2023-11-21 version 2.1 Analysis reference to Run
+# 2023-12-21 version 2.2 center name changes
 #
 
 # Options
@@ -139,8 +140,7 @@ for num, line in submission_a
 
   if num == 2
     center_name = line[0].to_s if center_name.empty?
-    lab_name = line[1].to_s
-    hold = line[2].to_s
+    hold = line[1].to_s
   end
 
   if num > 4 && line[0] && line[1]
@@ -288,7 +288,7 @@ unless analysis_only
   # Output Submission XML
   if not submission_a.empty?
 
-    submission_f.puts xml_submission.SUBMISSION("accession" => "", "center_name" => center_name, "lab_name" => lab_name, "alias" => "#{submission_id}_Submission", "submission_date" => Time.now.to_datetime.rfc3339){|submission|
+    submission_f.puts xml_submission.SUBMISSION("accession" => "", "center_name" => center_name, "alias" => "#{submission_id}_Submission", "submission_date" => Time.now.to_datetime.rfc3339){|submission|
 
       submission.CONTACTS{|contacts|
 
