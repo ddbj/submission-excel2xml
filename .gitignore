@@ -1,3 +1,4 @@
+.DS_Store
 .rspec_status
 /.bundle/
 /.yardoc
@@ -7,3 +8,11 @@
 /pkg/
 /spec/reports/
 /tmp/
+
+# results from sample file
+JSUB999999*.xml
+example-0001*.xml
+example-0002*.xml
+
+# temporary files
+~$*.xlsx
