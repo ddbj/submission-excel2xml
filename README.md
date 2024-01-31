@@ -3,8 +3,8 @@
 ## 日本語
 
 * 生命情報・DDBJ センター
-* 公開日: 2023-12-21
-* version: v2.4
+* 公開日: 2024-01-31
+* version: v2.5
 
 [Bioinformation and DDBJ Center](https://www.ddbj.nig.ac.jp/index-e.html) のデータベースに登録するためのメタデータ XML を生成、チェックするツール。
 * [DDBJ Sequence Read Archive (DRA)](https://www.ddbj.nig.ac.jp/dra/submission.html): Submission、Experiment、Run と Analysis (任意) XML を生成・チェックするためのエクセルとスクリプト
@@ -13,6 +13,7 @@
 
 ## 履歴
 
+* 2024-01-31: v2.5 テンプレート・サンプルデータの修正
 * 2023-12-21: v2.4 center name 変更
 * 2023-12-05: v2.3 Analysis step と Attributes 複数値の区切りを , から ; に変更
 * 2023-12-01: v2.2 gem 化
@@ -315,8 +316,8 @@ TBD
 ## English
 
 * Bioinformation and DDBJ Center
-* release: 2023-12-01
-* version: v2.2
+* release: 2024-01-31
+* version: v2.5
 
 These files are Excel, container images and tools for generation and validation of metadata XML files for databases of [Bioinformation and DDBJ Center](https://www.ddbj.nig.ac.jp/index-e.html).
 * [DDBJ Sequence Read Archive (DRA)](https://www.ddbj.nig.ac.jp/dra/submission-e.html): generate and check Submission, Experiment and Run XML files.
@@ -325,6 +326,7 @@ These files are Excel, container images and tools for generation and validation 
 
 ## History
 
+* 2024-01-31: v2.5 Fixing templates and sample data
 * 2023-12-21: v2.4 center name changes
 * 2023-12-05: v2.3 Delimiter of Analysis step and Attributes was changed from "," to ";"
 * 2023-12-01: v2.2 gem
