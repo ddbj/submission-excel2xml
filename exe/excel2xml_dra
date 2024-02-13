@@ -471,64 +471,111 @@ unless analysis_only
 
           case exp[8]
 
-          when /454/i
-            platform.LS454{|platform_e|
-              platform_e.INSTRUMENT_MODEL(exp[8])
-            }
+					when /454/i
+						platform.LS454{|platform_e|
+							platform_e.INSTRUMENT_MODEL(exp[8])
+						}
 
-          when /illumina|nextseq|hiseq/i
-            platform.ILLUMINA{|platform_e|
-              platform_e.INSTRUMENT_MODEL(exp[8])
-            }
+					when /illumina|nextseq|hiseq/i
+						platform.ILLUMINA{|platform_e|
+							platform_e.INSTRUMENT_MODEL(exp[8])
+						}
 
-          when /solid/i
-            platform.ABI_SOLID{|platform_e|
-              platform_e.INSTRUMENT_MODEL(exp[8])
-            }
+          when "unspecified"
+						platform.ILLUMINA{|platform_e|
+							platform_e.INSTRUMENT_MODEL(exp[8])
+						}
 
-          when /AB 5500/
-            platform.ABI_SOLID{|platform_e|
-              platform_e.INSTRUMENT_MODEL(exp[8])
-            }
+					when /solid/i
+						platform.ABI_SOLID{|platform_e|
+							platform_e.INSTRUMENT_MODEL(exp[8])
+						}
 
-          when /Ion/
-            platform.ION_TORRENT{|platform_e|
-              platform_e.INSTRUMENT_MODEL(exp[8])
-            }
+					when /AB 5500/
+						platform.ABI_SOLID{|platform_e|
+							platform_e.INSTRUMENT_MODEL(exp[8])
+						}
 
-          when /pacbio/i
-            platform.PACBIO_SMRT{|platform_e|
-              platform_e.INSTRUMENT_MODEL(exp[8])
-            }
+					when /Ion/
+						platform.ION_TORRENT{|platform_e|
+							platform_e.INSTRUMENT_MODEL(exp[8])
+						}
+
+					when /pacbio/i
+						platform.PACBIO_SMRT{|platform_e|
+							platform_e.INSTRUMENT_MODEL(exp[8])
+						}
+
           when /Sequel/
-            platform.PACBIO_SMRT{|platform_e|
-              platform_e.INSTRUMENT_MODEL(exp[8])
-            }
+						platform.PACBIO_SMRT{|platform_e|
+							platform_e.INSTRUMENT_MODEL(exp[8])
+						}
+
+          when "Onso", "Revio"
+						platform.PACBIO_SMRT{|platform_e|
+							platform_e.INSTRUMENT_MODEL(exp[8])
+						}
+
           when /ION/
-            platform.OXFORD_NANOPORE{|platform_e|
-              platform_e.INSTRUMENT_MODEL(exp[8])
-            }
+						platform.OXFORD_NANOPORE{|platform_e|
+							platform_e.INSTRUMENT_MODEL(exp[8])
+						}
 
-          when /AB 3/
-            platform.CAPILLARY{|platform_e|
-              platform_e.INSTRUMENT_MODEL(exp[8])
-            }
-          when /Helicos HeliScope/
-            platform.HELICOS{|platform_e|
-              platform_e.INSTRUMENT_MODEL(exp[8])
-            }
+					when /AB 3/
+							platform.CAPILLARY{|platform_e|
+								platform_e.INSTRUMENT_MODEL(exp[8])
+							}
+					when /Helicos HeliScope/
+						platform.HELICOS{|platform_e|
+							platform_e.INSTRUMENT_MODEL(exp[8])
+						}
 
-          when /Complete/
-            platform.COMPLETE_GENOMICS{|platform_e|
-              platform_e.INSTRUMENT_MODEL(exp[8])
-            }
+					when /Complete/
+						platform.COMPLETE_GENOMICS{|platform_e|
+							platform_e.INSTRUMENT_MODEL(exp[8])
+						}
 
-          when /bgiseq|dnbseq|mgiseq/i
-            platform.BGISEQ{|platform_e|
-              platform_e.INSTRUMENT_MODEL(exp[8])
-            }
+					when /bgiseq|mgiseq/i
+						platform.BGISEQ{|platform_e|
+							platform_e.INSTRUMENT_MODEL(exp[8])
+						}
 
-          end
+          when /dnbseq/i
+						platform.DNBSEQ{|platform_e|
+							platform_e.INSTRUMENT_MODEL(exp[8])
+						}
+
+          when /Element/
+						platform.ELEMENT{|platform_e|
+							platform_e.INSTRUMENT_MODEL(exp[8])
+						}
+
+          when "UG 100"
+						platform.ULTIMA{|platform_e|
+							platform_e.INSTRUMENT_MODEL(exp[8])
+						}
+
+          when "GENIUS", "Genapsys Sequencer", "GS111"
+						platform.GENAPSYS{|platform_e|
+							platform_e.INSTRUMENT_MODEL(exp[8])
+						}
+
+          when "GenoCare 1600", "GenoLab M", "FASTASeq 300"
+						platform.GENEMIND{|platform_e|
+							platform_e.INSTRUMENT_MODEL(exp[8])
+						}
+
+          when "Tapestri"
+						platform.TAPESTRI{|platform_e|
+							platform_e.INSTRUMENT_MODEL(exp[8])
+						}
+
+          when "Sentosa SQ301"
+						platform.VELA_DIAGNOSTICS{|platform_e|
+							platform_e.INSTRUMENT_MODEL(exp[8])
+						}
+
+					end
 
           instrument_model = exp[8]
 
