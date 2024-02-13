@@ -13,7 +13,7 @@ module SubmissionExcel2xml
       base = 'https://raw.githubusercontent.com/ddbj/pub/master/docs'
 
       %w(analysis annotation common experiment package run sample study submission).each do |part|
-        url = "#{base}/dra/xsd/1-5/SRA.#{part}.xsd"
+        url = "#{base}/dra/xsd/1-6/SRA.#{part}.xsd"
 
         get url, SubmissionExcel2xml.xsd_path.join(File.basename(url))
       end
