@@ -11,15 +11,17 @@ require 'optparse'
 #
 
 # Update history
-# 2022-12-23 change handling of submission date
+# 2024-05-17 Change the way of describing Sample attributes
+# 2022-12-23 Change handling of submission date
 # 2022-12-22 AGD
-# 2022-12-14 publicly released
+# 2022-12-14 Publicly released
 
 ### Options
 account = ""
 submission_no = ""
 submission_id = ""
 study_accession = ""
+previous_sample_attrs_flag = false
 OptionParser.new{|opt|
 
   opt.on('-j [JSUB ID]', 'JSUB/ASUB submission ID'){|v|
@@ -34,6 +36,11 @@ OptionParser.new{|opt|
     puts "JGA/AGD Study Accession: #{v}"
   }
 
+  opt.on('-r', 'flag for the previous added Sample attributes format, internal use'){
+  	previous_sample_attrs_flag = true
+		puts "Previous added Sample attributes format: #{previous_sample_attrs_flag}"
+  }
+	
   begin
     opt.parse!
   rescue
@@ -306,21 +313,62 @@ end
 # Sample
 samples_a = Array.new
 sample_aliases_a = Array.new
+added_attr_name_a = Array.new
+fixed_attr_name_a = Array.new
 i = 0 # array index number
-
 for num, line in sample_a
 
+	# 追加属性名を取得
+	if num == 2
+
+		unless previous_sample_attrs_flag
+			
+			raise "Added Sample attributes in the previous format. Use -r option." if line[11] == "Attributes"
+		
+			line[1..10].each{|attr_name|
+				fixed_attr_name_a.push(attr_name)
+			}
+
+			line[11..-1].each{|attr_name|
+				if attr_name && attr_name.to_s
+					raise "Added attribute is included in fixed attributes: #{attr_name.to_s}" if fixed_attr_name_a.map(&:downcase).include?(attr_name.to_s.downcase)
+					added_attr_name_a.push(attr_name.to_s.strip)				
+				end
+			}
+		
+		end
+		
+	end
+	
   if /^Sample-\d{1,6}/ =~ line[0]
-    # alias
+    
+		added_attr_h = Hash.new
+		
+		# alias
     sample_number = line[0].split("-")[1].to_i
     sample_alias = submission_id + "_Sample_" + sprintf("%06d", line[0].split("-")[1].to_i)
     sample_aliases_a.push(sample_alias)
-
-    # Title があれば
+		
+    # Title があれば。追加属性は hash で格納
     if line[4]
-      samples_a.push([sample_alias, line[1], line[2], line[3], line[4], line[5], line[6], line[7], line[8], line[9], line[10], line[11]])
-    end
+			
+			if previous_sample_attrs_flag
+				samples_a.push([sample_alias, line[1], line[2], line[3], line[4], line[5], line[6], line[7], line[8], line[9], line[10], line[11]])
+			else
+				
+				# 追加属性があれば
+				if line[11..-1].size > 0
+					line[11..-1].each_with_index{|attr, idx|
+						added_attr_h.store(added_attr_name_a[idx], attr.to_s.strip) if added_attr_name_a[idx] && attr && attr.to_s
+					}
+				end
+				
+				samples_a.push([sample_alias, line[1], line[2], line[3], line[4], line[5], line[6], line[7], line[8], line[9], line[10], added_attr_h])
 
+			end
+
+		end # if line[4]
+			
   end
 
 end
@@ -916,20 +964,37 @@ sample_f.puts xml_sample.SAMPLE_SET{|sample_set|
           }
         end
 
-        # phenotypes
-        if sam[11] && sam[11].split(";")
+				if previous_sample_attrs_flag
 
-          sam[11].split(";").each{|phenotype|
-            sample_attributes.SAMPLE_ATTRIBUTE{|sample_attribute|
-              pp phenotype if phenotype.strip.split(":")[0].nil?
+					if sam[11] && sam[11].split(";")
 
-              sample_attribute.TAG(phenotype.strip.split(":")[0].strip)
-              sample_attribute.VALUE(phenotype.strip.split(":")[1].strip)
-            }
-          }
+						sam[11].split(";").each{|phenotype|
+							sample_attributes.SAMPLE_ATTRIBUTE{|sample_attribute|
+								pp phenotype if phenotype.strip.split(":")[0].nil?
+	
+								sample_attribute.TAG(phenotype.strip.split(":")[0].strip)
+								sample_attribute.VALUE(phenotype.strip.split(":")[1].strip)
+							}
+						}
+	
+					end
+					
+				else
 
-        end
+					# added attributes
+					sample_added_attr_h = Hash.new
+					sample_added_attr_h = sam[11]
+					unless sample_added_attr_h.empty?
+						sample_added_attr_h.each{|attr_name, attr_value|
+							sample_attributes.SAMPLE_ATTRIBUTE{|sample_attribute|
+								sample_attribute.TAG(attr_name)
+								sample_attribute.VALUE(attr_value)
+							}
+						}					
+					end
 
+			end
+				
       }
 
     }

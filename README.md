@@ -3,8 +3,8 @@
 ## 日本語
 
 * 生命情報・DDBJ センター
-* 公開日: 2024-02-14
-* version: v2.6
+* 公開日: 2024-05-17
+* version: v2.7
 
 [Bioinformation and DDBJ Center](https://www.ddbj.nig.ac.jp/index-e.html) のデータベースに登録するためのメタデータ XML を生成、チェックするツール。
 * [DDBJ Sequence Read Archive (DRA)](https://www.ddbj.nig.ac.jp/dra/submission.html): Submission、Experiment、Run と Analysis (任意) XML を生成・チェックするためのエクセルとスクリプト
@@ -13,6 +13,7 @@
 
 ## 履歴
 
+* 2024-05-17: v2.7 JGA Sample 追加属性の記載方法を変更
 * 2024-02-14: v2.6 DRA xsd 1.6.0
 * 2024-01-31: v2.5 テンプレート・サンプルデータの修正
 * 2023-12-21: v2.4 center name 変更
@@ -215,6 +216,8 @@ singularity exec excel2xml.simg excel2xml_jga -j JSUB999999 example/JSUB999999_j
 * JSUB999999_Study.xml
 * JSUB999999_Submission.xml
 
+Sample 追加属性の記載方法が v2.6 以前の形式 (例 age:37; collection_date:2015-03-05) の場合、-r オプションを付けて XML を生成します。　　
+
 JGA Submission ID を指定して XML をチェックします。XML は submission-excel2xml ディレクトリ直下に配置されている必要があります。JGA xsd ファイルは build 中にコンテナー内の /opt/submission-excel2xml/ にダウンロードされています。
 ```
 singularity exec excel2xml.simg validate_meta_jga -j JSUB999999
@@ -242,6 +245,8 @@ sudo docker run -v /path_to_excel_directory:/data -w /data excel2xml excel2xml_j
 * JSUB999999_Sample.xml
 * JSUB999999_Study.xml
 * JSUB999999_Submission.xml
+
+Sample 追加属性の記載方法が v2.6 以前の形式 (例 age:37; collection_date:2015-03-05) の場合、-r オプションを付けて XML を生成します。　　
 
 Submission ID を指定して XML をチェックします。XML は submission-excel2xml ディレクトリ直下に配置されている必要があります。JGA xsd ファイルは build 中にコンテナー内の /opt/submission-excel2xml/ にダウンロードされています。
 ```
@@ -317,8 +322,8 @@ TBD
 ## English
 
 * Bioinformation and DDBJ Center
-* release: 2024-02-14
-* version: v2.6
+* release: 2024-05-17
+* version: v2.7
 
 These files are Excel, container images and tools for generation and validation of metadata XML files for databases of [Bioinformation and DDBJ Center](https://www.ddbj.nig.ac.jp/index-e.html).
 * [DDBJ Sequence Read Archive (DRA)](https://www.ddbj.nig.ac.jp/dra/submission-e.html): generate and check Submission, Experiment and Run XML files.
@@ -327,6 +332,7 @@ These files are Excel, container images and tools for generation and validation 
 
 ## History
 
+* 2024-05-17: v2.7 Added sample attributes description format changed
 * 2024-02-14: v2.6 DRA xsd 1.6.0
 * 2024-01-31: v2.5 Fixing templates and sample data
 * 2023-12-21: v2.4 center name changes
