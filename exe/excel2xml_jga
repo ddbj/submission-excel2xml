@@ -576,28 +576,39 @@ end
 files_a = Array.new
 checksums_a = Array.new
 filenames_a = Array.new
+invalid_filenames_a = Array.new
 files_h = Hash.new
 i = 0 # array index number
 
-for num, line in file_a
+for num, line in file_a[3..-1]
+	
+  if line[0] && line[0] != ""
 
-  if line[0] && line[1] && line[0] != "" && line[1].strip.gsub(/[[:space:]]/, '') =~ /^[a-f0-9]{32}$/i
+		filename = line[0].strip
+		
+		if line[1] && line[1].strip.gsub(/[[:space:]]/, '') =~ /^[a-f0-9]{32}$/i
 
-    # md5
-    filename = line[0].strip
-    md5 = line[1].strip.gsub(/[[:space:]]/, '')
+			# md5			
+			md5 = line[1].strip.gsub(/[[:space:]]/, '')
 
-    files_h.store(filename, md5)
-    files_a.push([filename, md5])
-    checksums_a.push(md5)
-    filenames_a.push(filename)
+			files_h.store(filename, md5)
+			files_a.push([filename, md5])
+			checksums_a.push(md5)
+			filenames_a.push(filename)
 
-  end
+		# invalid md5 etc
+		else
+			invalid_filenames_a.push(filename)
+		end
 
+	end
+		
 end
 
-# alias 重複チェック
+# invalid md5 値
+puts "Invalid md5 checksum: #{invalid_filenames_a.join(",")}" if invalid_filenames_a.size > 0
 
+# alias 重複チェック
 sample_aliases_duplicated_a = sample_aliases_a.select{|e| sample_aliases_a.count(e) > 1 }.uniq
 experiment_aliases_duplicated_a = experiment_aliases_a.select{|e| experiment_aliases_a.count(e) > 1 }.uniq
 data_aliases_duplicated_a = data_aliases_a.select{|e| data_aliases_a.count(e) > 1 }.uniq
@@ -1820,8 +1831,8 @@ data_analysis_files_a = data_files_a + analysis_files_a
 
 if (filenames_a - data_analysis_files_a).size > 0
   puts "Some files in filelist are not in Data and Analysis: #{(filenames_a - data_analysis_files_a).sort.uniq.join(",")}"
-elsif (data_analysis_files_a - filenames_a).size > 0
-  puts "Some files in Data and Analysis are not in filelist: #{(data_analysis_files_a - filenames_a).sort.uniq.join(",")}"
+elsif (data_analysis_files_a - filenames_a).size > 0  
+	puts "Some files in Data and Analysis are not in filelist: #{(data_analysis_files_a - filenames_a).sort.uniq.join(",")}"
 else (data_analysis_files_a - filenames_a).size == 0
   puts "Files in filelist and those of Data and Analysis are identical."
 end
