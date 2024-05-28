@@ -580,7 +580,7 @@ invalid_filenames_a = Array.new
 files_h = Hash.new
 i = 0 # array index number
 
-for num, line in file_a[3..-1]
+for num, line in file_a[2..-1]
 	
   if line[0] && line[0] != ""
 
