@@ -3,8 +3,8 @@
 ## 日本語
 
 * 生命情報・DDBJ センター
-* 公開日: 2024-05-28
-* version: v2.8.1
+* 公開日: 2024-06-14
+* version: v2.9
 
 [Bioinformation and DDBJ Center](https://www.ddbj.nig.ac.jp/index-e.html) のデータベースに登録するためのメタデータ XML を生成、チェックするツール。
 * [DDBJ Sequence Read Archive (DRA)](https://www.ddbj.nig.ac.jp/dra/submission.html): Submission、Experiment、Run と Analysis (任意) XML を生成・チェックするためのエクセルとスクリプト
@@ -13,6 +13,7 @@
 
 ## 履歴
 
+* 2024-06-14: v2.9 Sample 属性追加、及び、公開指定の削除
 * 2024-05-28: v2.8.1 file bug fix
 * 2024-05-23: v2.8 md5 桁数エラー追加
 * 2024-05-17: v2.7 JGA Sample 追加属性の記載方法を変更
@@ -324,8 +325,8 @@ TBD
 ## English
 
 * Bioinformation and DDBJ Center
-* release: 2024-05-28
-* version: v2.8.1
+* release: 2024-06-14
+* version: v2.9
 
 These files are Excel, container images and tools for generation and validation of metadata XML files for databases of [Bioinformation and DDBJ Center](https://www.ddbj.nig.ac.jp/index-e.html).
 * [DDBJ Sequence Read Archive (DRA)](https://www.ddbj.nig.ac.jp/dra/submission-e.html): generate and check Submission, Experiment and Run XML files.
@@ -334,6 +335,7 @@ These files are Excel, container images and tools for generation and validation 
 
 ## History
 
+* 2024-06-14: v2.9 Sample attributes added and hold/release removed
 * 2024-05-28: v2.8.1 file bug fix
 * 2024-05-23: v2.8 md5 checksum value digit check added
 * 2024-05-17: v2.7 Added sample attributes description format changed

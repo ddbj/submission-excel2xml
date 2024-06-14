@@ -101,7 +101,7 @@ for meta in meta_object
     when "Study" then
       study_a.push([i, line])
     when "Sample" then
-      sample_a.push([i, line])
+      sample_a.push([i, line.map(&:to_s)])
     when "Experiment" then
       experiment_a.push([i, line])
     when "Data" then
@@ -133,9 +133,7 @@ for num, line in submission_a
     submission_h.store("nbdc_number", submission_a[i+1][1][0])
   end
 
-  if line[0] == "Hold/Release"
-    submission_h.store("hold", submission_a[i+1][1][0])
-  end
+	submission_h.store("hold", "Hold")
 
   if line[0] == "Contacts"
     j = num
@@ -325,11 +323,11 @@ for num, line in sample_a
 			
 			raise "Added Sample attributes in the previous format. Use -r option." if line[11] == "Attributes"
 		
-			line[1..10].each{|attr_name|
+			line[1..16].each{|attr_name|
 				fixed_attr_name_a.push(attr_name)
 			}
 
-			line[11..-1].each{|attr_name|
+			line[17..-1].each{|attr_name|
 				if attr_name && attr_name.to_s
 					raise "Added attribute is included in fixed attributes: #{attr_name.to_s}" if fixed_attr_name_a.map(&:downcase).include?(attr_name.to_s.downcase)
 					added_attr_name_a.push(attr_name.to_s.strip)				
@@ -340,36 +338,31 @@ for num, line in sample_a
 		
 	end
 	
-  if /^Sample-\d{1,6}/ =~ line[0]
-    
+  if /^Sample-\d{1,6}/ =~ line[0] && line[2] && !line[2].empty?
+
 		added_attr_h = Hash.new
 		
 		# alias
     sample_number = line[0].split("-")[1].to_i
     sample_alias = submission_id + "_Sample_" + sprintf("%06d", line[0].split("-")[1].to_i)
     sample_aliases_a.push(sample_alias)
-		
-    # Title があれば。追加属性は hash で格納
-    if line[4]
+					
+		if previous_sample_attrs_flag
+			samples_a.push([sample_alias, line[1], line[2], line[3], line[4], line[5], line[6], line[7], line[8], line[9], line[10], line[11], line[12], line[13], line[14], line[15], line[16]])
+		else
 			
-			if previous_sample_attrs_flag
-				samples_a.push([sample_alias, line[1], line[2], line[3], line[4], line[5], line[6], line[7], line[8], line[9], line[10], line[11]])
-			else
-				
-				# 追加属性があれば
-				if line[11..-1].size > 0
-					line[11..-1].each_with_index{|attr, idx|
-						added_attr_h.store(added_attr_name_a[idx], attr.to_s.strip) if added_attr_name_a[idx] && attr && attr.to_s
-					}
-				end
-				
-				samples_a.push([sample_alias, line[1], line[2], line[3], line[4], line[5], line[6], line[7], line[8], line[9], line[10], added_attr_h])
-
+			# 追加属性があれば
+			if line[17..-1].size > 0
+				line[17..-1].each_with_index{|attr, idx|
+					added_attr_h.store(added_attr_name_a[idx], attr.to_s.strip) if added_attr_name_a[idx] && attr && attr.to_s
+				}
 			end
-
-		end # if line[4]
 			
-  end
+			samples_a.push([sample_alias, line[1], line[2], line[3], line[4], line[5], line[6], line[7], line[8], line[9], line[10], line[11], line[12], line[13], line[14], line[15], line[16], added_attr_h])
+
+		end
+					
+  end # if /^Sample-\d{1,6}/ =~ line[0]
 
 end
 
@@ -900,21 +893,22 @@ study_f.puts xml_study.STUDY_SET{|study_set|
 # Sample
 sample_f.puts xml_sample.SAMPLE_SET{|sample_set|
 
-  for sam in samples_a
-    sample_set.SAMPLE("accession" => "", "center_name" => center_name, "alias" => sam[0]){|sample|
-      sample.TITLE(sam[4])
+  for sam in samples_a    		
+				
+		sample_set.SAMPLE("accession" => "", "center_name" => center_name, "alias" => sam[0]){|sample|
+      sample.TITLE(sam[2])
       sample.SAMPLE_NAME{|sample_name|
 
         sample_name.TAXON_ID("9606")
         sample_name.SCIENTIFIC_NAME("Homo sapiens")
         sample_name.COMMON_NAME("Human")
 
-        sample_name.DONOR_ID(sam[2])
+        sample_name.DONOR_ID(sam[4])
 
       }
 
-      sample.SAMPLE_GROUP_TYPE(sam[6])
-      sample.DESCRIPTION(sam[5])
+      sample.SAMPLE_GROUP_TYPE(sam[12])
+      sample.DESCRIPTION(sam[3])
 
       # attributes
       sample.SAMPLE_ATTRIBUTES{|sample_attributes|
@@ -925,63 +919,125 @@ sample_f.puts xml_sample.SAMPLE_SET{|sample_set|
           sample_attribute.VALUE(sam[1].to_s.strip)
         }
 
-        # gender
-        if sam[3]
+        # sex
+        if sam[5]
           sample_attributes.SAMPLE_ATTRIBUTE{|sample_attribute|
-            sample_attribute.TAG("gender")
-            sample_attribute.VALUE(sam[3].strip)
+            sample_attribute.TAG("sex")
+            sample_attribute.VALUE(sam[5].strip)
 
             first = false
           }
         end
 
-        # affection status
+				# age
         if sam[6]
           sample_attributes.SAMPLE_ATTRIBUTE{|sample_attribute|
-            sample_attribute.TAG("affection_status")
+            sample_attribute.TAG("age")
             sample_attribute.VALUE(sam[6].strip)
+
+            first = false
+          }
+        end
+
+				# residence
+        if sam[7]
+          sample_attributes.SAMPLE_ATTRIBUTE{|sample_attribute|
+            sample_attribute.TAG("residence")
+            sample_attribute.VALUE(sam[7].strip)
+
+            first = false
+          }
+        end
+
+				# birth_location
+        if sam[8]
+          sample_attributes.SAMPLE_ATTRIBUTE{|sample_attribute|
+            sample_attribute.TAG("birth_location")
+            sample_attribute.VALUE(sam[8].strip)
+
+            first = false
+          }
+        end
+
+				# disease
+        if sam[9]
+          sample_attributes.SAMPLE_ATTRIBUTE{|sample_attribute|
+            sample_attribute.TAG("disease")
+            sample_attribute.VALUE(sam[9].strip)
+
+            first = false
+          }
+        end
+
+				# ICD10
+        if sam[10]
+          sample_attributes.SAMPLE_ATTRIBUTE{|sample_attribute|
+            sample_attribute.TAG("ICD10")
+            sample_attribute.VALUE(sam[10].strip)
+
+            first = false
+          }
+        end
+
+				# collection_date
+        if sam[11]
+          sample_attributes.SAMPLE_ATTRIBUTE{|sample_attribute|
+            sample_attribute.TAG("collection_date")
+            sample_attribute.VALUE(sam[11].strip)
+
+            first = false
+          }
+        end
+				
+        # affection status
+        if sam[12]
+          sample_attributes.SAMPLE_ATTRIBUTE{|sample_attribute|
+            sample_attribute.TAG("affection_status")
+            sample_attribute.VALUE(sam[12].strip)
           }
         end
 
         # tissue
-        if sam[7]
+        if sam[13]
           sample_attributes.SAMPLE_ATTRIBUTE{|sample_attribute|
             sample_attribute.TAG("tissue")
-            sample_attribute.VALUE(sam[7])
+            sample_attribute.VALUE(sam[13])
           }
         end
 
         # population
-        if sam[8]
+        if sam[14]
           sample_attributes.SAMPLE_ATTRIBUTE{|sample_attribute|
             sample_attribute.TAG("population")
-            sample_attribute.VALUE(sam[8])
+            sample_attribute.VALUE(sam[14])
           }
         end
 
         # histological_type
-        if sam[9]
+        if sam[15]
           sample_attributes.SAMPLE_ATTRIBUTE{|sample_attribute|
             sample_attribute.TAG("histological_type")
-            sample_attribute.VALUE(sam[9])
+            sample_attribute.VALUE(sam[15])
           }
         end
 
         # is_tumor
-        if sam[10]
+        if sam[16]
           sample_attributes.SAMPLE_ATTRIBUTE{|sample_attribute|
             sample_attribute.TAG("is_tumor")
-            sample_attribute.VALUE(sam[10])
+            sample_attribute.VALUE(sam[16])
           }
         end
 
 				if previous_sample_attrs_flag
 
-					if sam[11] && sam[11].split(";")
+					if sam[17] && sam[17].split(";")
 
-						sam[11].split(";").each{|phenotype|
+						sam[17].split(";").each{|phenotype|
 							sample_attributes.SAMPLE_ATTRIBUTE{|sample_attribute|
-								pp phenotype if phenotype.strip.split(":")[0].nil?
+								if phenotype.strip.split(":")[0].nil?
+									puts "Invalid sample attribute: #{phenotype}"
+								end
 	
 								sample_attribute.TAG(phenotype.strip.split(":")[0].strip)
 								sample_attribute.VALUE(phenotype.strip.split(":")[1].strip)
@@ -991,10 +1047,10 @@ sample_f.puts xml_sample.SAMPLE_SET{|sample_set|
 					end
 					
 				else
-
-					# added attributes
+					
+					# added attributes					
 					sample_added_attr_h = Hash.new
-					sample_added_attr_h = sam[11]
+					sample_added_attr_h = sam[17]
 					unless sample_added_attr_h.empty?
 						sample_added_attr_h.each{|attr_name, attr_value|
 							sample_attributes.SAMPLE_ATTRIBUTE{|sample_attribute|
