@@ -11,6 +11,7 @@ require 'optparse'
 #
 
 # Update history
+# 2024-07-04 Record all sample attributes in the sample attribute elements
 # 2024-05-17 Change the way of describing Sample attributes
 # 2022-12-23 Change handling of submission date
 # 2022-12-22 AGD
@@ -352,9 +353,12 @@ for num, line in sample_a
 		else
 			
 			# 追加属性があれば
-			if line[17..-1].size > 0
-				line[17..-1].each_with_index{|attr, idx|
-					added_attr_h.store(added_attr_name_a[idx], attr.to_s.strip) if added_attr_name_a[idx] && attr && attr.to_s
+			unless line[17..-1].all?{|e| e.empty? || e.nil?}
+				line[17..-1].each_with_index{|attr, idx|					
+					if added_attr_name_a[idx] && attr && attr.to_s && !attr.to_s.empty?
+						added_attr_h.store(added_attr_name_a[idx], attr.to_s.strip)
+						raise "Replace the default explanation \"Add additional phenotypes ...\" by an user-defined attribute name." if added_attr_name_a[idx] =~ /Add additional phenotypes/i	
+					end
 				}
 			end
 			
@@ -896,19 +900,19 @@ sample_f.puts xml_sample.SAMPLE_SET{|sample_set|
   for sam in samples_a    		
 				
 		sample_set.SAMPLE("accession" => "", "center_name" => center_name, "alias" => sam[0]){|sample|
-      sample.TITLE(sam[2])
+      sample.TITLE(sam[2].to_s.strip)
       sample.SAMPLE_NAME{|sample_name|
 
         sample_name.TAXON_ID("9606")
         sample_name.SCIENTIFIC_NAME("Homo sapiens")
         sample_name.COMMON_NAME("Human")
 
-        sample_name.DONOR_ID(sam[4])
+        sample_name.DONOR_ID(sam[4].to_s.strip)
 
       }
 
-      sample.SAMPLE_GROUP_TYPE(sam[12])
-      sample.DESCRIPTION(sam[3])
+      sample.SAMPLE_GROUP_TYPE(sam[12].to_s.strip)
+      sample.DESCRIPTION(sam[3].to_s.strip)
 
       # attributes
       sample.SAMPLE_ATTRIBUTES{|sample_attributes|
@@ -919,8 +923,26 @@ sample_f.puts xml_sample.SAMPLE_SET{|sample_set|
           sample_attribute.VALUE(sam[1].to_s.strip)
         }
 
+				# sample title
+        sample_attributes.SAMPLE_ATTRIBUTE{|sample_attribute|
+          sample_attribute.TAG("sample_title")
+          sample_attribute.VALUE(sam[2].to_s.strip)
+        }
+
+				# description
+        sample_attributes.SAMPLE_ATTRIBUTE{|sample_attribute|
+          sample_attribute.TAG("description")
+          sample_attribute.VALUE(sam[3].to_s.strip)
+        }
+
+				# subject id
+        sample_attributes.SAMPLE_ATTRIBUTE{|sample_attribute|
+          sample_attribute.TAG("subject_id")
+          sample_attribute.VALUE(sam[4].to_s.strip)
+        }
+
         # sex
-        if sam[5]
+        if sam[5] && !sam[5].empty?
           sample_attributes.SAMPLE_ATTRIBUTE{|sample_attribute|
             sample_attribute.TAG("sex")
             sample_attribute.VALUE(sam[5].strip)
@@ -930,7 +952,7 @@ sample_f.puts xml_sample.SAMPLE_SET{|sample_set|
         end
 
 				# age
-        if sam[6]
+        if sam[6] && !sam[6].empty?
           sample_attributes.SAMPLE_ATTRIBUTE{|sample_attribute|
             sample_attribute.TAG("age")
             sample_attribute.VALUE(sam[6].strip)
@@ -940,7 +962,7 @@ sample_f.puts xml_sample.SAMPLE_SET{|sample_set|
         end
 
 				# residence
-        if sam[7]
+        if sam[7] && !sam[7].empty?
           sample_attributes.SAMPLE_ATTRIBUTE{|sample_attribute|
             sample_attribute.TAG("residence")
             sample_attribute.VALUE(sam[7].strip)
@@ -950,7 +972,7 @@ sample_f.puts xml_sample.SAMPLE_SET{|sample_set|
         end
 
 				# birth_location
-        if sam[8]
+        if sam[8] && !sam[8].empty?
           sample_attributes.SAMPLE_ATTRIBUTE{|sample_attribute|
             sample_attribute.TAG("birth_location")
             sample_attribute.VALUE(sam[8].strip)
@@ -960,7 +982,7 @@ sample_f.puts xml_sample.SAMPLE_SET{|sample_set|
         end
 
 				# disease
-        if sam[9]
+        if sam[9] && !sam[9].empty?
           sample_attributes.SAMPLE_ATTRIBUTE{|sample_attribute|
             sample_attribute.TAG("disease")
             sample_attribute.VALUE(sam[9].strip)
@@ -970,7 +992,7 @@ sample_f.puts xml_sample.SAMPLE_SET{|sample_set|
         end
 
 				# ICD10
-        if sam[10]
+        if sam[10] && !sam[10].empty?
           sample_attributes.SAMPLE_ATTRIBUTE{|sample_attribute|
             sample_attribute.TAG("ICD10")
             sample_attribute.VALUE(sam[10].strip)
@@ -980,7 +1002,7 @@ sample_f.puts xml_sample.SAMPLE_SET{|sample_set|
         end
 
 				# collection_date
-        if sam[11]
+        if sam[11] && !sam[11].empty?
           sample_attributes.SAMPLE_ATTRIBUTE{|sample_attribute|
             sample_attribute.TAG("collection_date")
             sample_attribute.VALUE(sam[11].strip)
@@ -990,7 +1012,7 @@ sample_f.puts xml_sample.SAMPLE_SET{|sample_set|
         end
 				
         # affection status
-        if sam[12]
+        if sam[12] && !sam[12].empty?
           sample_attributes.SAMPLE_ATTRIBUTE{|sample_attribute|
             sample_attribute.TAG("affection_status")
             sample_attribute.VALUE(sam[12].strip)
@@ -998,7 +1020,7 @@ sample_f.puts xml_sample.SAMPLE_SET{|sample_set|
         end
 
         # tissue
-        if sam[13]
+        if sam[13] && !sam[13].empty?
           sample_attributes.SAMPLE_ATTRIBUTE{|sample_attribute|
             sample_attribute.TAG("tissue")
             sample_attribute.VALUE(sam[13])
@@ -1006,7 +1028,7 @@ sample_f.puts xml_sample.SAMPLE_SET{|sample_set|
         end
 
         # population
-        if sam[14]
+        if sam[14] && !sam[14].empty?
           sample_attributes.SAMPLE_ATTRIBUTE{|sample_attribute|
             sample_attribute.TAG("population")
             sample_attribute.VALUE(sam[14])
@@ -1014,7 +1036,7 @@ sample_f.puts xml_sample.SAMPLE_SET{|sample_set|
         end
 
         # histological_type
-        if sam[15]
+        if sam[15] && !sam[15].empty?
           sample_attributes.SAMPLE_ATTRIBUTE{|sample_attribute|
             sample_attribute.TAG("histological_type")
             sample_attribute.VALUE(sam[15])
@@ -1022,7 +1044,7 @@ sample_f.puts xml_sample.SAMPLE_SET{|sample_set|
         end
 
         # is_tumor
-        if sam[16]
+        if sam[16] && !sam[16].empty?
           sample_attributes.SAMPLE_ATTRIBUTE{|sample_attribute|
             sample_attribute.TAG("is_tumor")
             sample_attribute.VALUE(sam[16])
@@ -1046,18 +1068,20 @@ sample_f.puts xml_sample.SAMPLE_SET{|sample_set|
 	
 					end
 					
-				else
+				else # if previous_sample_attrs_flag
 					
 					# added attributes					
 					sample_added_attr_h = Hash.new
 					sample_added_attr_h = sam[17]
 					unless sample_added_attr_h.empty?
 						sample_added_attr_h.each{|attr_name, attr_value|
-							sample_attributes.SAMPLE_ATTRIBUTE{|sample_attribute|
-								sample_attribute.TAG(attr_name)
-								sample_attribute.VALUE(attr_value)
-							}
-						}					
+							if attr_name && !attr_name.empty? && attr_value && !attr_value.empty?
+								sample_attributes.SAMPLE_ATTRIBUTE{|sample_attribute|
+									sample_attribute.TAG(attr_name)
+									sample_attribute.VALUE(attr_value)
+								}
+							end
+						}
 					end
 
 			end
