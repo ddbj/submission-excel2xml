@@ -11,6 +11,7 @@ require 'optparse'
 #
 
 # Update history
+# 2024-07-05 DB prefix added to sheet name
 # 2024-07-04 Record all sample attributes in the sample attribute elements
 # 2024-05-17 Change the way of describing Sample attributes
 # 2022-12-23 Change handling of submission date
@@ -23,6 +24,7 @@ submission_no = ""
 submission_id = ""
 study_accession = ""
 previous_sample_attrs_flag = false
+sheet_without_prefix = false
 OptionParser.new{|opt|
 
   opt.on('-j [JSUB ID]', 'JSUB/ASUB submission ID'){|v|
@@ -40,6 +42,11 @@ OptionParser.new{|opt|
   opt.on('-r', 'flag for the previous added Sample attributes format, internal use'){
   	previous_sample_attrs_flag = true
 		puts "Previous added Sample attributes format: #{previous_sample_attrs_flag}"
+  }
+	
+  opt.on('-p', 'sheet without prefix'){
+  	sheet_without_prefix = true
+		puts "Previous sheet name without DB prefix"
   }
 	
   begin
@@ -75,7 +82,11 @@ rescue
 end
 
 # sheets
-meta_object = ['Submission', 'Study', 'Sample', 'Experiment', 'Data', 'Analysis', 'Dataset', 'File']
+if sheet_without_prefix
+	meta_object = ['Submission', 'Study', 'Sample', 'Experiment', 'Data', 'Analysis', 'Dataset', 'File']
+else
+	meta_object = ['JGA_Submission', 'JGA_Study', 'JGA_Sample', 'JGA_Experiment', 'JGA_Data', 'JGA_Analysis', 'JGA_Dataset', 'JGA_File']
+end
 
 # array for metadata objects
 submission_a = Array.new
@@ -97,21 +108,21 @@ for meta in meta_object
 
     case meta
 
-    when "Submission" then
+    when /Submission$/ then
       submission_a.push([i, line])
-    when "Study" then
+    when /Study$/ then
       study_a.push([i, line])
-    when "Sample" then
+    when /Sample$/ then
       sample_a.push([i, line.map(&:to_s)])
-    when "Experiment" then
+    when /Experiment$/ then
       experiment_a.push([i, line])
-    when "Data" then
+    when /Data$/ then
       data_a.push([i, line])
-    when "Analysis" then
+    when /Analysis$/ then
       analysis_a.push([i, line])
-    when "Dataset" then
+    when /Dataset$/ then
       dataset_a.push([i, line])
-    when "File" then
+    when /File$/ then
       file_a.push([i, line])
     end
 

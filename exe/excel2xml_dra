@@ -18,6 +18,7 @@ require 'date'
 # 2023-09-04 version 2.0 Analysis support
 # 2023-11-21 version 2.1 Analysis reference to Run
 # 2023-12-21 version 2.2 center name changes
+# 2024-07-05 version 3.0 new sheet names with DB prefixes
 #
 
 # Options
@@ -25,6 +26,7 @@ account = ""
 submission_no = ""
 bioproject_accession = ""
 center_name = ""
+sheet_without_prefix = false
 OptionParser.new{|opt|
 
   opt.on('-a [VALUE]', 'D-way account ID'){|v|
@@ -49,6 +51,11 @@ OptionParser.new{|opt|
   opt.on('-c [Center name]', 'Center name'){|v|
     center_name = v
     puts "Center name: #{v}"
+  }
+
+  opt.on('-r', 'sheet name without prefix'){|v|
+		sheet_without_prefix = true
+    puts "Previous sheet name without prefix"
   }
 
   begin
@@ -91,7 +98,11 @@ rescue
 end
 
 # metadata sheets
-meta_object = ['Submission', 'Experiment', 'Run', 'Run-file', 'Analysis']
+if sheet_without_prefix
+	meta_object = ['Submission', 'Experiment', 'Run', 'Run-file', 'Analysis']
+else
+	meta_object = ['DRA_Submission', 'DRA_Experiment', 'DRA_Run', 'DRA_Run-file', 'DRA_Analysis']
+end
 
 # array for metadata objects
 submission_a = Array.new
@@ -109,15 +120,15 @@ for meta in meta_object
 
     case meta
 
-    when "Submission" then
+    when /Submission$/ then
       submission_a.push([i, line])
-    when "Experiment" then
+    when /Experiment$/ then
       experiment_a.push([i, line])
-    when "Run" then
+    when /Run$/ then
       run_a.push([i, line])
-    when "Run-file" then
+    when /Run-file$/ then
       run_file_a.push([i, line])
-    when "Analysis" then
+    when /Analysis$/ then
       analysis_a.push([i, line])
     end
 
