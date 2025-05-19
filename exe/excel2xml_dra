@@ -19,6 +19,7 @@ require 'date'
 # 2023-11-21 version 2.1 Analysis reference to Run
 # 2023-12-21 version 2.2 center name changes
 # 2024-07-05 version 3.0 new sheet names with DB prefixes
+# 2025-05-19 version 3.1 Warnings to >5,000 objects
 #
 
 # Options
@@ -272,6 +273,11 @@ unless analysis_only
     raise "Run file duplication: #{duplicated_run_files_a.join(",")}"
   end
 end
+
+## Warnings to >5000 Exp/Run
+puts "\nWARNING: More than 5,000 Experiments. Split your submission to keep the number of Experiments <= 5,000" if experiments_a.size > 5000
+puts "\nWARNING: More than 5,000 Runs. Split your submission to keep the number of Runs <= 5,000" if runs_a.size > 5000
+puts "\nWARNING: More than 5,000 Analyses. Split your submission to keep the number of Analyses <= 5,000" if analyses_a.size > 5000
 
 ## Create XML
 prefix = submission_id + "_"
