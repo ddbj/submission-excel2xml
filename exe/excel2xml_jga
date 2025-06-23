@@ -11,6 +11,7 @@ require 'optparse'
 #
 
 # Update history
+# 2025-06-23 non-ascii check
 # 2025-01-16 phone removed
 # 2024-07-05 DB prefix added to sheet name
 # 2024-07-04 Record all sample attributes in the sample attribute elements
@@ -67,6 +68,30 @@ def clean_number(num)
     return num
   end
 
+end
+
+## hash や array の全ての値が ascii かどうか
+def collect_nonascii(value, path = [])
+  case value
+  when String
+    if value.ascii_only?
+      nil
+    else
+      # 非ASCII文字だけを抽出
+      nonascii_chars = value.scan(/[^\x00-\x7F]/).uniq
+      { path: path.join("."), value: value, nonascii: nonascii_chars }
+    end
+  when Array
+    value.each_with_index.map do |v, i|
+      collect_nonascii(v, path + ["[#{i}]"])
+    end.compact
+  when Hash
+    value.map do |k, v|
+      collect_nonascii(v, path + [k.to_s])
+    end.compact
+  else
+    nil
+  end
 end
 
 ### Settings
@@ -633,6 +658,56 @@ puts "Dataset aliases duplication: #{dataset_aliases_duplicated_a.join(",")}" if
 # objects into an array
 metadata_a = [submission_a, study_a, sample_a, experiment_a, data_a, analysis_a, dataset_a]
 
+## Non-ASCII check
+submission_nonascii = collect_nonascii(submission_h).flatten.compact
+if !submission_h.empty? && !submission_nonascii.empty?
+  submission_nonascii.each do |r|
+    puts "Non-ASCII found at Submission: '#{r[:value]}' (chars: #{r[:nonascii].join})"
+  end
+end
+
+study_nonascii = collect_nonascii(study_h).flatten.compact
+if !study_h.empty? && !study_nonascii.empty?
+  study_nonascii.each do |r|
+    puts "Non-ASCII found at Study: '#{r[:value]}' (chars: #{r[:nonascii].join})"
+  end
+end
+
+dataset_nonascii = collect_nonascii(datasets_a).flatten.compact
+if !datasets_a.empty? && !dataset_nonascii.empty?
+  dataset_nonascii.each do |r|
+    puts "Non-ASCII found at Dataset: '#{r[:value]}' (chars: #{r[:nonascii].join})"
+  end
+end
+
+sample_nonascii = collect_nonascii(samples_a).flatten.compact
+if !samples_a.empty? && !sample_nonascii.empty?
+  sample_nonascii.each do |r|
+    puts "Non-ASCII found at Sample: '#{r[:value]}' (chars: #{r[:nonascii].join})"
+  end
+end
+
+experiment_nonascii = collect_nonascii(experiments_a).flatten.compact
+if !experiments_a.empty? && !experiment_nonascii.empty?
+  experiment_nonascii.each do |r|
+    puts "Non-ASCII found at Experiment: '#{r[:value]}' (chars: #{r[:nonascii].join})"
+  end
+end
+
+data_nonascii = collect_nonascii(datas_a).flatten.compact
+if !datas_a.empty? && !data_nonascii.empty?
+  data_nonascii.each do |r|
+    puts "Non-ASCII found at Data: '#{r[:value]}' (chars: #{r[:nonascii].join})"
+  end
+end
+
+analysis_nonascii = collect_nonascii(analyses_a).flatten.compact
+if !analyses_a.empty? && !analysis_nonascii.empty?
+  analysis_nonascii.each do |r|
+    puts "Non-ASCII found at Analysis: '#{r[:value]}' (chars: #{r[:nonascii].join})"
+  end
+end
+
 ### Create XML
 prefix = submission_id + "_"
 
@@ -909,7 +984,7 @@ study_f.puts xml_study.STUDY_SET{|study_set|
 # Sample
 sample_f.puts xml_sample.SAMPLE_SET{|sample_set|
 
-  for sam in samples_a    		
+  for sam in samples_a
 				
 		sample_set.SAMPLE("accession" => "", "center_name" => center_name, "alias" => sam[0]){|sample|
       sample.TITLE(sam[2].to_s.strip)

@@ -20,6 +20,7 @@ require 'date'
 # 2023-12-21 version 2.2 center name changes
 # 2024-07-05 version 3.0 new sheet names with DB prefixes
 # 2025-05-19 version 3.1 Warnings to >5,000 objects
+# 2025-06-23 version 3.2 Non-ASCII, error when layout is missing
 #
 
 # Options
@@ -83,6 +84,30 @@ def clean_number(num)
     return num
   end
 
+end
+
+## hash や array の全ての値が ascii かどうか
+def collect_nonascii(value, path = [])
+  case value
+  when String
+    if value.ascii_only?
+      nil
+    else
+      # 非ASCII文字だけを抽出
+      nonascii_chars = value.scan(/[^\x00-\x7F]/).uniq
+      { path: path.join("."), value: value, nonascii: nonascii_chars }
+    end
+  when Array
+    value.each_with_index.map do |v, i|
+      collect_nonascii(v, path + ["[#{i}]"])
+    end.compact
+  when Hash
+    value.map do |k, v|
+      collect_nonascii(v, path + [k.to_s])
+    end.compact
+  else
+    nil
+  end
 end
 
 ## Settings
@@ -279,6 +304,50 @@ puts "\nWARNING: More than 5,000 Experiments. Split your submission to keep the 
 puts "\nWARNING: More than 5,000 Runs. Split your submission to keep the number of Runs <= 5,000" if runs_a.size > 5000
 puts "\nWARNING: More than 5,000 Analyses. Split your submission to keep the number of Analyses <= 5,000" if analyses_a.size > 5000
 
+## Non-ASCII
+## Non-ASCII check
+submission_nonascii = collect_nonascii(submission_a).flatten.compact
+if !submission_a.empty? && !submission_nonascii.empty?
+  submission_nonascii.each do |r|
+    puts "Non-ASCII found at Submission: '#{r[:value]}' (chars: #{r[:nonascii].join})"
+  end
+end
+
+experiment_nonascii = collect_nonascii(experiments_a).flatten.compact
+if !experiments_a.empty? && !submission_nonascii.empty?
+  experiment_nonascii.each do |r|
+    puts "Non-ASCII found at Experiment: '#{r[:value]}' (chars: #{r[:nonascii].join})"
+  end
+end
+
+run_nonascii = collect_nonascii(runs_a).flatten.compact
+if !runs_a.empty? && !run_nonascii.empty?
+  run_nonascii.each do |r|
+    puts "Non-ASCII found at Experiment: '#{r[:value]}' (chars: #{r[:nonascii].join})"
+  end
+end
+
+analysis_nonascii = collect_nonascii(analyses_a).flatten.compact
+if !analyses_a.empty? && !analysis_nonascii.empty?
+  analysis_nonascii.each do |r|
+    puts "Non-ASCII found at Analysis: '#{r[:value]}' (chars: #{r[:nonascii].join})"
+  end
+end
+
+runfile_nonascii = collect_nonascii(run_files_a).flatten.compact
+if !run_files_a.empty? && !runfile_nonascii.empty?
+  runfile_nonascii.each do |r|
+    puts "Non-ASCII found at Run file: '#{r[:value]}' (chars: #{r[:nonascii].join})"
+  end
+end
+
+analysis_nonascii = collect_nonascii(analyses_a).flatten.compact
+if !analyses_a.empty? && !analysis_nonascii.empty?
+  analysis_nonascii.each do |r|
+    puts "Non-ASCII found at Analysis: '#{r[:value]}' (chars: #{r[:nonascii].join})"
+  end
+end
+
 ## Create XML
 prefix = submission_id + "_"
 
@@ -428,9 +497,11 @@ unless analysis_only
               elsif exp[9] =~ /paired/
                 layout.PAIRED
                 paired_seq = "paired end sequencing"
-              else
+              elsif exp[9] =~ /single/
                 layout.SINGLE
                 paired_seq = "sequencing"
+              else
+                raise "Invalid Library Layout: #{exp[0]}"
               end
             } # layout
 
