@@ -3,8 +3,8 @@
 ## 日本語
 
 * 生命情報・DDBJ センター
-* 公開日: 2025-xx-yy
-* version: v3.2
+* 公開日: 2025-10-23
+* version: v3.6
 
 [Bioinformation and DDBJ Center](https://www.ddbj.nig.ac.jp/index-e.html) のデータベースに登録するためのメタデータ XML を生成、チェックするツール。
 * [DDBJ Sequence Read Archive (DRA)](https://www.ddbj.nig.ac.jp/dra/submission.html): Submission、Experiment、Run と Analysis (任意) XML を生成・チェックするためのエクセルとスクリプト
@@ -13,7 +13,11 @@
 
 ## 履歴
 
-* 2025-xx-yy: v3.2 JGA xsd 1.3.0
+* 2025-10-23: v3.6 JGA xsd 1.3.0
+* 2025-06-23: v3.5 Non-ASCII, DRA Experiment Library Layout
+* 2025-05-19: v3.4 5000 以上のオブジェクト数でワーニング
+* 2025-02-27: v3.3 Organization bug fix
+* 2025-01-16: v3.2 TEL 削除
 * 2024-10-23: v3.1 Library Source SINGLE CELL
 * 2024-07-05: v3.0 シート名に DB prefix を付加
 * 2024-07-04: v2.9.1 Sample 属性を全て ATTRIBUTE に格納
@@ -329,8 +333,8 @@ TBD
 ## English
 
 * Bioinformation and DDBJ Center
-* release: 2025-xx-yy
-* version: v3.2
+* release: 2025-10-23
+* version: v3.6
 
 These files are Excel, container images and tools for generation and validation of metadata XML files for databases of [Bioinformation and DDBJ Center](https://www.ddbj.nig.ac.jp/index-e.html).
 * [DDBJ Sequence Read Archive (DRA)](https://www.ddbj.nig.ac.jp/dra/submission-e.html): generate and check Submission, Experiment and Run XML files.
@@ -339,7 +343,11 @@ These files are Excel, container images and tools for generation and validation 
 
 ## History
 
-* 2025-xx-yy: v3.2 JGA xsd 1.3.0
+* 2025-10-23: v3.6 JGA xsd 1.3.0
+* 2025-06-23: v3.5 Non-ASCII, DRA Experiment Library Layout
+* 2025-05-19: v3.4 Warning to objects > 5000
+* 2025-02-27: v3.3 Organization bug fix
+* 2025-01-16: v3.2 TEL removed
 * 2024-10-23: v3.1 Library Source SINGLE CELL
 * 2024-07-05: v3.0 DB prefix added to sheet name
 * 2024-07-04: v2.9.1 Store all sample attributes in SAMPLE_ATTRIBUTE
