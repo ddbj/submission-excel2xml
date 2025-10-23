@@ -3,7 +3,7 @@
 ## 日本語
 
 * 生命情報・DDBJ センター
-* 公開日: 2025-xx-yy
+* 公開日: 2025-10-22
 * version: v3.2
 
 [Bioinformation and DDBJ Center](https://www.ddbj.nig.ac.jp/index-e.html) のデータベースに登録するためのメタデータ XML を生成、チェックするツール。
@@ -13,7 +13,7 @@
 
 ## 履歴
 
-* 2025-xx-yy: v3.2 JGA xsd 1.3.0
+* 2025-10-22: v3.2 JGA xsd 1.3.0
 * 2024-10-23: v3.1 Library Source SINGLE CELL
 * 2024-07-05: v3.0 シート名に DB prefix を付加
 * 2024-07-04: v2.9.1 Sample 属性を全て ATTRIBUTE に格納
@@ -329,7 +329,7 @@ TBD
 ## English
 
 * Bioinformation and DDBJ Center
-* release: 2025-xx-yy
+* release: 2025-10-22
 * version: v3.2
 
 These files are Excel, container images and tools for generation and validation of metadata XML files for databases of [Bioinformation and DDBJ Center](https://www.ddbj.nig.ac.jp/index-e.html).
@@ -339,7 +339,7 @@ These files are Excel, container images and tools for generation and validation 
 
 ## History
 
-* 2025-xx-yy: v3.2 JGA xsd 1.3.0
+* 2025-10-22: v3.2 JGA xsd 1.3.0
 * 2024-10-23: v3.1 Library Source SINGLE CELL
 * 2024-07-05: v3.0 DB prefix added to sheet name
 * 2024-07-04: v2.9.1 Store all sample attributes in SAMPLE_ATTRIBUTE
