@@ -1270,7 +1270,12 @@ experiment_f.puts xml_experiment.EXPERIMENT_SET{|experiment_set|
                 platform_e.INSTRUMENT_MODEL(exp[7])
               }
 
-            when /illumina|NextSeq|HiSeq/i
+            when /illumina|nextseq|hiseq/i
+              seq2_platform.ILLUMINA{|platform_e|
+                platform_e.INSTRUMENT_MODEL(exp[7])
+              }
+
+            when "unspecified"
               seq2_platform.ILLUMINA{|platform_e|
                 platform_e.INSTRUMENT_MODEL(exp[7])
               }
@@ -1280,12 +1285,27 @@ experiment_f.puts xml_experiment.EXPERIMENT_SET{|experiment_set|
                 platform_e.INSTRUMENT_MODEL(exp[7])
               }
 
+            when /AB 5500/
+              seq2_platform.ABI_SOLID{|platform_e|
+                platform_e.INSTRUMENT_MODEL(exp[7])
+              }
+
             when /Ion/
               seq2_platform.ION_TORRENT{|platform_e|
                 platform_e.INSTRUMENT_MODEL(exp[7])
               }
 
-            when /pacbio|sequel/i
+            when /pacbio/i
+              seq2_platform.PACBIO_SMRT{|platform_e|
+                platform_e.INSTRUMENT_MODEL(exp[7])
+              }
+
+            when /Sequel/
+              seq2_platform.PACBIO_SMRT{|platform_e|
+                platform_e.INSTRUMENT_MODEL(exp[7])
+              }
+
+            when "Onso", "Revio"
               seq2_platform.PACBIO_SMRT{|platform_e|
                 platform_e.INSTRUMENT_MODEL(exp[7])
               }
@@ -1295,12 +1315,61 @@ experiment_f.puts xml_experiment.EXPERIMENT_SET{|experiment_set|
                 platform_e.INSTRUMENT_MODEL(exp[7])
               }
 
-            when /bgiseq|dnbseq|mgiseq/i
+            when /AB 3/
+                seq2_platform.CAPILLARY{|platform_e|
+                  platform_e.INSTRUMENT_MODEL(exp[7])
+                }
+            when /Helicos HeliScope/
+              seq2_platform.HELICOS{|platform_e|
+                platform_e.INSTRUMENT_MODEL(exp[7])
+              }
+
+            when /Complete/
+              seq2_platform.COMPLETE_GENOMICS{|platform_e|
+                platform_e.INSTRUMENT_MODEL(exp[7])
+              }
+
+            when /bgiseq|mgiseq/i
               seq2_platform.BGISEQ{|platform_e|
                 platform_e.INSTRUMENT_MODEL(exp[7])
               }
 
-            end
+            when /dnbseq/i
+              seq2_platform.DNBSEQ{|platform_e|
+                platform_e.INSTRUMENT_MODEL(exp[7])
+              }
+
+            when /Element/
+              seq2_platform.ELEMENT{|platform_e|
+                platform_e.INSTRUMENT_MODEL(exp[7])
+              }
+
+            when "UG 100"
+              seq2_platform.ULTIMA{|platform_e|
+                platform_e.INSTRUMENT_MODEL(exp[7])
+              }
+
+            when "GENIUS", "Genapsys Sequencer", "GS111"
+              seq2_platform.GENAPSYS{|platform_e|
+                platform_e.INSTRUMENT_MODEL(exp[7])
+              }
+
+            when "GenoCare 1600", "GenoLab M", "FASTASeq 300"
+              seq2_platform.GENEMIND{|platform_e|
+                platform_e.INSTRUMENT_MODEL(exp[7])
+              }
+
+            when "Tapestri"
+              seq2_platform.TAPESTRI{|platform_e|
+                platform_e.INSTRUMENT_MODEL(exp[7])
+              }
+
+            when "Sentosa SQ301"
+              seq2_platform.VELA_DIAGNOSTICS{|platform_e|
+                platform_e.INSTRUMENT_MODEL(exp[7])
+              }
+
+						end
 
             } #seq2_platform
 
