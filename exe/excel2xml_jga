@@ -1329,13 +1329,8 @@ experiment_f.puts xml_experiment.EXPERIMENT_SET{|experiment_set|
                 platform_e.INSTRUMENT_MODEL(exp[7])
               }
 
-            when /bgiseq|mgiseq/i
+            when /bgiseq|mgiseq|dnbseq/i
               seq2_platform.BGISEQ{|platform_e|
-                platform_e.INSTRUMENT_MODEL(exp[7])
-              }
-
-            when /dnbseq/i
-              seq2_platform.DNBSEQ{|platform_e|
                 platform_e.INSTRUMENT_MODEL(exp[7])
               }
 
