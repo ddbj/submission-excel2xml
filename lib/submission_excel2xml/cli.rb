@@ -19,7 +19,7 @@ module SubmissionExcel2xml
       end
 
       %w(analysis common dac data dataset experiment policy sample study submission).each do |part|
-        url = "#{base}/jga/xsd/1-2/JGA.#{part}.xsd"
+        url = "#{base}/jga/xsd/1-3/JGA.#{part}.xsd"
 
         get url, SubmissionExcel2xml.xsd_path.join(File.basename(url))
       end
