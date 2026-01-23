@@ -199,13 +199,27 @@ for num, line in submission_a
   end
 
   if line[0] == "Submission Date"
-    if submission_a[i+1] && submission_a[i+1][1] && submission_a[i+1][1][0] && submission_a[i+1][1][0].strftime("%Y-%m-%dT00:00:00+09:00")
-      submission_h.store("submission_date", submission_a[i+1][1][0].strftime("%Y-%m-%dT00:00:00+09:00"))
+    # 対象の値を一度変数に置く（可読性と安全のため）
+    target_date = submission_a[i+1] && submission_a[i+1][1] && submission_a[i+1][1][0]
+
+    if target_date
+      # String型の場合は Date.parse で変換し、それ以外（Date/Time型）はそのまま使う
+      d = target_date.is_a?(String) ? Date.parse(target_date) : target_date
+      submission_h.store("submission_date", d.strftime("%Y-%m-%dT00:00:00+09:00"))
     else
       submission_h.store("submission_date", Date.today.strftime("%Y-%m-%dT00:00:00+09:00"))
       puts "Warning: The submission date is empty. Today #{Date.today.strftime("%Y-%m-%dT00:00:00+09:00")} is used."
     end
   end
+
+  # if line[0] == "Submission Date"
+  #   if submission_a[i+1] && submission_a[i+1][1] && submission_a[i+1][1][0] && submission_a[i+1][1][0].strftime("%Y-%m-%dT00:00:00+09:00")
+  #     submission_h.store("submission_date", submission_a[i+1][1][0].strftime("%Y-%m-%dT00:00:00+09:00"))
+  #   else
+  #     submission_h.store("submission_date", Date.today.strftime("%Y-%m-%dT00:00:00+09:00"))
+  #     puts "Warning: The submission date is empty. Today #{Date.today.strftime("%Y-%m-%dT00:00:00+09:00")} is used."
+  #   end
+  # end
 
   i += 1
 
