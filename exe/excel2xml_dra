@@ -21,6 +21,7 @@ require 'date'
 # 2024-07-05 version 3.0 new sheet names with DB prefixes
 # 2025-05-19 version 3.1 Warnings to >5,000 objects
 # 2025-06-23 version 3.2 Non-ASCII, error when layout is missing
+# 2026-02-24 version 3.3 DRA 1.6.1
 #
 
 # Options
@@ -623,7 +624,7 @@ unless analysis_only
 							platform_e.INSTRUMENT_MODEL(exp[8])
 						}
 
-					when /bgiseq|mgiseq/i
+					when /bgiseq|mgiseq|CycloneSEQ/i
 						platform.BGISEQ{|platform_e|
 							platform_e.INSTRUMENT_MODEL(exp[8])
 						}
@@ -648,7 +649,7 @@ unless analysis_only
 							platform_e.INSTRUMENT_MODEL(exp[8])
 						}
 
-          when "GenoCare 1600", "GenoLab M", "FASTASeq 300"
+          when "GenoCare 1600", "GenoLab M", "FASTASeq 300", "SURFSeq 5000", "SURFSeq Q"
 						platform.GENEMIND{|platform_e|
 							platform_e.INSTRUMENT_MODEL(exp[8])
 						}
@@ -660,6 +661,21 @@ unless analysis_only
 
           when "Sentosa SQ301"
 						platform.VELA_DIAGNOSTICS{|platform_e|
+							platform_e.INSTRUMENT_MODEL(exp[8])
+						}
+
+          when "Saluseq Nimbo", "Salus Pro", "Salus EVO"
+						platform.SALUS{|platform_e|
+							platform_e.INSTRUMENT_MODEL(exp[8])
+						}
+
+          when "G-seq500"
+						platform.GENEUS_TECH{|platform_e|
+							platform_e.INSTRUMENT_MODEL(exp[8])
+						}
+
+          when "G4"
+						platform.SINGULAR_GENOMICS{|platform_e|
 							platform_e.INSTRUMENT_MODEL(exp[8])
 						}
 
