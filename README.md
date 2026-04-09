@@ -3,7 +3,7 @@
 ## 日本語
 
 * 生命情報・DDBJ センター
-* 公開日: 2026-03-19
+* 公開日: 2026-04-09
 * version: v3.6.3
 
 [Bioinformation and DDBJ Center](https://www.ddbj.nig.ac.jp/index-e.html) のデータベースに登録するためのメタデータ XML を生成、チェックするツール。
@@ -13,7 +13,7 @@
 
 ## 履歴
 
-* 2026-03-19: v3.6.3 DRA xsd 1.6.1
+* 2026-04-09: v3.6.3 DRA xsd 1.6.1 and JGA xsd 1.3.1
 * 2025-10-30: v3.6.2 BGISEQ platform bug fix
 * 2025-10-29: v3.6.1 DNBSEQ platform bug fix
 * 2025-10-23: v3.6 JGA xsd 1.3.0
@@ -336,7 +336,7 @@ TBD
 ## English
 
 * Bioinformation and DDBJ Center
-* release: 2026-03-19
+* release: 2026-04-09
 * version: v3.6.3
 
 These files are Excel, container images and tools for generation and validation of metadata XML files for databases of [Bioinformation and DDBJ Center](https://www.ddbj.nig.ac.jp/index-e.html).
@@ -346,7 +346,7 @@ These files are Excel, container images and tools for generation and validation 
 
 ## History
 
-* 2026-03-19: v3.6.3 DRA xsd 1.6.1
+* 2026-04-09: v3.6.3 DRA xsd 1.6.1 and JGA xsd 1.3.1
 * 2025-10-30: v3.6.2 BGISEQ platform bug fix
 * 2025-10-29: v3.6.1 DNBSEQ platform bug fix
 * 2025-10-23: v3.6 JGA xsd 1.3.0
