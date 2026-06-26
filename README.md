@@ -3,8 +3,8 @@
 ## 日本語
 
 * 生命情報・DDBJ センター
-* 公開日: 2026-04-09
-* version: v3.6.3
+* 公開日: 2026-06-26
+* version: v3.6.4
 
 [Bioinformation and DDBJ Center](https://www.ddbj.nig.ac.jp/index-e.html) のデータベースに登録するためのメタデータ XML を生成、チェックするツール。
 * [DDBJ Sequence Read Archive (DRA)](https://www.ddbj.nig.ac.jp/dra/submission.html): Submission、Experiment、Run と Analysis (任意) XML を生成・チェックするためのエクセルとスクリプト
@@ -13,6 +13,7 @@
 
 ## 履歴
 
+* 2026-06-26: v3.6.4 DRR more than 6 digit
 * 2026-04-09: v3.6.3 DRA xsd 1.6.1 and JGA xsd 1.3.1
 * 2025-10-30: v3.6.2 BGISEQ platform bug fix
 * 2025-10-29: v3.6.1 DNBSEQ platform bug fix
@@ -336,8 +337,8 @@ TBD
 ## English
 
 * Bioinformation and DDBJ Center
-* release: 2026-04-09
-* version: v3.6.3
+* release: 2026-06-26
+* version: v3.6.4
 
 These files are Excel, container images and tools for generation and validation of metadata XML files for databases of [Bioinformation and DDBJ Center](https://www.ddbj.nig.ac.jp/index-e.html).
 * [DDBJ Sequence Read Archive (DRA)](https://www.ddbj.nig.ac.jp/dra/submission-e.html): generate and check Submission, Experiment and Run XML files.
@@ -346,6 +347,7 @@ These files are Excel, container images and tools for generation and validation 
 
 ## History
 
+* 2026-06-26: v3.6.4 DRR more than 6 digit
 * 2026-04-09: v3.6.3 DRA xsd 1.6.1 and JGA xsd 1.3.1
 * 2025-10-30: v3.6.2 BGISEQ platform bug fix
 * 2025-10-29: v3.6.1 DNBSEQ platform bug fix

@@ -1141,7 +1141,7 @@ unless analyses_a.empty?
               if ana[5] && ana[5].split(",")
                 for run_acc in ana[5].split(",")
                   # range
-                  if run_acc =~ /^DRR(\d{6})-DRR(\d{6})$/ || run_acc =~ /^SRR(\d{6,})-SRR(\d{6,})$/ || run_acc =~ /^ERR(\d{6,})-ERR(\d{6,})$/
+                  if run_acc =~ /^DRR(\d{6,})-DRR(\d{6,})$/ || run_acc =~ /^SRR(\d{6,})-SRR(\d{6,})$/ || run_acc =~ /^ERR(\d{6,})-ERR(\d{6,})$/
 
                     sra_prefix = run_acc[0, 3]
                     min = $1.to_i
@@ -1155,7 +1155,7 @@ unless analyses_a.empty?
                       targets.TARGET("sra_object_type" => "RUN", "accession" => "#{sra_prefix}#{j.to_s.rjust(digit_one, "0")}")
                       run_accs_a.push("#{sra_prefix}#{j.to_s.rjust(digit_one, "0")}")
                     }
-                  elsif run_acc =~ /^DRR(\d{6})$/ || run_acc =~ /^SRR(\d{6,})$/ || run_acc =~ /^ERR(\d{6,})$/
+                  elsif run_acc =~ /^DRR(\d{6,})$/ || run_acc =~ /^SRR(\d{6,})$/ || run_acc =~ /^ERR(\d{6,})$/
                     targets.TARGET("sra_object_type" => "RUN", "accession" => run_acc)
                     run_accs_a.push(run_acc)
                   else
