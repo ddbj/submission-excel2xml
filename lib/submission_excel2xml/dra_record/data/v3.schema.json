@@ -1,0 +1,8577 @@
+{
+  "$defs": {
+    "AccessControl": {
+      "additionalProperties": false,
+      "description": "JGA の policy と DAC。",
+      "properties": {
+        "policy": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Policy"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "dac": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Dac"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "title": "AccessControl",
+      "type": "object"
+    },
+    "Address": {
+      "additionalProperties": false,
+      "properties": {
+        "country": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "Japan"
+          ],
+          "title": "Country"
+        },
+        "state": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "Shizuoka"
+          ],
+          "title": "State"
+        },
+        "city": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "Mishima"
+          ],
+          "title": "City"
+        },
+        "street": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "Yata 1111"
+          ],
+          "title": "Street"
+        },
+        "postal_code": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "411-8540"
+          ],
+          "title": "Postal Code"
+        }
+      },
+      "title": "Address",
+      "type": "object"
+    },
+    "Analysis": {
+      "additionalProperties": false,
+      "properties": {
+        "accession": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "DRZ000001"
+          ],
+          "title": "Accession"
+        },
+        "alias": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Alias"
+        },
+        "title": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Title"
+        },
+        "description": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Description"
+        },
+        "analysis_type": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "de_novo_assembly"
+          ],
+          "title": "Analysis Type"
+        },
+        "analysis_date": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Analysis Date"
+        },
+        "data_blocks": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/DataBlock"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Data Blocks"
+        },
+        "processing": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/PipelineStep"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Processing"
+        },
+        "attributes": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/Attribute"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Attributes"
+        },
+        "identifiers": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/Identifier"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Identifiers"
+        },
+        "center_name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Center Name"
+        },
+        "broker_name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Broker Name"
+        },
+        "analysis_center": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Analysis Center"
+        },
+        "reference_alignment": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ReferenceAlignment"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "protocol_refs": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Protocol Refs"
+        },
+        "comments": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/Attribute"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Comments"
+        },
+        "sdrf_rows": {
+          "anyOf": [
+            {
+              "items": {
+                "minimum": 0,
+                "type": "integer"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Sdrf Rows"
+        },
+        "sdrf_column": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Sdrf Column"
+        }
+      },
+      "title": "Analysis",
+      "type": "object"
+    },
+    "ApplicationIdentification": {
+      "additionalProperties": false,
+      "properties": {
+        "ip_office_code": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "JP"
+          ],
+          "title": "Ip Office Code"
+        },
+        "application_number_text": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Application Number Text"
+        },
+        "filing_date": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "2024-01-15"
+          ],
+          "title": "Filing Date"
+        }
+      },
+      "title": "ApplicationIdentification",
+      "type": "object"
+    },
+    "ArrayDesign": {
+      "additionalProperties": false,
+      "description": "GEA のアレイ設計 (A-GEAD)。ADF の見出しと、表を含むファイルそのもの。\n\nADF の表 (プローブ 1 つ 1 行) は装置メーカーごとの形式で、ファイルとして保管する。見出しの\n欄は file の見出しから読んだもので、正本は file。",
+      "properties": {
+        "accession": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "A-GEAD-210"
+          ],
+          "title": "Accession"
+        },
+        "alias": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Alias"
+        },
+        "name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Name"
+        },
+        "version": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Version"
+        },
+        "provider": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Provider"
+        },
+        "printing_protocol": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Printing Protocol"
+        },
+        "technology_type": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Technology Type"
+        },
+        "surface_type": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Surface Type"
+        },
+        "substrate_type": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Substrate Type"
+        },
+        "sequence_polymer_type": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Sequence Polymer Type"
+        },
+        "term_sources": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/TermSource"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Term Sources"
+        },
+        "organism": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Organism"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "description": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Description"
+        },
+        "submitted_name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Submitted Name"
+        },
+        "file": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/File"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "legacy": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ArrayDesignLegacy"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "title": "ArrayDesign",
+      "type": "object"
+    },
+    "ArrayDesignLegacy": {
+      "additionalProperties": false,
+      "properties": {
+        "cibex_public_release_date": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Cibex Public Release Date"
+        }
+      },
+      "title": "ArrayDesignLegacy",
+      "type": "object"
+    },
+    "Assembly": {
+      "additionalProperties": false,
+      "properties": {
+        "accession": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "GCA_000001405.29"
+          ],
+          "title": "Accession"
+        },
+        "alias": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Alias"
+        },
+        "title": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Title"
+        },
+        "name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Name"
+        },
+        "description": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Description"
+        },
+        "assembly_level": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "contig"
+          ],
+          "title": "Assembly Level"
+        },
+        "genome_representation": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "full"
+          ],
+          "title": "Genome Representation"
+        },
+        "attributes": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/Attribute"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Attributes"
+        }
+      },
+      "title": "Assembly",
+      "type": "object"
+    },
+    "Attribute": {
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "examples": [
+            "collection_date"
+          ],
+          "pattern": "\\S",
+          "title": "Name",
+          "type": "string"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Value"
+        },
+        "unit": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Unit"
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "title": "Attribute",
+      "type": "object"
+    },
+    "BaseCalling": {
+      "additionalProperties": false,
+      "description": "PROCESSING/BASE_CALLS。",
+      "properties": {
+        "base_caller": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Base Caller"
+        },
+        "sequence_space": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "Base Space"
+          ],
+          "title": "Sequence Space"
+        }
+      },
+      "title": "BaseCalling",
+      "type": "object"
+    },
+    "Basecall": {
+      "additionalProperties": false,
+      "description": "EXPECTED_BASECALL_TABLE の 1 行。バーコードなど、その位置に来るはずの配列。",
+      "properties": {
+        "value": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "ACGTACGT"
+          ],
+          "title": "Value"
+        },
+        "read_group_tag": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Read Group Tag"
+        },
+        "min_match": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Min Match"
+        },
+        "max_mismatch": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Max Mismatch"
+        },
+        "match_edge": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "start"
+          ],
+          "title": "Match Edge"
+        }
+      },
+      "title": "Basecall",
+      "type": "object"
+    },
+    "BasecallTable": {
+      "additionalProperties": false,
+      "properties": {
+        "base_coord": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Base Coord"
+        },
+        "default_length": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Default Length"
+        },
+        "basecalls": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/Basecall"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Basecalls"
+        }
+      },
+      "title": "BasecallTable",
+      "type": "object"
+    },
+    "Cibex": {
+      "additionalProperties": false,
+      "description": "GEA に移す前の CIBEX の登録 (CBX)。GEA の experiment 1 つに 1 つ対応する。",
+      "properties": {
+        "accession": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "CBX100"
+          ],
+          "title": "Accession"
+        },
+        "release_date": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Release Date"
+        },
+        "experiment": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/CibexExperiment"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "submitters": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/CibexSubmitter"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Submitters"
+        },
+        "references": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/CibexReference"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "References"
+        },
+        "protocols": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/Protocol"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Protocols"
+        },
+        "array_designs": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/CibexArrayDesign"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Array Designs"
+        },
+        "samples": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/CibexSample"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Samples"
+        },
+        "labeled_extracts": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/CibexLabeledExtract"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Labeled Extracts"
+        },
+        "hybridizations": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/CibexHybridization"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Hybridizations"
+        },
+        "summaries": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/CibexSummary"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Summaries"
+        }
+      },
+      "title": "Cibex",
+      "type": "object"
+    },
+    "CibexArrayDesign": {
+      "additionalProperties": false,
+      "properties": {
+        "accession": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "CAR273"
+          ],
+          "title": "Accession"
+        },
+        "model_name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Model Name"
+        },
+        "technology_type": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Technology Type"
+        },
+        "surface_type": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Surface Type"
+        },
+        "number_of_features": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Number Of Features"
+        },
+        "reporter_type": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Reporter Type"
+        },
+        "strand_type": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Strand Type"
+        },
+        "substrate_type": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Substrate Type"
+        },
+        "attachment": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Attachment"
+        },
+        "design_provider": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Design Provider"
+        },
+        "array_design_protocol": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Array Design Protocol"
+        },
+        "description": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Description"
+        },
+        "file": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "File"
+        },
+        "data_fields": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/CibexDataField"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Data Fields"
+        }
+      },
+      "title": "CibexArrayDesign",
+      "type": "object"
+    },
+    "CibexDataField": {
+      "additionalProperties": false,
+      "description": "データファイルの列の 1 つと、その説明 (CIBEX の * data text field)。",
+      "properties": {
+        "field": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "F532 Median"
+          ],
+          "title": "Field"
+        },
+        "description": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Description"
+        }
+      },
+      "title": "CibexDataField",
+      "type": "object"
+    },
+    "CibexExperiment": {
+      "additionalProperties": false,
+      "properties": {
+        "title": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Title"
+        },
+        "design_type": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Design Type"
+        },
+        "factor": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Factor"
+        },
+        "common_reference": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Common Reference"
+        },
+        "quality_control_description": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Quality Control Description"
+        },
+        "number_of_hybridizations": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Number Of Hybridizations"
+        },
+        "description": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Description"
+        }
+      },
+      "title": "CibexExperiment",
+      "type": "object"
+    },
+    "CibexHybridization": {
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Name"
+        },
+        "array_design_accession": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Array Design Accession"
+        },
+        "hybridization_protocol": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Hybridization Protocol"
+        },
+        "scanning_protocol": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Scanning Protocol"
+        },
+        "description": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Description"
+        },
+        "file": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "File"
+        },
+        "data_fields": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/CibexDataField"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Data Fields"
+        }
+      },
+      "title": "CibexHybridization",
+      "type": "object"
+    },
+    "CibexLabeledExtract": {
+      "additionalProperties": false,
+      "properties": {
+        "label": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Label"
+        },
+        "label_compound": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Label Compound"
+        },
+        "extraction_protocol": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Extraction Protocol"
+        },
+        "labeling_protocol": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Labeling Protocol"
+        },
+        "pooling_protocol": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Pooling Protocol"
+        }
+      },
+      "title": "CibexLabeledExtract",
+      "type": "object"
+    },
+    "CibexReference": {
+      "additionalProperties": false,
+      "description": "Publication に写さない: 著者は 1 つの文字列、頁は「13784-9」のような 1 つの値、年は日付でない。",
+      "properties": {
+        "title": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Title"
+        },
+        "author": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Author"
+        },
+        "journal": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Journal"
+        },
+        "year": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Year"
+        },
+        "volume": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Volume"
+        },
+        "issue": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Issue"
+        },
+        "page": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Page"
+        },
+        "pubmed_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Pubmed Id"
+        }
+      },
+      "title": "CibexReference",
+      "type": "object"
+    },
+    "CibexSample": {
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Name"
+        },
+        "organism": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Organism"
+        },
+        "organism_part": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Organism Part"
+        },
+        "sex": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Sex"
+        },
+        "age": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Age"
+        },
+        "strain_or_line": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Strain Or Line"
+        },
+        "cell_line": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Cell Line"
+        },
+        "cell_type": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Cell Type"
+        },
+        "developmental_stage": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Developmental Stage"
+        },
+        "disease_state": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Disease State"
+        },
+        "genetic_modification": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Genetic Modification"
+        },
+        "individual": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Individual"
+        },
+        "individual_genetic_characteristics": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Individual Genetic Characteristics"
+        },
+        "growth_condition_protocol": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Growth Condition Protocol"
+        },
+        "treatment_protocol": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Treatment Protocol"
+        },
+        "biosource_provider": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Biosource Provider"
+        },
+        "description": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Description"
+        }
+      },
+      "title": "CibexSample",
+      "type": "object"
+    },
+    "CibexSubmitter": {
+      "additionalProperties": false,
+      "description": "Person に写さない: 住所、所属、研究室が 1 つずつの自由記述で、Organization の形に分けられない。",
+      "properties": {
+        "first_name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "First Name"
+        },
+        "middle_initials": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Middle Initials"
+        },
+        "last_name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Last Name"
+        },
+        "organization": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Organization"
+        },
+        "department": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Department"
+        },
+        "laboratory": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Laboratory"
+        },
+        "address": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Address"
+        }
+      },
+      "title": "CibexSubmitter",
+      "type": "object"
+    },
+    "CibexSummary": {
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Name"
+        },
+        "normalization_protocol": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Normalization Protocol"
+        },
+        "transformation_protocol": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Transformation Protocol"
+        },
+        "description": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Description"
+        },
+        "file": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "File"
+        },
+        "data_fields": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/CibexDataField"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Data Fields"
+        }
+      },
+      "title": "CibexSummary",
+      "type": "object"
+    },
+    "ColorMatrixEntry": {
+      "additionalProperties": false,
+      "description": "SOLiD の 2 塩基と色の対応(ABI_SOLID/COLOR_MATRIX/COLOR)。",
+      "properties": {
+        "dibase": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "AC"
+          ],
+          "title": "Dibase"
+        },
+        "color": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "1"
+          ],
+          "title": "Color"
+        }
+      },
+      "title": "ColorMatrixEntry",
+      "type": "object"
+    },
+    "CustomAssembly": {
+      "additionalProperties": false,
+      "properties": {
+        "description": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Description"
+        },
+        "sources": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/ExternalRef"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Sources"
+        }
+      },
+      "title": "CustomAssembly",
+      "type": "object"
+    },
+    "Dac": {
+      "additionalProperties": false,
+      "properties": {
+        "accession": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "JGAC000001"
+          ],
+          "title": "Accession"
+        },
+        "alias": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Alias"
+        },
+        "contacts": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/Person"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Contacts"
+        },
+        "attributes": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/Attribute"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Attributes"
+        }
+      },
+      "title": "Dac",
+      "type": "object"
+    },
+    "DataBlock": {
+      "additionalProperties": false,
+      "description": "files をまとめる単位(SRA / JGA の DATA_BLOCK)。\n\nmember_name は experiment の pool.members[].member_name を指す。",
+      "properties": {
+        "name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Name"
+        },
+        "serial": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Serial"
+        },
+        "member_name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Member Name"
+        },
+        "files": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/File"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Files"
+        },
+        "legacy": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/DataBlockLegacy"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "title": "DataBlock",
+      "type": "object"
+    },
+    "DataBlockLegacy": {
+      "additionalProperties": false,
+      "description": "SRA XSD 1.5 より前の DATA_BLOCK にだけある、装置上の位置と読みの数。",
+      "properties": {
+        "sector": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Sector"
+        },
+        "region": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Region"
+        },
+        "format_code": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Format Code"
+        },
+        "number_channels": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Number Channels"
+        },
+        "total_spots": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Total Spots"
+        },
+        "total_reads": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Total Reads"
+        }
+      },
+      "title": "DataBlockLegacy",
+      "type": "object"
+    },
+    "Dataset": {
+      "additionalProperties": false,
+      "description": "JGA の dataset。含む run / analysis と従う policy は relations で指す。",
+      "properties": {
+        "accession": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "JGAD000001"
+          ],
+          "title": "Accession"
+        },
+        "alias": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Alias"
+        },
+        "title": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Title"
+        },
+        "description": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Description"
+        },
+        "dataset_types": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Dataset Types"
+        },
+        "attributes": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/Attribute"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Attributes"
+        }
+      },
+      "title": "Dataset",
+      "type": "object"
+    },
+    "Entry": {
+      "additionalProperties": false,
+      "properties": {
+        "accession": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "AB123456.1"
+          ],
+          "title": "Accession"
+        },
+        "alias": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "contig_001"
+          ],
+          "title": "Alias"
+        },
+        "name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Name"
+        },
+        "type": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "chromosome"
+          ],
+          "title": "Type"
+        },
+        "topology": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "circular"
+          ],
+          "title": "Topology"
+        },
+        "division": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "BCT"
+          ],
+          "title": "Division"
+        },
+        "sequence": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Sequence"
+        },
+        "comments": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Comments"
+        },
+        "source_features": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/SourceFeature"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source Features"
+        },
+        "st26": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/St26Sequence"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "title": "Entry",
+      "type": "object"
+    },
+    "ExpectedBasecall": {
+      "additionalProperties": false,
+      "description": "READ_SPEC/EXPECTED_BASECALL。表でなく 1 つの配列を書く。",
+      "properties": {
+        "value": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "TCAG"
+          ],
+          "title": "Value"
+        },
+        "base_coord": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Base Coord"
+        },
+        "default_length": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Default Length"
+        }
+      },
+      "title": "ExpectedBasecall",
+      "type": "object"
+    },
+    "Experiment": {
+      "additionalProperties": false,
+      "properties": {
+        "accession": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "DRX000001"
+          ],
+          "title": "Accession"
+        },
+        "alias": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Alias"
+        },
+        "title": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Title"
+        },
+        "description": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Description"
+        },
+        "library": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/LibraryDescriptor"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "platform": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Platform"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "targeted_loci": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/TargetedLocus"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Targeted Loci"
+        },
+        "spot_descriptor": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/SpotDescriptor"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "processing": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/PipelineStep"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Processing"
+        },
+        "attributes": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/Attribute"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Attributes"
+        },
+        "identifiers": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/Identifier"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Identifiers"
+        },
+        "center_name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Center Name"
+        },
+        "broker_name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Broker Name"
+        },
+        "pool": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Pool"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "sample_demux_directive": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "leave_as_pool"
+          ],
+          "title": "Sample Demux Directive"
+        },
+        "technology_type": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "array assay"
+          ],
+          "title": "Technology Type"
+        },
+        "protocol_refs": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Protocol Refs"
+        },
+        "comments": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/Attribute"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Comments"
+        },
+        "legacy": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ExperimentLegacy"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "title": "Experiment",
+      "type": "object"
+    },
+    "ExperimentLegacy": {
+      "additionalProperties": false,
+      "description": "SRA XSD 1.5 より前の EXPERIMENT にだけある要素と属性。",
+      "properties": {
+        "expected_number_runs": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Expected Number Runs"
+        },
+        "gaps": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/Gap"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Gaps"
+        },
+        "base_calling": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/BaseCalling"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "quality_scoring": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/QualityScoring"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Quality Scoring"
+        }
+      },
+      "title": "ExperimentLegacy",
+      "type": "object"
+    },
+    "ExperimentalFactor": {
+      "additionalProperties": false,
+      "description": "MAGE-TAB の IDF の Experimental Factor Name / Type の 1 組。\n\n値は experiments[].pool.members[].factor_values に置く。",
+      "properties": {
+        "name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "treatment"
+          ],
+          "title": "Name"
+        },
+        "type": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "compound"
+          ],
+          "title": "Type"
+        }
+      },
+      "title": "ExperimentalFactor",
+      "type": "object"
+    },
+    "ExternalRef": {
+      "additionalProperties": false,
+      "description": "record の中に埋め込まれた、URL か DB の項目への参照。\n\nrecord のオブジェクトの間の関係は relations に置く。これはその関係の一部では\nなく、ある値そのものが外部の何かを指しているときに使う(参照アセンブリの名前、\ntargeted locus のプローブなど)。",
+      "properties": {
+        "url": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Url"
+        },
+        "db": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "GenBank"
+          ],
+          "title": "Db"
+        },
+        "id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "NC_000001.11"
+          ],
+          "title": "Id"
+        },
+        "label": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Label"
+        }
+      },
+      "title": "ExternalRef",
+      "type": "object"
+    },
+    "Extract": {
+      "additionalProperties": false,
+      "description": "MAGE-TAB の Extract。Source から取り出した材料。\n\ncomments は Comment[x] の列 (name が x)。",
+      "properties": {
+        "name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Name"
+        },
+        "material_type": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "total RNA"
+          ],
+          "title": "Material Type"
+        },
+        "protocol_refs": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Protocol Refs"
+        },
+        "comments": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/Attribute"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Comments"
+        }
+      },
+      "title": "Extract",
+      "type": "object"
+    },
+    "FactorValue": {
+      "additionalProperties": false,
+      "description": "MAGE-TAB の Factor Value[name] の列と、その後の Unit[unit_type] の列。",
+      "properties": {
+        "name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "time"
+          ],
+          "title": "Name"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "24"
+          ],
+          "title": "Value"
+        },
+        "unit": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "hour"
+          ],
+          "title": "Unit"
+        },
+        "unit_type": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "time unit"
+          ],
+          "title": "Unit Type"
+        }
+      },
+      "title": "FactorValue",
+      "type": "object"
+    },
+    "Feature": {
+      "additionalProperties": false,
+      "properties": {
+        "alias": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Alias"
+        },
+        "type": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "CDS"
+          ],
+          "title": "Type"
+        },
+        "location": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "1..2277985"
+          ],
+          "title": "Location"
+        },
+        "sequence_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Sequence Id"
+        },
+        "qualifiers": {
+          "anyOf": [
+            {
+              "additionalProperties": {
+                "items": {
+                  "$ref": "#/$defs/Qualifier"
+                },
+                "type": "array"
+              },
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Qualifiers"
+        },
+        "locus_tag_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Locus Tag Id"
+        },
+        "source_tool": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source Tool"
+        },
+        "score": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Score"
+        },
+        "phase": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Phase"
+        },
+        "parent_ids": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Parent Ids"
+        }
+      },
+      "title": "Feature",
+      "type": "object"
+    },
+    "File": {
+      "additionalProperties": false,
+      "properties": {
+        "filename": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Filename"
+        },
+        "filetype": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "fastq"
+          ],
+          "title": "Filetype"
+        },
+        "checksum_method": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "MD5"
+          ],
+          "title": "Checksum Method"
+        },
+        "checksum": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Checksum"
+        },
+        "unencrypted_checksum": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Unencrypted Checksum"
+        },
+        "quality_scoring_system": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "phred"
+          ],
+          "title": "Quality Scoring System"
+        },
+        "quality_encoding": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "ascii"
+          ],
+          "title": "Quality Encoding"
+        },
+        "ascii_offset": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "!"
+          ],
+          "title": "Ascii Offset"
+        },
+        "read_labels": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Read Labels"
+        },
+        "legacy": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/FileLegacy"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "title": "File",
+      "type": "object"
+    },
+    "FileLegacy": {
+      "additionalProperties": false,
+      "description": "SRA XSD 1.5 より前の FILE にだけある要素。",
+      "properties": {
+        "data_series_labels": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Data Series Labels"
+        }
+      },
+      "title": "FileLegacy",
+      "type": "object"
+    },
+    "Gap": {
+      "additionalProperties": false,
+      "description": "DESIGN/GAP_DESCRIPTOR/GAP。\n\ntype は GAP_TYPE の子要素の名前(\"MatePair\" / \"PairedEnd\" / \"Tandem\")。",
+      "properties": {
+        "type": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "PairedEnd"
+          ],
+          "title": "Type"
+        },
+        "orientation": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Orientation"
+        },
+        "link5": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "R3"
+          ],
+          "title": "Link5"
+        },
+        "link3": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "F3"
+          ],
+          "title": "Link3"
+        },
+        "min_length": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Min Length"
+        },
+        "max_length": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Max Length"
+        },
+        "mean": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Mean"
+        },
+        "stdev": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Stdev"
+        }
+      },
+      "title": "Gap",
+      "type": "object"
+    },
+    "GeaSubmission": {
+      "additionalProperties": false,
+      "description": "GEA の IDF の、MAGE-TAB の版と SDRF のファイル名、GEA が Comment[...] に書く項目。",
+      "properties": {
+        "magetab_version": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "1.1"
+          ],
+          "title": "Magetab Version"
+        },
+        "sdrf_file": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "E-GEAD-1005.sdrf.txt"
+          ],
+          "title": "Sdrf File"
+        },
+        "experiment_type": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "transcription profiling by array"
+          ],
+          "title": "Experiment Type"
+        },
+        "channel_type": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "single-channel"
+          ],
+          "title": "Channel Type"
+        },
+        "array_design_ref": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "A-GEAD-210"
+          ],
+          "title": "Array Design Ref"
+        },
+        "last_update_date": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Last Update Date"
+        },
+        "nbdc_approval": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Nbdc Approval"
+        },
+        "dbcls_approval": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Dbcls Approval"
+        },
+        "additional_files": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/File"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Additional Files"
+        },
+        "legacy": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/GeaSubmissionLegacy"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "title": "GeaSubmission",
+      "type": "object"
+    },
+    "GeaSubmissionLegacy": {
+      "additionalProperties": false,
+      "description": "移した GEA の experiment にだけあるもの。CIBEX から移したものの IDF の Comment[CIBEX *] と\nCIBEX の元の登録、表として読めない過去の版の SDRF。",
+      "properties": {
+        "cibex_accept_date": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Cibex Accept Date"
+        },
+        "cibex_public_release_date": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Cibex Public Release Date"
+        },
+        "cibex_submitter": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Cibex Submitter"
+        },
+        "cibex": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Cibex"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "unread_sdrf": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/File"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "title": "GeaSubmissionLegacy",
+      "type": "object"
+    },
+    "GffMeta": {
+      "additionalProperties": false,
+      "description": "GFF の record 全体の情報。feature ごとの値 (source 列、score 列など) は Feature に置く。",
+      "properties": {
+        "version": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "3"
+          ],
+          "title": "Version"
+        },
+        "pragmas": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Pragmas"
+        },
+        "source_tool": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "DFAST"
+          ],
+          "title": "Source Tool"
+        }
+      },
+      "title": "GffMeta",
+      "type": "object"
+    },
+    "Grant": {
+      "additionalProperties": false,
+      "properties": {
+        "title": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Title"
+        },
+        "agency": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Agency"
+        },
+        "id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Id"
+        }
+      },
+      "title": "Grant",
+      "type": "object"
+    },
+    "Identifier": {
+      "additionalProperties": false,
+      "description": "accession 以外の識別子(SRA IDENTIFIERS)。\n\ntype は \"primary\" / \"secondary\" / \"external\" / \"submitter\" / \"uuid\"。\nnamespace は external / submitter が持つ(例: \"BioSample\", \"NGDC\")。",
+      "properties": {
+        "type": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "secondary"
+          ],
+          "title": "Type"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "SRS000001"
+          ],
+          "title": "Value"
+        },
+        "label": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Label"
+        },
+        "namespace": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "BioSample"
+          ],
+          "title": "Namespace"
+        }
+      },
+      "title": "Identifier",
+      "type": "object"
+    },
+    "InventionTitle": {
+      "additionalProperties": false,
+      "properties": {
+        "title": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Title"
+        },
+        "language_code": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "ja"
+          ],
+          "title": "Language Code"
+        }
+      },
+      "title": "InventionTitle",
+      "type": "object"
+    },
+    "LibraryDescriptor": {
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Name"
+        },
+        "strategy": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "WGS"
+          ],
+          "title": "Strategy"
+        },
+        "source": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "GENOMIC"
+          ],
+          "title": "Source"
+        },
+        "selection": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "RANDOM"
+          ],
+          "title": "Selection"
+        },
+        "layout": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "paired"
+          ],
+          "title": "Layout"
+        },
+        "nominal_length": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Nominal Length"
+        },
+        "nominal_sdev": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Nominal Sdev"
+        },
+        "construction_protocol": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Construction Protocol"
+        },
+        "pooling_strategy": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Pooling Strategy"
+        },
+        "legacy": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/LibraryLegacy"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "title": "LibraryDescriptor",
+      "type": "object"
+    },
+    "LibraryLegacy": {
+      "additionalProperties": false,
+      "description": "SRA XSD 1.5 より前の LIBRARY_DESCRIPTOR にだけある属性。",
+      "properties": {
+        "orientation": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "5'-3'-3'-5'"
+          ],
+          "title": "Orientation"
+        }
+      },
+      "title": "LibraryLegacy",
+      "type": "object"
+    },
+    "LocusTagPrefix": {
+      "additionalProperties": false,
+      "description": "locus_tag prefix と、それを申告した BioSample の対。\n\nBP は prefix 単独では検証できない（BP_R0021 が prefix と BioSample の組を\nBioSample DB と突き合わせ、BP_R0022 が biosample_id の形式を見る）。\nTrad のように対になる BioSample が無い場合は biosample_id を省く。",
+      "properties": {
+        "prefix": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "ECK12"
+          ],
+          "title": "Prefix"
+        },
+        "biosample_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "SAMD00123456"
+          ],
+          "title": "Biosample Id"
+        }
+      },
+      "title": "LocusTagPrefix",
+      "type": "object"
+    },
+    "Organism": {
+      "additionalProperties": false,
+      "description": "生物種。最小限の項目だけを持ち、strain や isolate などは attributes に置く。",
+      "properties": {
+        "name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "Homo sapiens"
+          ],
+          "title": "Name"
+        },
+        "common_name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "human"
+          ],
+          "title": "Common Name"
+        },
+        "taxonomy_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "9606"
+          ],
+          "title": "Taxonomy Id"
+        }
+      },
+      "title": "Organism",
+      "type": "object"
+    },
+    "Organization": {
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "National Institute of Genetics"
+          ],
+          "title": "Name"
+        },
+        "abbreviation": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "NIG"
+          ],
+          "title": "Abbreviation"
+        },
+        "url": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "http://www.ddbj.nig.ac.jp"
+          ],
+          "title": "Url"
+        },
+        "role": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "owner"
+          ],
+          "title": "Role"
+        },
+        "type": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "institution"
+          ],
+          "title": "Type"
+        },
+        "department": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "DNA Data Bank of Japan"
+          ],
+          "title": "Department"
+        },
+        "address": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Address"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "ror_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "https://ror.org/01xq5f0"
+          ],
+          "title": "Ror Id"
+        }
+      },
+      "title": "Organization",
+      "type": "object"
+    },
+    "Person": {
+      "additionalProperties": false,
+      "description": "人。role はこの場所での役割で、同じ人が複数の役割を持つときは Person を役割の数だけ書く。",
+      "properties": {
+        "name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "Hanako Mishima"
+          ],
+          "title": "Name"
+        },
+        "first_name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "Hanako"
+          ],
+          "title": "First Name"
+        },
+        "last_name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "Mishima"
+          ],
+          "title": "Last Name"
+        },
+        "abbreviation": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "Mishima,H."
+          ],
+          "title": "Abbreviation"
+        },
+        "email": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "mishima@ddbj.nig.ac.jp"
+          ],
+          "title": "Email"
+        },
+        "phone": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Phone"
+        },
+        "orcid": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "0000-0000-0000-0000"
+          ],
+          "title": "Orcid"
+        },
+        "role": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "submitter"
+          ],
+          "title": "Role"
+        },
+        "organizations": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/Organization"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Organizations"
+        }
+      },
+      "title": "Person",
+      "type": "object"
+    },
+    "PipelineStep": {
+      "additionalProperties": false,
+      "properties": {
+        "step_index": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Step Index"
+        },
+        "prev_step_indexes": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Prev Step Indexes"
+        },
+        "program": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Program"
+        },
+        "version": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Version"
+        },
+        "section_name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Section Name"
+        },
+        "notes": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Notes"
+        }
+      },
+      "title": "PipelineStep",
+      "type": "object"
+    },
+    "Platform": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "ILLUMINA"
+          ],
+          "title": "Type"
+        },
+        "instrument_model": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "Illumina HiSeq 2500"
+          ],
+          "title": "Instrument Model"
+        },
+        "array_name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Array Name"
+        },
+        "array_description": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Array Description"
+        },
+        "array_provider": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Array Provider"
+        },
+        "array_design": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/RelationTarget"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "legacy": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/PlatformLegacy"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "title": "Platform",
+      "type": "object"
+    },
+    "PlatformLegacy": {
+      "additionalProperties": false,
+      "description": "SRA XSD 1.5 より前の PLATFORM にだけある、装置ごとの運転条件。",
+      "properties": {
+        "cycle_count": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Cycle Count"
+        },
+        "sequence_length": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Sequence Length"
+        },
+        "cycle_sequence": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Cycle Sequence"
+        },
+        "flow_count": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Flow Count"
+        },
+        "flow_sequence": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Flow Sequence"
+        },
+        "key_sequence": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Key Sequence"
+        },
+        "color_matrix": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/ColorMatrixEntry"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Color Matrix"
+        },
+        "color_matrix_code": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Color Matrix Code"
+        }
+      },
+      "title": "PlatformLegacy",
+      "type": "object"
+    },
+    "Policy": {
+      "additionalProperties": false,
+      "properties": {
+        "accession": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "JGAP000001"
+          ],
+          "title": "Accession"
+        },
+        "alias": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Alias"
+        },
+        "title": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Title"
+        },
+        "policy_text": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Policy Text"
+        },
+        "policy_url": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Policy Url"
+        },
+        "attributes": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/Attribute"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Attributes"
+        }
+      },
+      "title": "Policy",
+      "type": "object"
+    },
+    "Pool": {
+      "additionalProperties": false,
+      "properties": {
+        "default_member": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/PoolMember"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "members": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/PoolMember"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Members"
+        }
+      },
+      "title": "Pool",
+      "type": "object"
+    },
+    "PoolMember": {
+      "additionalProperties": false,
+      "description": "1 つの experiment に混ぜた sample の 1 つ(SRA SAMPLE_DESCRIPTOR/POOL)。\n\nMAGE-TAB では、Assay に入る Labeled Extract (無ければ Extract) の 1 つ。member_name が\nLabeled Extract Name、sample が元の Source、extract が途中の Extract。\nmember_name は run / analysis の data_blocks[].member_name から指される。",
+      "properties": {
+        "sample": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/RelationTarget"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "member_name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Member Name"
+        },
+        "proportion": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Proportion"
+        },
+        "read_labels": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/ReadLabel"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Read Labels"
+        },
+        "label": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "Cy3"
+          ],
+          "title": "Label"
+        },
+        "protocol_refs": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Protocol Refs"
+        },
+        "extract": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Extract"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "factor_values": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/FactorValue"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Factor Values"
+        },
+        "misplaced_columns": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/Attribute"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Misplaced Columns"
+        },
+        "sdrf_rows": {
+          "anyOf": [
+            {
+              "items": {
+                "minimum": 0,
+                "type": "integer"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Sdrf Rows"
+        }
+      },
+      "title": "PoolMember",
+      "type": "object"
+    },
+    "Project": {
+      "additionalProperties": false,
+      "properties": {
+        "accession": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "PRJDB12345"
+          ],
+          "title": "Accession"
+        },
+        "alias": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Alias"
+        },
+        "name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Name"
+        },
+        "title": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Title"
+        },
+        "description": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Description"
+        },
+        "project_type": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "primary"
+          ],
+          "title": "Project Type"
+        },
+        "umbrella_subtype": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "eComparativeGenomics"
+          ],
+          "title": "Umbrella Subtype"
+        },
+        "umbrella_subtype_description": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Umbrella Subtype Description"
+        },
+        "study_types": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Study Types"
+        },
+        "experimental_factors": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/ExperimentalFactor"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Experimental Factors"
+        },
+        "protocols": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/Protocol"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Protocols"
+        },
+        "organism": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Organism"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "publications": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/Publication"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Publications"
+        },
+        "grants": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/Grant"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Grants"
+        },
+        "keywords": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Keywords"
+        },
+        "relevance": {
+          "anyOf": [
+            {
+              "additionalProperties": {
+                "type": "string"
+              },
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Relevance"
+        },
+        "locus_tag_prefix": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/LocusTagPrefix"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Locus Tag Prefix"
+        },
+        "target": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ProjectTarget"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "attributes": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/Attribute"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Attributes"
+        },
+        "identifiers": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/Identifier"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Identifiers"
+        },
+        "center_name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Center Name"
+        },
+        "broker_name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Broker Name"
+        },
+        "study_description": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Study Description"
+        },
+        "center_project_name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Center Project Name"
+        },
+        "descriptor_center_name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Descriptor Center Name"
+        },
+        "new_study_type": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "New Study Type"
+        },
+        "legacy": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ProjectLegacy"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "title": "Project",
+      "type": "object"
+    },
+    "ProjectLegacy": {
+      "additionalProperties": false,
+      "description": "SRA XSD 1.5 より前の STUDY にだけある要素。",
+      "properties": {
+        "project_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Project Id"
+        }
+      },
+      "title": "ProjectLegacy",
+      "type": "object"
+    },
+    "ProjectTarget": {
+      "additionalProperties": false,
+      "properties": {
+        "sample_scope": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "monoisolate"
+          ],
+          "title": "Sample Scope"
+        },
+        "material": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "genome"
+          ],
+          "title": "Material"
+        },
+        "capture": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "whole"
+          ],
+          "title": "Capture"
+        },
+        "method": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "sequencing"
+          ],
+          "title": "Method"
+        },
+        "data_types": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Data Types"
+        },
+        "description": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Description"
+        },
+        "method_description": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Method Description"
+        },
+        "data_type_descriptions": {
+          "anyOf": [
+            {
+              "additionalProperties": {
+                "type": "string"
+              },
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Data Type Descriptions"
+        }
+      },
+      "title": "ProjectTarget",
+      "type": "object"
+    },
+    "Protocol": {
+      "additionalProperties": false,
+      "description": "MAGE-TAB の IDF の Protocol Name / Type / Description の 1 組 (CIBEX の Protocol も)。\n\nname は、各オブジェクトの protocol_refs から指される。",
+      "properties": {
+        "name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "P-GEAD-16"
+          ],
+          "title": "Name"
+        },
+        "type": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "nucleic acid extraction protocol"
+          ],
+          "title": "Type"
+        },
+        "description": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Description"
+        }
+      },
+      "title": "Protocol",
+      "type": "object"
+    },
+    "Provenance": {
+      "additionalProperties": true,
+      "description": "record の来歴。変換元の形式と分類、GFF の record 全体の情報。\n\n変換元ごとに持つ情報が違うので、知らないキーも受け取る (extra=\"allow\")。分かっている情報は型付きのフィールドに置く。",
+      "properties": {
+        "source_format": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "GFF"
+          ],
+          "title": "Source Format"
+        },
+        "submission_category": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "WGS"
+          ],
+          "title": "Submission Category"
+        },
+        "gff": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/GffMeta"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "title": "Provenance",
+      "type": "object"
+    },
+    "Publication": {
+      "additionalProperties": false,
+      "properties": {
+        "title": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Title"
+        },
+        "pubmed_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "12345678"
+          ],
+          "title": "Pubmed Id"
+        },
+        "doi": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "10.1038/nature12345"
+          ],
+          "title": "Doi"
+        },
+        "status": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "published"
+          ],
+          "title": "Status"
+        },
+        "date": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "2025-01-01"
+          ],
+          "title": "Date"
+        },
+        "journal": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "Nature"
+          ],
+          "title": "Journal"
+        },
+        "volume": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Volume"
+        },
+        "issue": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Issue"
+        },
+        "pages_from": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Pages From"
+        },
+        "pages_to": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Pages To"
+        },
+        "authors": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/Person"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Authors"
+        },
+        "consortiums": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Consortiums"
+        }
+      },
+      "title": "Publication",
+      "type": "object"
+    },
+    "Qualifier": {
+      "additionalProperties": false,
+      "description": "INSDC の qualifier の値。alias は record の中での識別子。",
+      "properties": {
+        "alias": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Alias"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Value"
+        },
+        "non_english_value": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Non English Value"
+        }
+      },
+      "title": "Qualifier",
+      "type": "object"
+    },
+    "QualityScoring": {
+      "additionalProperties": false,
+      "description": "PROCESSING/QUALITY_SCORES。",
+      "properties": {
+        "qtype": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "phred"
+          ],
+          "title": "Qtype"
+        },
+        "quality_scorer": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Quality Scorer"
+        },
+        "number_of_levels": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Number Of Levels"
+        },
+        "multiplier": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Multiplier"
+        }
+      },
+      "title": "QualityScoring",
+      "type": "object"
+    },
+    "ReadLabel": {
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Value"
+        },
+        "read_group_tag": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Read Group Tag"
+        }
+      },
+      "title": "ReadLabel",
+      "type": "object"
+    },
+    "ReadSpec": {
+      "additionalProperties": false,
+      "properties": {
+        "read_index": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Read Index"
+        },
+        "read_label": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Read Label"
+        },
+        "read_class": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "Application Read"
+          ],
+          "title": "Read Class"
+        },
+        "read_type": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "Forward"
+          ],
+          "title": "Read Type"
+        },
+        "base_coord": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Base Coord"
+        },
+        "relative_order": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/RelativeOrder"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "expected_basecall_table": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/BasecallTable"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "legacy": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ReadSpecLegacy"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "title": "ReadSpec",
+      "type": "object"
+    },
+    "ReadSpecLegacy": {
+      "additionalProperties": false,
+      "description": "SRA XSD 1.5 より前の、READ_SPEC の位置の決め方。",
+      "properties": {
+        "cycle_coord": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Cycle Coord"
+        },
+        "expected_basecall": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ExpectedBasecall"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "title": "ReadSpecLegacy",
+      "type": "object"
+    },
+    "ReferenceAlignment": {
+      "additionalProperties": false,
+      "description": "ANALYSIS_TYPE/REFERENCE_ALIGNMENT。\n\nrun_labels と seq_labels はアラインメントの中の名前(read group と参照配列)を\n外の run や配列と結ぶ表で、analysis というオブジェクトについての関係ではない。",
+      "properties": {
+        "standard_assembly": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/StandardAssembly"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "custom_assembly": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/CustomAssembly"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "run_labels": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/RunLabel"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Run Labels"
+        },
+        "seq_labels": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/SeqLabel"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Seq Labels"
+        },
+        "includes_unaligned_reads": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Includes Unaligned Reads"
+        },
+        "marks_duplicate_reads": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Marks Duplicate Reads"
+        },
+        "includes_failed_reads": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Includes Failed Reads"
+        }
+      },
+      "title": "ReferenceAlignment",
+      "type": "object"
+    },
+    "Relation": {
+      "additionalProperties": false,
+      "description": "オブジェクトの間の関係と、外部への参照。\n\ntype は \"reference\" (URL)、\"xref\" (外部 DB)、\"part_of\"、\"child_of\"、\"derived_from\"、\"related_to\"、\"governed_by\"、\"managed_by\"、\"contains\"。\nsource を省くと、record 全体が起点になる。",
+      "properties": {
+        "type": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "child_of"
+          ],
+          "title": "Type"
+        },
+        "source": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/RelationSource"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "target": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/RelationTarget"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "label": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Label"
+        },
+        "properties": {
+          "anyOf": [
+            {
+              "additionalProperties": {
+                "type": "string"
+              },
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Properties"
+        }
+      },
+      "title": "Relation",
+      "type": "object"
+    },
+    "RelationSource": {
+      "additionalProperties": false,
+      "description": "関係の起点。type はオブジェクトの種類で、record のキーの単数形 (\"sample\"、\"analysis\"、\"policy\" など)。\n\nrecord 内のオブジェクトを accession で指し、accession が無ければ alias で指す。\nSRA の alias は record の中でも一意とは限らないので、accession が無く alias も\n一意でないときは、その種類の list で同じ alias を持つものの中での位置 (書かれた順、\n0 始まり) を index に書く。list 全体の中の位置ではない。alias は前後の空白を除き、\n続く空白を 1 つとみなして比べ、alias の無いものどうしも同じ alias を持つものとして数える。",
+      "properties": {
+        "type": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "sample"
+          ],
+          "title": "Type"
+        },
+        "alias": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Alias"
+        },
+        "accession": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Accession"
+        },
+        "index": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Index"
+        }
+      },
+      "title": "RelationSource",
+      "type": "object"
+    },
+    "RelationTarget": {
+      "additionalProperties": false,
+      "description": "関係の相手。\n\ndb が外部 DB の名前なら、id はその DB での番号。\ndb がオブジェクトの種類 (RelationSource.type と同じ名前) なら、相手はその種類の\nオブジェクトで、id は alias、accession は accession。相手がこの record の中に\nあるかどうかは表さず、読む側が accession か (center_name, alias) で探す。\nただし、相手がこの record の中にあり、accession が無く alias も一意でないときは、\nその種類の list で同じ alias を持つものの中での位置 (書かれた順、0 始まり) を index に書く。\nSRA の参照は refname と accession を同時に書けるので、片方に寄せると戻せない。\ncenter_name は alias の名前空間(SRA の refcenter)。",
+      "properties": {
+        "url": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Url"
+        },
+        "db": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "biosample"
+          ],
+          "title": "Db"
+        },
+        "id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "SAMD00123456"
+          ],
+          "title": "Id"
+        },
+        "accession": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Accession"
+        },
+        "center_name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Center Name"
+        },
+        "identifiers": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/Identifier"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Identifiers"
+        },
+        "index": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Index"
+        }
+      },
+      "title": "RelationTarget",
+      "type": "object"
+    },
+    "RelativeOrder": {
+      "additionalProperties": false,
+      "properties": {
+        "follows_read_index": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Follows Read Index"
+        },
+        "precedes_read_index": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Precedes Read Index"
+        }
+      },
+      "title": "RelativeOrder",
+      "type": "object"
+    },
+    "Run": {
+      "additionalProperties": false,
+      "properties": {
+        "accession": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "DRR000001"
+          ],
+          "title": "Accession"
+        },
+        "alias": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Alias"
+        },
+        "title": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Title"
+        },
+        "run_date": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Run Date"
+        },
+        "data_type": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "sequencing"
+          ],
+          "title": "Data Type"
+        },
+        "data_blocks": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/DataBlock"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Data Blocks"
+        },
+        "attributes": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/Attribute"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Attributes"
+        },
+        "identifiers": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/Identifier"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Identifiers"
+        },
+        "center_name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Center Name"
+        },
+        "broker_name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Broker Name"
+        },
+        "run_center": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Run Center"
+        },
+        "platform": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Platform"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "spot_descriptor": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/SpotDescriptor"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "processing": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/PipelineStep"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Processing"
+        },
+        "sample_demux_directive": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Sample Demux Directive"
+        },
+        "protocol_refs": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Protocol Refs"
+        },
+        "comments": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/Attribute"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Comments"
+        },
+        "sdrf_rows": {
+          "anyOf": [
+            {
+              "items": {
+                "minimum": 0,
+                "type": "integer"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Sdrf Rows"
+        },
+        "sdrf_column": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Sdrf Column"
+        },
+        "legacy": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/RunLegacy"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "title": "Run",
+      "type": "object"
+    },
+    "RunLabel": {
+      "additionalProperties": false,
+      "description": "アラインメントの read group と、それが来た run の対応。",
+      "properties": {
+        "run": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/RelationTarget"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "data_block_name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Data Block Name"
+        },
+        "read_group_label": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Read Group Label"
+        }
+      },
+      "title": "RunLabel",
+      "type": "object"
+    },
+    "RunLegacy": {
+      "additionalProperties": false,
+      "description": "SRA XSD 1.5 より前の RUN にだけある属性。\n\ninstrument_model は RUN の属性で、PLATFORM の INSTRUMENT_MODEL とは別に書かれる。",
+      "properties": {
+        "instrument_model": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Instrument Model"
+        },
+        "instrument_name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Instrument Name"
+        },
+        "run_file": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Run File"
+        },
+        "total_data_blocks": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Total Data Blocks"
+        }
+      },
+      "title": "RunLegacy",
+      "type": "object"
+    },
+    "Sample": {
+      "additionalProperties": false,
+      "properties": {
+        "accession": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "SAMD00123456"
+          ],
+          "title": "Accession"
+        },
+        "alias": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Alias"
+        },
+        "title": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Title"
+        },
+        "description": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Description"
+        },
+        "organism": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Organism"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "attributes": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/Attribute"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Attributes"
+        },
+        "package": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "MIGS.ba"
+          ],
+          "title": "Package"
+        },
+        "donor_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Donor Id"
+        },
+        "sample_group_type": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "case"
+          ],
+          "title": "Sample Group Type"
+        },
+        "identifiers": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/Identifier"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Identifiers"
+        },
+        "center_name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Center Name"
+        },
+        "broker_name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Broker Name"
+        },
+        "anonymized_name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Anonymized Name"
+        },
+        "individual_name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Individual Name"
+        },
+        "comments": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/Attribute"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Comments"
+        },
+        "sdrf_rows": {
+          "anyOf": [
+            {
+              "items": {
+                "minimum": 0,
+                "type": "integer"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Sdrf Rows"
+        }
+      },
+      "title": "Sample",
+      "type": "object"
+    },
+    "SeqLabel": {
+      "additionalProperties": false,
+      "description": "アラインメントの参照配列の名前と、その配列の対応。",
+      "properties": {
+        "accession": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "NC_000001.11"
+          ],
+          "title": "Accession"
+        },
+        "gi": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Gi"
+        },
+        "data_block_name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Data Block Name"
+        },
+        "seq_label": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "chr1"
+          ],
+          "title": "Seq Label"
+        }
+      },
+      "title": "SeqLabel",
+      "type": "object"
+    },
+    "Sequences": {
+      "additionalProperties": false,
+      "properties": {
+        "seq_prefix": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "contig"
+          ],
+          "title": "Seq Prefix"
+        },
+        "common_source": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Source"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "entries": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/Entry"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Entries"
+        },
+        "structured_comments": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/StructuredComment"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Structured Comments"
+        },
+        "attributes": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/Attribute"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Attributes"
+        }
+      },
+      "title": "Sequences",
+      "type": "object"
+    },
+    "Source": {
+      "additionalProperties": false,
+      "properties": {
+        "organism": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Organism"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "mol_type": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "genomic DNA"
+          ],
+          "title": "Mol Type"
+        },
+        "qualifiers": {
+          "anyOf": [
+            {
+              "additionalProperties": {
+                "items": {
+                  "$ref": "#/$defs/Qualifier"
+                },
+                "type": "array"
+              },
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Qualifiers"
+        }
+      },
+      "title": "Source",
+      "type": "object"
+    },
+    "SourceFeature": {
+      "additionalProperties": false,
+      "description": "INSDC の source feature。\n\ndefinition は DEFINITION 行 (ff_definition) をそのまま持つ。`@@[organism]@@` のような template は展開しない。展開は record を読む側が行う。",
+      "properties": {
+        "alias": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Alias"
+        },
+        "location": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "1..2277985"
+          ],
+          "title": "Location"
+        },
+        "source": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Source"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "definition": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Definition"
+        }
+      },
+      "title": "SourceFeature",
+      "type": "object"
+    },
+    "SpotDescriptor": {
+      "additionalProperties": false,
+      "properties": {
+        "spot_length": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Spot Length"
+        },
+        "reads": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/ReadSpec"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Reads"
+        },
+        "legacy": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/SpotDescriptorLegacy"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "title": "SpotDescriptor",
+      "type": "object"
+    },
+    "SpotDescriptorLegacy": {
+      "additionalProperties": false,
+      "description": "SRA XSD 1.5 より前の SPOT_DECODE_SPEC にだけある要素。",
+      "properties": {
+        "number_of_reads_per_spot": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Number Of Reads Per Spot"
+        },
+        "adapter_spec": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Adapter Spec"
+        }
+      },
+      "title": "SpotDescriptorLegacy",
+      "type": "object"
+    },
+    "SraAction": {
+      "additionalProperties": false,
+      "description": "SRA SUBMISSION/ACTIONS/ACTION の 1 つ。書かれた順に並べる。\n\ntype は ACTION の子要素の名前(\"ADD\" / \"MODIFY\" / \"VALIDATE\" / \"HOLD\" /\n\"RELEASE\" / \"SUPPRESS\" / \"PROTECT\")。object_type は @schema の値そのまま。",
+      "properties": {
+        "type": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "ADD"
+          ],
+          "title": "Type"
+        },
+        "source": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "DRA000001.experiment.xml"
+          ],
+          "title": "Source"
+        },
+        "object_type": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "experiment"
+          ],
+          "title": "Object Type"
+        },
+        "target": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Target"
+        },
+        "hold_until_date": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "2025-01-01"
+          ],
+          "title": "Hold Until Date"
+        },
+        "legacy": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/SraActionLegacy"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "title": "SraAction",
+      "type": "object"
+    },
+    "SraActionLegacy": {
+      "additionalProperties": false,
+      "description": "SRA XSD 1.5 より前の ACTION にだけある属性。",
+      "properties": {
+        "hold_for_period": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Hold For Period"
+        },
+        "notes": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Notes"
+        }
+      },
+      "title": "SraActionLegacy",
+      "type": "object"
+    },
+    "SraContact": {
+      "additionalProperties": false,
+      "description": "SRA SUBMISSION/CONTACTS/CONTACT。登録の経過を知らせる宛先。",
+      "properties": {
+        "name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Name"
+        },
+        "inform_on_status": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "mishima@ddbj.nig.ac.jp"
+          ],
+          "title": "Inform On Status"
+        },
+        "inform_on_error": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "mishima@ddbj.nig.ac.jp"
+          ],
+          "title": "Inform On Error"
+        }
+      },
+      "title": "SraContact",
+      "type": "object"
+    },
+    "SraSubmission": {
+      "additionalProperties": false,
+      "description": "SRA の SUBMISSION が持つ、登録の手続きについての情報。",
+      "properties": {
+        "lab_name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Lab Name"
+        },
+        "submission_date": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Submission Date"
+        },
+        "submission_comment": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Submission Comment"
+        },
+        "contacts": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/SraContact"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Contacts"
+        },
+        "actions": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/SraAction"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Actions"
+        },
+        "legacy": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/SraSubmissionLegacy"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "title": "SraSubmission",
+      "type": "object"
+    },
+    "SraSubmissionLegacy": {
+      "additionalProperties": false,
+      "description": "SRA XSD 1.5 より前の SUBMISSION にだけある要素と属性。",
+      "properties": {
+        "submission_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Submission Id"
+        },
+        "files": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/File"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Files"
+        }
+      },
+      "title": "SraSubmissionLegacy",
+      "type": "object"
+    },
+    "St26Sequence": {
+      "additionalProperties": false,
+      "description": "ST.26 の配列 (SequenceData) の 1 つについて、v3 の Entry に置き場の無い値。書かれたまま持つ。",
+      "properties": {
+        "moltype": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "AA"
+          ],
+          "title": "Moltype"
+        },
+        "other_seqid": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "pat|JP|2024048697|A5|1"
+          ],
+          "title": "Other Seqid"
+        }
+      },
+      "title": "St26Sequence",
+      "type": "object"
+    },
+    "St26Submission": {
+      "additionalProperties": false,
+      "description": "ST.26 (WIPO) の特許配列リストの出願情報。来歴ではなく、登録の内容そのもの。\n\n配列 (SequenceData) より前の全てと、JPO が末尾に足す Bibliography、欠番にした配列の番号を持つ。\n配列そのものは sequences.entries[] (配列ごとの ST.26 の値は entries[].st26)。",
+      "properties": {
+        "dtd_version": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "V1_3"
+          ],
+          "title": "Dtd Version"
+        },
+        "file_name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "File Name"
+        },
+        "software_name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Software Name"
+        },
+        "software_version": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Software Version"
+        },
+        "production_date": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Production Date"
+        },
+        "original_language": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "ja"
+          ],
+          "title": "Original Language"
+        },
+        "non_english_language": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "ja"
+          ],
+          "title": "Non English Language"
+        },
+        "applicant_file_reference": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Applicant File Reference"
+        },
+        "application": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ApplicationIdentification"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "earliest_priority": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ApplicationIdentification"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "applicant_name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Applicant Name"
+        },
+        "applicant_name_language_code": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "ja"
+          ],
+          "title": "Applicant Name Language Code"
+        },
+        "applicant_name_latin": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Applicant Name Latin"
+        },
+        "inventor_name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Inventor Name"
+        },
+        "inventor_name_language_code": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "ja"
+          ],
+          "title": "Inventor Name Language Code"
+        },
+        "inventor_name_latin": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Inventor Name Latin"
+        },
+        "invention_titles": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/InventionTitle"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Invention Titles"
+        },
+        "sequence_total_quantity": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Sequence Total Quantity"
+        },
+        "skipped_sequence_id_numbers": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Skipped Sequence Id Numbers"
+        },
+        "published_date": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "2024-12-03"
+          ],
+          "title": "Published Date"
+        },
+        "bibliography_priority": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ApplicationIdentification"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "title": "St26Submission",
+      "type": "object"
+    },
+    "StandardAssembly": {
+      "additionalProperties": false,
+      "properties": {
+        "short_name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "GRCh38"
+          ],
+          "title": "Short Name"
+        },
+        "names": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/ExternalRef"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Names"
+        }
+      },
+      "title": "StandardAssembly",
+      "type": "object"
+    },
+    "StructuredComment": {
+      "additionalProperties": false,
+      "description": "Trad の ST_COMMENT の 1 つ。tagset_id がブロックの種類で、fields はその中の項目と値。",
+      "properties": {
+        "tagset_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "Genome-Assembly-Data"
+          ],
+          "title": "Tagset Id"
+        },
+        "fields": {
+          "anyOf": [
+            {
+              "additionalProperties": {
+                "type": "string"
+              },
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Fields"
+        }
+      },
+      "title": "StructuredComment",
+      "type": "object"
+    },
+    "Submission": {
+      "additionalProperties": false,
+      "properties": {
+        "accession": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "DRA000001"
+          ],
+          "title": "Accession"
+        },
+        "alias": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Alias"
+        },
+        "title": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Title"
+        },
+        "submitters": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/Person"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Submitters"
+        },
+        "hold_date": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "2025-01-01"
+          ],
+          "title": "Hold Date"
+        },
+        "comments": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Comments"
+        },
+        "st26": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/St26Submission"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "sra": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/SraSubmission"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "gea": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/GeaSubmission"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "attributes": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/Attribute"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Attributes"
+        },
+        "identifiers": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/Identifier"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Identifiers"
+        },
+        "center_name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "NIG"
+          ],
+          "title": "Center Name"
+        },
+        "broker_name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Broker Name"
+        }
+      },
+      "title": "Submission",
+      "type": "object"
+    },
+    "TargetedLocus": {
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "examples": [
+            "16S rRNA"
+          ],
+          "title": "Name"
+        },
+        "description": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Description"
+        },
+        "probe_set": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ExternalRef"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "title": "TargetedLocus",
+      "type": "object"
+    },
+    "TermSource": {
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Name"
+        },
+        "file": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "File"
+        },
+        "version": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Version"
+        }
+      },
+      "title": "TermSource",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "examples": [
+        "v3"
+      ],
+      "title": "Schema Version"
+    },
+    "provenance": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Provenance"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "submission": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Submission"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "projects": {
+      "anyOf": [
+        {
+          "items": {
+            "$ref": "#/$defs/Project"
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Projects"
+    },
+    "samples": {
+      "anyOf": [
+        {
+          "items": {
+            "$ref": "#/$defs/Sample"
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Samples"
+    },
+    "experiments": {
+      "anyOf": [
+        {
+          "items": {
+            "$ref": "#/$defs/Experiment"
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Experiments"
+    },
+    "runs": {
+      "anyOf": [
+        {
+          "items": {
+            "$ref": "#/$defs/Run"
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Runs"
+    },
+    "analyses": {
+      "anyOf": [
+        {
+          "items": {
+            "$ref": "#/$defs/Analysis"
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Analyses"
+    },
+    "sequences": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Sequences"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "features": {
+      "anyOf": [
+        {
+          "items": {
+            "$ref": "#/$defs/Feature"
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Features"
+    },
+    "assembly": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Assembly"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "datasets": {
+      "anyOf": [
+        {
+          "items": {
+            "$ref": "#/$defs/Dataset"
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Datasets"
+    },
+    "relations": {
+      "anyOf": [
+        {
+          "items": {
+            "$ref": "#/$defs/Relation"
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Relations"
+    },
+    "access_control": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/AccessControl"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "array_design": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ArrayDesign"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    }
+  },
+  "title": "DdbjRecord",
+  "type": "object"
+}

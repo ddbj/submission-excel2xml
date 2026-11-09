@@ -1,0 +1,77 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+# A DDBJ Record v3 for a DRA submission from the same Excel file as
+# excel2xml_dra, which reads and checks it: <account>-<number>_dra_record.json.
+#
+# Stricter than excel2xml_dra, which writes its XML whatever it made of the
+# options: a record is known by the aliases those make, and names its
+# BioProject by accession.
+
+require 'json'
+require 'optparse'
+require 'rbconfig'
+require 'tmpdir'
+
+require 'nokogiri'
+require 'submission_excel2xml/dra_record'
+
+DOCUMENTS = %w[Submission Experiment Run Analysis].freeze
+
+options = {}
+
+parser = OptionParser.new {|opt|
+  opt.banner = 'Usage: excel2record_dra -a ACCOUNT -i NUMBER -p PRJDB… [-c CENTER] [-r] WORKBOOK'
+
+  opt.on('-a VALUE', 'D-way account ID')  { options[:account] = _1 }
+  opt.on('-i NUMBER', 'submission number (e.g., 0001)') { options[:number] = _1 }
+  opt.on('-p ID', 'BioProject accession (PRJDB…)') { options[:project] = _1 }
+  opt.on('-c NAME', 'Center name')        { options[:center] = _1 }
+  opt.on('-r', 'sheet name without prefix') { options[:without_prefix] = true }
+}
+
+begin
+  workbooks = parser.parse(ARGV)
+rescue OptionParser::ParseError => e
+  abort "#{e.message}\n#{parser}"
+end
+
+abort parser.to_s unless workbooks.one? && options[:account] && options[:number] && options[:project]
+abort "-i is a number of four digits: #{options[:number]}" unless options[:number].match?(/\A\d{4}\z/)
+abort "-p is a BioProject accession (PRJDB…); a record cannot name one by PSUB: #{options[:project]}" unless options[:project].match?(/\APRJDB\d+\z/)
+
+workbook = File.expand_path(workbooks.first)
+args     = ['-a', options[:account], '-i', options[:number], '-p', options[:project]]
+
+args.push('-c', options[:center]) if options[:center]
+args.push('-r')                   if options[:without_prefix]
+
+excel2xml = File.expand_path('excel2xml_dra', __dir__)
+
+record = Dir.mktmpdir('excel2record-dra-') {|dir|
+  abort 'excel2xml_dra failed.' unless system(RbConfig.ruby, excel2xml, *args, workbook, chdir: dir)
+
+  documents = DOCUMENTS.filter_map {|kind|
+    path = Dir.glob("*dra_#{kind}.xml", base: dir).first
+
+    File.read(File.join(dir, path)) if path
+  }.select { Nokogiri::XML(_1).root }
+
+  SubmissionExcel2xml::DRARecord.call(documents)
+}
+
+# excel2xml_dra writes no Submission for a workbook of Analysis alone, and
+# with it would go the hold date and the contacts.
+abort 'The workbook makes no Submission; a record needs one (a workbook of Analysis alone is not supported).' unless record['submission']
+
+unnumbered = Array(record['relations']).map { _1['target'] }.select { %w[project sample].include?(_1['db']) && !_1['accession'] }
+
+unless unnumbered.empty?
+  abort "A record names BioProject and BioSample by accession (PRJDB…, SAMD…): #{unnumbered.flat_map { Array(_1['identifiers']).map { |id| id['value'] } }.uniq.join(', ')}"
+end
+
+name = "#{options[:account]}-#{options[:number]}_dra_record.json"
+
+File.write(name, "#{JSON.pretty_generate(record)}\n")
+
+puts "Wrote #{name}"

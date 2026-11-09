@@ -195,6 +195,14 @@ Run から参照されていない Experiment が存在する。
 
 メタデータモデルは [DRA Handbook](https://www.ddbj.nig.ac.jp/dra/submission.html#metadata-objects) を参照してください。
 
+### DDBJ Record の生成
+
+`excel2record_dra` は、`excel2xml_dra` と同じ Excel から、DDBJ Repository に登録するための DDBJ Record（v3 の JSON）を `<submission>_dra_record.json` として生成します。Excel の読み取りとチェックは `excel2xml_dra` が行います。DRA のみ対応しています。`-a`、`-i`、`-p`（PRJDB で始まる BioProject accession）は必須で、Analysis のみの Excel には対応していません。BioSample も SAMD で始まる accession で指定します。
+
+```
+excel2record_dra -a example -i 0001 -p PRJDB7252 example/example-0001_dra_metadata.xlsx
+```
+
 ### DRA ウェブ画面から XML を登録する
 
 メタデータ XML を登録する前に[登録ディレクトリに配列データファイルをアップロードします](https://www.ddbj.nig.ac.jp/dra/submission.html#upload-sequence-data)。D-way にログイン後、[Submission、Experiment と Run XML を DRA 登録ページででアップロード](https://www.ddbj.nig.ac.jp/dra/submission.html#create-metadata-in-xml-files) します。通常5分以内に登録が完了します。
@@ -541,6 +549,14 @@ Your web browser may time out, however, submission processes are ongoing on the 
 ### When Github and XML generation are not clear for you
 
 Download [DRA metadata Excel](https://github.com/ddbj/submission-excel2xml/blob/main/metadata_dra.xlsx), fill in and send it to the DRA team by Email (trace@ddbj.nig.ac.jp).
+
+### Generating a DDBJ Record
+
+`excel2record_dra` takes the same Excel file as `excel2xml_dra` and writes a DDBJ Record (v3 JSON) for submission to DDBJ Repository as `<submission>_dra_record.json`. The Excel file is read and checked by `excel2xml_dra`. DRA only. `-a`, `-i` and `-p` (a BioProject accession starting with PRJDB) are required, an Excel file with Analysis alone is not supported, and BioSamples are named by SAMD accessions.
+
+```
+excel2record_dra -a example -i 0001 -p PRJDB7252 example/example-0001_dra_metadata.xlsx
+```
 
 ## JGA
 

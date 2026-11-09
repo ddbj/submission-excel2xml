@@ -1,0 +1,784 @@
+# SRA XML（DRA のメタデータ）の要素と属性を、v3 のどこに置くか。
+# tests/unit/schema/test_v3_sra_mapping.py が、全ての行の場所がモデルに実在すること、
+# raw fixture の SRA XML の要素と属性が全てここにあること、sra_full.json に全ての行の
+# 実例があることを確かめる。モデルを変えたら、ここも手で直す。
+#
+# 対象は SRA XSD 1.5d2 から 1.6.1 までの全版に現れる要素と属性に、D-way に保存された
+# 全版の文書に現れるものを加えたもの。後者には、XSD 1.5 より前の登録にしかない要素も
+# 含む。文書の種類ごとに、その根の要素から書く（*_SET は同じ種類を並べる入れ物なので
+# 省く）。
+#
+# 値の読み方:
+#   (container)          値を持たない入れ物。子が値を持つ
+#   a.b[]                b は list。[] の中の語は注記で、要素の type と、relation なら
+#                        target.db（relations[part_of sample] は type が part_of で
+#                        target.db が sample の relation）
+#   a.properties{key}    dict の key の値
+#   ... (要素名が値)     子要素の名前がその値になる（PLATFORM/ILLUMINA → "ILLUMINA"）
+#   ... (要素名を小文字にした値)
+#                        同じく、小文字にして値にする（LIBRARY_LAYOUT/PAIRED → "paired"）
+#   ... (種類の名前にした値)
+#                        SRA のオブジェクトの型名を、record の種類の名前（record のキーの
+#                        単数形）にする（STUDY → "project"、SAMPLE → "sample"）
+#   relations[...]       ルートの relations。source は文書の根の要素
+#
+# 注記の付いた行は、XSD の一部の版にしかないか、XSD に無いもの。
+# 数は D-way の全版の文書のうち、その要素を含むものの数。
+
+submission:
+  SUBMISSION:                                                  (container)
+  SUBMISSION/@accession:                                       submission.accession
+  SUBMISSION/@alias:                                           submission.alias
+  SUBMISSION/@broker_name:                                     submission.broker_name
+  SUBMISSION/@center_name:                                     submission.center_name
+  SUBMISSION/@lab_name:                                        submission.sra.lab_name
+  SUBMISSION/@submission_comment:                              submission.sra.submission_comment
+  SUBMISSION/@submission_date:                                 submission.sra.submission_date
+  SUBMISSION/@submission_id:                                   submission.sra.legacy.submission_id  # XSD に無い。D-way で 2 文書
+  SUBMISSION/ACTIONS:                                          (container)
+  SUBMISSION/ACTIONS/ACTION:                                   submission.sra.actions[]
+  SUBMISSION/ACTIONS/ACTION/ADD:                               submission.sra.actions[].type (要素名が値)
+  SUBMISSION/ACTIONS/ACTION/ADD/@notes:                        submission.sra.actions[].legacy.notes  # XSD に無い。D-way で 768 文書
+  SUBMISSION/ACTIONS/ACTION/ADD/@schema:                       submission.sra.actions[].object_type
+  SUBMISSION/ACTIONS/ACTION/ADD/@source:                       submission.sra.actions[].source
+  SUBMISSION/ACTIONS/ACTION/HOLD:                              submission.sra.actions[].type (要素名が値)
+  SUBMISSION/ACTIONS/ACTION/HOLD/@HoldForPeriod:               submission.sra.actions[].legacy.hold_for_period  # XSD に無い。D-way で 1,123 文書
+  SUBMISSION/ACTIONS/ACTION/HOLD/@HoldUntilDate:               submission.sra.actions[].hold_until_date (@target の無い HOLD と RELEASE のうち最後のものなら、submission.hold_date にも同じ値)
+  SUBMISSION/ACTIONS/ACTION/HOLD/@notes:                       submission.sra.actions[].legacy.notes  # XSD に無い。D-way で 495 文書
+  SUBMISSION/ACTIONS/ACTION/HOLD/@target:                      submission.sra.actions[].target
+  SUBMISSION/ACTIONS/ACTION/MODIFY:                            submission.sra.actions[].type (要素名が値)
+  SUBMISSION/ACTIONS/ACTION/MODIFY/@schema:                    submission.sra.actions[].object_type
+  SUBMISSION/ACTIONS/ACTION/MODIFY/@source:                    submission.sra.actions[].source
+  SUBMISSION/ACTIONS/ACTION/MODIFY/@target:                    submission.sra.actions[].target  # XSD に無い。D-way で 2 文書
+  SUBMISSION/ACTIONS/ACTION/PROTECT:                           submission.sra.actions[].type (要素名が値)
+  SUBMISSION/ACTIONS/ACTION/RELEASE:                           submission.sra.actions[].type (要素名が値)
+  SUBMISSION/ACTIONS/ACTION/RELEASE/@notes:                    submission.sra.actions[].legacy.notes  # XSD に無い。D-way で 6 文書
+  SUBMISSION/ACTIONS/ACTION/RELEASE/@target:                   submission.sra.actions[].target
+  SUBMISSION/ACTIONS/ACTION/SUPPRESS:                          submission.sra.actions[].type (要素名が値)
+  SUBMISSION/ACTIONS/ACTION/SUPPRESS/@target:                  submission.sra.actions[].target
+  SUBMISSION/ACTIONS/ACTION/VALIDATE:                          submission.sra.actions[].type (要素名が値)
+  SUBMISSION/ACTIONS/ACTION/VALIDATE/@schema:                  submission.sra.actions[].object_type
+  SUBMISSION/ACTIONS/ACTION/VALIDATE/@source:                  submission.sra.actions[].source
+  SUBMISSION/CONTACTS:                                         (container)
+  SUBMISSION/CONTACTS/CONTACT:                                 submission.sra.contacts[]
+  SUBMISSION/CONTACTS/CONTACT/@inform_on_error:                submission.sra.contacts[].inform_on_error
+  SUBMISSION/CONTACTS/CONTACT/@inform_on_status:               submission.sra.contacts[].inform_on_status
+  SUBMISSION/CONTACTS/CONTACT/@name:                           submission.sra.contacts[].name
+  SUBMISSION/FILES:                                            (container)  # XSD に無い。D-way で 536 文書
+  SUBMISSION/FILES/FILE:                                       submission.sra.legacy.files[]  # XSD に無い。D-way で 536 文書
+  SUBMISSION/FILES/FILE/@checksum:                             submission.sra.legacy.files[].checksum  # XSD に無い。D-way で 536 文書
+  SUBMISSION/FILES/FILE/@checksum_method:                      submission.sra.legacy.files[].checksum_method  # XSD に無い。D-way で 536 文書
+  SUBMISSION/FILES/FILE/@filename:                             submission.sra.legacy.files[].filename  # XSD に無い。D-way で 536 文書
+  SUBMISSION/IDENTIFIERS:                                      (container)
+  SUBMISSION/IDENTIFIERS/EXTERNAL_ID:                          submission.identifiers[external].value
+  SUBMISSION/IDENTIFIERS/EXTERNAL_ID/@label:                   submission.identifiers[external].label
+  SUBMISSION/IDENTIFIERS/EXTERNAL_ID/@namespace:               submission.identifiers[external].namespace
+  SUBMISSION/IDENTIFIERS/PRIMARY_ID:                           submission.identifiers[primary].value
+  SUBMISSION/IDENTIFIERS/PRIMARY_ID/@label:                    submission.identifiers[primary].label
+  SUBMISSION/IDENTIFIERS/SECONDARY_ID:                         submission.identifiers[secondary].value
+  SUBMISSION/IDENTIFIERS/SECONDARY_ID/@label:                  submission.identifiers[secondary].label
+  SUBMISSION/IDENTIFIERS/SUBMITTER_ID:                         submission.identifiers[submitter].value
+  SUBMISSION/IDENTIFIERS/SUBMITTER_ID/@label:                  submission.identifiers[submitter].label
+  SUBMISSION/IDENTIFIERS/SUBMITTER_ID/@namespace:              submission.identifiers[submitter].namespace
+  SUBMISSION/IDENTIFIERS/UUID:                                 submission.identifiers[uuid].value
+  SUBMISSION/IDENTIFIERS/UUID/@label:                          submission.identifiers[uuid].label
+  SUBMISSION/SUBMISSION_ATTRIBUTES:                            (container)
+  SUBMISSION/SUBMISSION_ATTRIBUTES/SUBMISSION_ATTRIBUTE:       submission.attributes[]
+  SUBMISSION/SUBMISSION_ATTRIBUTES/SUBMISSION_ATTRIBUTE/TAG:   submission.attributes[].name
+  SUBMISSION/SUBMISSION_ATTRIBUTES/SUBMISSION_ATTRIBUTE/UNITS: submission.attributes[].unit
+  SUBMISSION/SUBMISSION_ATTRIBUTES/SUBMISSION_ATTRIBUTE/VALUE: submission.attributes[].value
+  SUBMISSION/SUBMISSION_LINKS:                                 (container)
+  SUBMISSION/SUBMISSION_LINKS/SUBMISSION_LINK:                 relations[]
+  SUBMISSION/SUBMISSION_LINKS/SUBMISSION_LINK/URL_LINK:        relations[reference]
+  SUBMISSION/SUBMISSION_LINKS/SUBMISSION_LINK/URL_LINK/LABEL:  relations[reference].label
+  SUBMISSION/SUBMISSION_LINKS/SUBMISSION_LINK/URL_LINK/URL:    relations[reference].target.url
+  SUBMISSION/SUBMISSION_LINKS/SUBMISSION_LINK/XREF_LINK:       relations[xref]
+  SUBMISSION/SUBMISSION_LINKS/SUBMISSION_LINK/XREF_LINK/DB:    relations[xref].target.db
+  SUBMISSION/SUBMISSION_LINKS/SUBMISSION_LINK/XREF_LINK/ID:    relations[xref].target.id
+  SUBMISSION/SUBMISSION_LINKS/SUBMISSION_LINK/XREF_LINK/LABEL: relations[xref].label
+  SUBMISSION/TITLE:                                            submission.title
+
+study:
+  STUDY:                                                             (container)
+  STUDY/@accession:                                                  projects[].accession
+  STUDY/@alias:                                                      projects[].alias
+  STUDY/@broker_name:                                                projects[].broker_name
+  STUDY/@center_name:                                                projects[].center_name
+  STUDY/DESCRIPTOR:                                                  (container)
+  STUDY/DESCRIPTOR/CENTER_NAME:                                      projects[].descriptor_center_name  # XSD 1.5d2
+  STUDY/DESCRIPTOR/CENTER_PROJECT_NAME:                              projects[].center_project_name
+  STUDY/DESCRIPTOR/PROJECT_ID:                                       projects[].legacy.project_id  # XSD に無い。D-way で 1,790 文書
+  STUDY/DESCRIPTOR/RELATED_STUDIES:                                  (container)
+  STUDY/DESCRIPTOR/RELATED_STUDIES/RELATED_STUDY:                    relations[related_to]
+  STUDY/DESCRIPTOR/RELATED_STUDIES/RELATED_STUDY/IS_PRIMARY:         relations[related_to].properties{is_primary}
+  STUDY/DESCRIPTOR/RELATED_STUDIES/RELATED_STUDY/RELATED_LINK:       (container)
+  STUDY/DESCRIPTOR/RELATED_STUDIES/RELATED_STUDY/RELATED_LINK/DB:    relations[related_to].target.db
+  STUDY/DESCRIPTOR/RELATED_STUDIES/RELATED_STUDY/RELATED_LINK/ID:    relations[related_to].target.id
+  STUDY/DESCRIPTOR/RELATED_STUDIES/RELATED_STUDY/RELATED_LINK/LABEL: relations[related_to].label
+  STUDY/DESCRIPTOR/STUDY_ABSTRACT:                                   projects[].description
+  STUDY/DESCRIPTOR/STUDY_DESCRIPTION:                                projects[].study_description
+  STUDY/DESCRIPTOR/STUDY_TITLE:                                      projects[].title
+  STUDY/DESCRIPTOR/STUDY_TYPE:                                       (container)
+  STUDY/DESCRIPTOR/STUDY_TYPE/@existing_study_type:                  projects[].study_types[]
+  STUDY/DESCRIPTOR/STUDY_TYPE/@new_study_type:                       projects[].new_study_type
+  STUDY/IDENTIFIERS:                                                 (container)
+  STUDY/IDENTIFIERS/EXTERNAL_ID:                                     projects[].identifiers[external].value
+  STUDY/IDENTIFIERS/EXTERNAL_ID/@label:                              projects[].identifiers[external].label
+  STUDY/IDENTIFIERS/EXTERNAL_ID/@namespace:                          projects[].identifiers[external].namespace
+  STUDY/IDENTIFIERS/PRIMARY_ID:                                      projects[].identifiers[primary].value
+  STUDY/IDENTIFIERS/PRIMARY_ID/@label:                               projects[].identifiers[primary].label
+  STUDY/IDENTIFIERS/SECONDARY_ID:                                    projects[].identifiers[secondary].value
+  STUDY/IDENTIFIERS/SECONDARY_ID/@label:                             projects[].identifiers[secondary].label
+  STUDY/IDENTIFIERS/SUBMITTER_ID:                                    projects[].identifiers[submitter].value
+  STUDY/IDENTIFIERS/SUBMITTER_ID/@label:                             projects[].identifiers[submitter].label
+  STUDY/IDENTIFIERS/SUBMITTER_ID/@namespace:                         projects[].identifiers[submitter].namespace
+  STUDY/IDENTIFIERS/UUID:                                            projects[].identifiers[uuid].value
+  STUDY/IDENTIFIERS/UUID/@label:                                     projects[].identifiers[uuid].label
+  STUDY/STUDY_ATTRIBUTES:                                            (container)
+  STUDY/STUDY_ATTRIBUTES/STUDY_ATTRIBUTE:                            projects[].attributes[]
+  STUDY/STUDY_ATTRIBUTES/STUDY_ATTRIBUTE/TAG:                        projects[].attributes[].name
+  STUDY/STUDY_ATTRIBUTES/STUDY_ATTRIBUTE/UNITS:                      projects[].attributes[].unit
+  STUDY/STUDY_ATTRIBUTES/STUDY_ATTRIBUTE/VALUE:                      projects[].attributes[].value
+  STUDY/STUDY_LINKS:                                                 (container)
+  STUDY/STUDY_LINKS/STUDY_LINK:                                      relations[]
+  STUDY/STUDY_LINKS/STUDY_LINK/DDBJ_LINK:                            relations[xref].properties{sra_link_type} (DDBJ_LINK なら "ddbj")  # XSD に無い。D-way で 34 文書
+  STUDY/STUDY_LINKS/STUDY_LINK/DDBJ_LINK/DB:                         relations[xref].target.db  # XSD に無い。D-way で 34 文書
+  STUDY/STUDY_LINKS/STUDY_LINK/DDBJ_LINK/ID:                         relations[xref].target.id  # XSD に無い。D-way で 34 文書
+  STUDY/STUDY_LINKS/STUDY_LINK/ENTREZ_LINK:                          relations[xref].properties{sra_link_type} (ENTREZ_LINK なら "entrez")  # XSD に無い。D-way で 612 文書
+  STUDY/STUDY_LINKS/STUDY_LINK/ENTREZ_LINK/DB:                       relations[xref].target.db  # XSD に無い。D-way で 612 文書
+  STUDY/STUDY_LINKS/STUDY_LINK/ENTREZ_LINK/ID:                       relations[xref].target.id  # XSD に無い。D-way で 603 文書
+  STUDY/STUDY_LINKS/STUDY_LINK/ENTREZ_LINK/LABEL:                    relations[xref].label  # XSD に無い。D-way で 3 文書
+  STUDY/STUDY_LINKS/STUDY_LINK/URL_LINK:                             relations[reference]
+  STUDY/STUDY_LINKS/STUDY_LINK/URL_LINK/LABEL:                       relations[reference].label
+  STUDY/STUDY_LINKS/STUDY_LINK/URL_LINK/URL:                         relations[reference].target.url
+  STUDY/STUDY_LINKS/STUDY_LINK/XREF_LINK:                            relations[xref]
+  STUDY/STUDY_LINKS/STUDY_LINK/XREF_LINK/DB:                         relations[xref].target.db
+  STUDY/STUDY_LINKS/STUDY_LINK/XREF_LINK/ID:                         relations[xref].target.id
+  STUDY/STUDY_LINKS/STUDY_LINK/XREF_LINK/LABEL:                      relations[xref].label
+
+sample:
+  SAMPLE:                                          samples[]
+  SAMPLE/@accession:                               samples[].accession
+  SAMPLE/@alias:                                   samples[].alias
+  SAMPLE/@broker_name:                             samples[].broker_name
+  SAMPLE/@center_name:                             samples[].center_name
+  SAMPLE/DESCRIPTION:                              samples[].description
+  SAMPLE/IDENTIFIERS:                              (container)
+  SAMPLE/IDENTIFIERS/EXTERNAL_ID:                  samples[].identifiers[external].value
+  SAMPLE/IDENTIFIERS/EXTERNAL_ID/@label:           samples[].identifiers[external].label
+  SAMPLE/IDENTIFIERS/EXTERNAL_ID/@namespace:       samples[].identifiers[external].namespace
+  SAMPLE/IDENTIFIERS/PRIMARY_ID:                   samples[].identifiers[primary].value
+  SAMPLE/IDENTIFIERS/PRIMARY_ID/@label:            samples[].identifiers[primary].label
+  SAMPLE/IDENTIFIERS/SECONDARY_ID:                 samples[].identifiers[secondary].value
+  SAMPLE/IDENTIFIERS/SECONDARY_ID/@label:          samples[].identifiers[secondary].label
+  SAMPLE/IDENTIFIERS/SUBMITTER_ID:                 samples[].identifiers[submitter].value
+  SAMPLE/IDENTIFIERS/SUBMITTER_ID/@label:          samples[].identifiers[submitter].label
+  SAMPLE/IDENTIFIERS/SUBMITTER_ID/@namespace:      samples[].identifiers[submitter].namespace
+  SAMPLE/IDENTIFIERS/UUID:                         samples[].identifiers[uuid].value
+  SAMPLE/IDENTIFIERS/UUID/@label:                  samples[].identifiers[uuid].label
+  SAMPLE/SAMPLE_ATTRIBUTE:                         samples[].attributes[]  # 整形式でない文書を読み直した形。D-way で 4 文書
+  SAMPLE/SAMPLE_ATTRIBUTE/TAG:                     samples[].attributes[].name  # 整形式でない文書を読み直した形。D-way で 4 文書
+  SAMPLE/SAMPLE_ATTRIBUTE/VALUE:                   samples[].attributes[].value  # 整形式でない文書を読み直した形。D-way で 4 文書
+  SAMPLE/SAMPLE_ATTRIBUTES:                        (container)
+  SAMPLE/SAMPLE_ATTRIBUTES/SAMPLE_ATTRIBUTE:       samples[].attributes[]
+  SAMPLE/SAMPLE_ATTRIBUTES/SAMPLE_ATTRIBUTE/TAG:   samples[].attributes[].name
+  SAMPLE/SAMPLE_ATTRIBUTES/SAMPLE_ATTRIBUTE/UNITS: samples[].attributes[].unit
+  SAMPLE/SAMPLE_ATTRIBUTES/SAMPLE_ATTRIBUTE/VALUE: samples[].attributes[].value
+  SAMPLE/SAMPLE_ATTRIBUTES/TAG:                    samples[].attributes[].name  # 整形式でない文書を読み直した形。D-way で 4 文書
+  SAMPLE/SAMPLE_ATTRIBUTES/VALUE:                  samples[].attributes[].value  # 整形式でない文書を読み直した形。D-way で 4 文書
+  SAMPLE/SAMPLE_LINKS:                             (container)
+  SAMPLE/SAMPLE_LINKS/SAMPLE_LINK:                 relations[]
+  SAMPLE/SAMPLE_LINKS/SAMPLE_LINK/DDBJ_LINK:       relations[xref].properties{sra_link_type} (DDBJ_LINK なら "ddbj")  # XSD に無い。D-way で 24 文書
+  SAMPLE/SAMPLE_LINKS/SAMPLE_LINK/DDBJ_LINK/DB:    relations[xref].target.db  # XSD に無い。D-way で 24 文書
+  SAMPLE/SAMPLE_LINKS/SAMPLE_LINK/DDBJ_LINK/ID:    relations[xref].target.id  # XSD に無い。D-way で 24 文書
+  SAMPLE/SAMPLE_LINKS/SAMPLE_LINK/ENTREZ_LINK:     relations[xref].properties{sra_link_type} (ENTREZ_LINK なら "entrez")  # XSD に無い。D-way で 31 文書
+  SAMPLE/SAMPLE_LINKS/SAMPLE_LINK/ENTREZ_LINK/DB:  relations[xref].target.db  # XSD に無い。D-way で 31 文書
+  SAMPLE/SAMPLE_LINKS/SAMPLE_LINK/ENTREZ_LINK/ID:  relations[xref].target.id  # XSD に無い。D-way で 31 文書
+  SAMPLE/SAMPLE_LINKS/SAMPLE_LINK/URL_LINK:        relations[reference]
+  SAMPLE/SAMPLE_LINKS/SAMPLE_LINK/URL_LINK/LABEL:  relations[reference].label
+  SAMPLE/SAMPLE_LINKS/SAMPLE_LINK/URL_LINK/URL:    relations[reference].target.url
+  SAMPLE/SAMPLE_LINKS/SAMPLE_LINK/XREF_LINK:       relations[xref]
+  SAMPLE/SAMPLE_LINKS/SAMPLE_LINK/XREF_LINK/DB:    relations[xref].target.db
+  SAMPLE/SAMPLE_LINKS/SAMPLE_LINK/XREF_LINK/ID:    relations[xref].target.id
+  SAMPLE/SAMPLE_LINKS/SAMPLE_LINK/XREF_LINK/LABEL: relations[xref].label
+  SAMPLE/SAMPLE_NAME:                              (container)
+  SAMPLE/SAMPLE_NAME/ANONYMIZED_NAME:              samples[].anonymized_name
+  SAMPLE/SAMPLE_NAME/COMMON_NAME:                  samples[].organism.common_name
+  SAMPLE/SAMPLE_NAME/INDIVIDUAL_NAME:              samples[].individual_name
+  SAMPLE/SAMPLE_NAME/SCIENTIFIC_NAME:              samples[].organism.name
+  SAMPLE/SAMPLE_NAME/TAXON_ID:                     samples[].organism.taxonomy_id
+  SAMPLE/TITLE:                                    samples[].title
+
+experiment:
+  EXPERIMENT:                                                                                                    experiments[]
+  EXPERIMENT/@accession:                                                                                         experiments[].accession
+  EXPERIMENT/@alias:                                                                                             experiments[].alias
+  EXPERIMENT/@broker_name:                                                                                       experiments[].broker_name
+  EXPERIMENT/@center_name:                                                                                       experiments[].center_name
+  EXPERIMENT/@expected_number_runs:                                                                              experiments[].legacy.expected_number_runs  # XSD に無い。D-way で 2 文書
+  EXPERIMENT/DESIGN:                                                                                             (container)
+  EXPERIMENT/DESIGN/DESIGN_DESCRIPTION:                                                                          experiments[].description
+  EXPERIMENT/DESIGN/GAP_DESCRIPTOR:                                                                              (container)  # XSD に無い。D-way で 272 文書
+  EXPERIMENT/DESIGN/GAP_DESCRIPTOR/GAP:                                                                          experiments[].legacy.gaps[]  # XSD に無い。D-way で 272 文書
+  EXPERIMENT/DESIGN/GAP_DESCRIPTOR/GAP/GAP_SPEC:                                                                 (container)  # XSD に無い。D-way で 272 文書
+  EXPERIMENT/DESIGN/GAP_DESCRIPTOR/GAP/GAP_SPEC/@link3:                                                          experiments[].legacy.gaps[].link3  # XSD に無い。D-way で 259 文書
+  EXPERIMENT/DESIGN/GAP_DESCRIPTOR/GAP/GAP_SPEC/@link5:                                                          experiments[].legacy.gaps[].link5  # XSD に無い。D-way で 259 文書
+  EXPERIMENT/DESIGN/GAP_DESCRIPTOR/GAP/GAP_SPEC/interval:                                                        (container)  # XSD に無い。D-way で 175 文書
+  EXPERIMENT/DESIGN/GAP_DESCRIPTOR/GAP/GAP_SPEC/interval/@max_length:                                            experiments[].legacy.gaps[].max_length  # XSD に無い。D-way で 175 文書
+  EXPERIMENT/DESIGN/GAP_DESCRIPTOR/GAP/GAP_SPEC/interval/@min_length:                                            experiments[].legacy.gaps[].min_length  # XSD に無い。D-way で 175 文書
+  EXPERIMENT/DESIGN/GAP_DESCRIPTOR/GAP/GAP_SPEC/statistic:                                                       (container)  # XSD に無い。D-way で 97 文書
+  EXPERIMENT/DESIGN/GAP_DESCRIPTOR/GAP/GAP_SPEC/statistic/@mean:                                                 experiments[].legacy.gaps[].mean  # XSD に無い。D-way で 97 文書
+  EXPERIMENT/DESIGN/GAP_DESCRIPTOR/GAP/GAP_SPEC/statistic/@stdev:                                                experiments[].legacy.gaps[].stdev  # XSD に無い。D-way で 97 文書
+  EXPERIMENT/DESIGN/GAP_DESCRIPTOR/GAP/GAP_TYPE:                                                                 (container)  # XSD に無い。D-way で 272 文書
+  EXPERIMENT/DESIGN/GAP_DESCRIPTOR/GAP/GAP_TYPE/MatePair:                                                        experiments[].legacy.gaps[].type (要素名が値)  # XSD に無い。D-way で 25 文書
+  EXPERIMENT/DESIGN/GAP_DESCRIPTOR/GAP/GAP_TYPE/MatePair/@orientation:                                           experiments[].legacy.gaps[].orientation  # XSD に無い。D-way で 7 文書
+  EXPERIMENT/DESIGN/GAP_DESCRIPTOR/GAP/GAP_TYPE/PairedEnd:                                                       experiments[].legacy.gaps[].type (要素名が値)  # XSD に無い。D-way で 231 文書
+  EXPERIMENT/DESIGN/GAP_DESCRIPTOR/GAP/GAP_TYPE/Tandem:                                                          experiments[].legacy.gaps[].type (要素名が値)  # XSD に無い。D-way で 16 文書
+  EXPERIMENT/DESIGN/LIBRARY_DESCRIPTOR:                                                                          experiments[].library
+  EXPERIMENT/DESIGN/LIBRARY_DESCRIPTOR/LIBRARY_CONSTRUCTION_PROTOCOL:                                            experiments[].library.construction_protocol
+  EXPERIMENT/DESIGN/LIBRARY_DESCRIPTOR/LIBRARY_LAYOUT:                                                           (container)
+  EXPERIMENT/DESIGN/LIBRARY_DESCRIPTOR/LIBRARY_LAYOUT/PAIRED:                                                    experiments[].library.layout (要素名を小文字にした値)
+  EXPERIMENT/DESIGN/LIBRARY_DESCRIPTOR/LIBRARY_LAYOUT/PAIRED/@NOMINAL_LENGTH:                                    experiments[].library.nominal_length
+  EXPERIMENT/DESIGN/LIBRARY_DESCRIPTOR/LIBRARY_LAYOUT/PAIRED/@NOMINAL_SDEV:                                      experiments[].library.nominal_sdev
+  EXPERIMENT/DESIGN/LIBRARY_DESCRIPTOR/LIBRARY_LAYOUT/PAIRED/@ORIENTATION:                                       experiments[].library.legacy.orientation  # XSD に無い。D-way で 4,930 文書
+  EXPERIMENT/DESIGN/LIBRARY_DESCRIPTOR/LIBRARY_LAYOUT/SINGLE:                                                    experiments[].library.layout (要素名を小文字にした値)
+  EXPERIMENT/DESIGN/LIBRARY_DESCRIPTOR/LIBRARY_NAME:                                                             experiments[].library.name
+  EXPERIMENT/DESIGN/LIBRARY_DESCRIPTOR/LIBRARY_SELECTION:                                                        experiments[].library.selection
+  EXPERIMENT/DESIGN/LIBRARY_DESCRIPTOR/LIBRARY_SOURCE:                                                           experiments[].library.source
+  EXPERIMENT/DESIGN/LIBRARY_DESCRIPTOR/LIBRARY_STRATEGY:                                                         experiments[].library.strategy
+  EXPERIMENT/DESIGN/LIBRARY_DESCRIPTOR/POOLING_STRATEGY:                                                         experiments[].library.pooling_strategy  # XSD 1.5d2
+  EXPERIMENT/DESIGN/LIBRARY_DESCRIPTOR/TARGETED_LOCI:                                                            (container)
+  EXPERIMENT/DESIGN/LIBRARY_DESCRIPTOR/TARGETED_LOCI/LOCUS:                                                      experiments[].targeted_loci[]
+  EXPERIMENT/DESIGN/LIBRARY_DESCRIPTOR/TARGETED_LOCI/LOCUS/@description:                                         experiments[].targeted_loci[].description
+  EXPERIMENT/DESIGN/LIBRARY_DESCRIPTOR/TARGETED_LOCI/LOCUS/@locus_name:                                          experiments[].targeted_loci[].name
+  EXPERIMENT/DESIGN/LIBRARY_DESCRIPTOR/TARGETED_LOCI/LOCUS/PROBE_SET:                                            experiments[].targeted_loci[].probe_set
+  EXPERIMENT/DESIGN/LIBRARY_DESCRIPTOR/TARGETED_LOCI/LOCUS/PROBE_SET/DB:                                         experiments[].targeted_loci[].probe_set.db
+  EXPERIMENT/DESIGN/LIBRARY_DESCRIPTOR/TARGETED_LOCI/LOCUS/PROBE_SET/ID:                                         experiments[].targeted_loci[].probe_set.id
+  EXPERIMENT/DESIGN/LIBRARY_DESCRIPTOR/TARGETED_LOCI/LOCUS/PROBE_SET/LABEL:                                      experiments[].targeted_loci[].probe_set.label
+  EXPERIMENT/DESIGN/SAMPLE_DESCRIPTOR:                                                                           relations[part_of sample]
+  EXPERIMENT/DESIGN/SAMPLE_DESCRIPTOR/@accession:                                                                relations[part_of sample].target.accession
+  EXPERIMENT/DESIGN/SAMPLE_DESCRIPTOR/@refcenter:                                                                relations[part_of sample].target.center_name
+  EXPERIMENT/DESIGN/SAMPLE_DESCRIPTOR/@refname:                                                                  relations[part_of sample].target.id
+  EXPERIMENT/DESIGN/SAMPLE_DESCRIPTOR/IDENTIFIERS:                                                               (container)
+  EXPERIMENT/DESIGN/SAMPLE_DESCRIPTOR/IDENTIFIERS/EXTERNAL_ID:                                                   relations[part_of sample].target.identifiers[external].value
+  EXPERIMENT/DESIGN/SAMPLE_DESCRIPTOR/IDENTIFIERS/EXTERNAL_ID/@label:                                            relations[part_of sample].target.identifiers[external].label
+  EXPERIMENT/DESIGN/SAMPLE_DESCRIPTOR/IDENTIFIERS/EXTERNAL_ID/@namespace:                                        relations[part_of sample].target.identifiers[external].namespace
+  EXPERIMENT/DESIGN/SAMPLE_DESCRIPTOR/IDENTIFIERS/PRIMARY_ID:                                                    relations[part_of sample].target.identifiers[primary].value
+  EXPERIMENT/DESIGN/SAMPLE_DESCRIPTOR/IDENTIFIERS/PRIMARY_ID/@label:                                             relations[part_of sample].target.identifiers[primary].label
+  EXPERIMENT/DESIGN/SAMPLE_DESCRIPTOR/IDENTIFIERS/SECONDARY_ID:                                                  relations[part_of sample].target.identifiers[secondary].value
+  EXPERIMENT/DESIGN/SAMPLE_DESCRIPTOR/IDENTIFIERS/SECONDARY_ID/@label:                                           relations[part_of sample].target.identifiers[secondary].label
+  EXPERIMENT/DESIGN/SAMPLE_DESCRIPTOR/IDENTIFIERS/SUBMITTER_ID:                                                  relations[part_of sample].target.identifiers[submitter].value
+  EXPERIMENT/DESIGN/SAMPLE_DESCRIPTOR/IDENTIFIERS/SUBMITTER_ID/@label:                                           relations[part_of sample].target.identifiers[submitter].label
+  EXPERIMENT/DESIGN/SAMPLE_DESCRIPTOR/IDENTIFIERS/SUBMITTER_ID/@namespace:                                       relations[part_of sample].target.identifiers[submitter].namespace
+  EXPERIMENT/DESIGN/SAMPLE_DESCRIPTOR/IDENTIFIERS/UUID:                                                          relations[part_of sample].target.identifiers[uuid].value
+  EXPERIMENT/DESIGN/SAMPLE_DESCRIPTOR/IDENTIFIERS/UUID/@label:                                                   relations[part_of sample].target.identifiers[uuid].label
+  EXPERIMENT/DESIGN/SAMPLE_DESCRIPTOR/POOL:                                                                      experiments[].pool
+  EXPERIMENT/DESIGN/SAMPLE_DESCRIPTOR/POOL/DEFAULT_MEMBER:                                                       experiments[].pool.default_member
+  EXPERIMENT/DESIGN/SAMPLE_DESCRIPTOR/POOL/DEFAULT_MEMBER/@accession:                                            experiments[].pool.default_member.sample.accession
+  EXPERIMENT/DESIGN/SAMPLE_DESCRIPTOR/POOL/DEFAULT_MEMBER/@member_name:                                          experiments[].pool.default_member.member_name
+  EXPERIMENT/DESIGN/SAMPLE_DESCRIPTOR/POOL/DEFAULT_MEMBER/@proportion:                                           experiments[].pool.default_member.proportion
+  EXPERIMENT/DESIGN/SAMPLE_DESCRIPTOR/POOL/DEFAULT_MEMBER/@refcenter:                                            experiments[].pool.default_member.sample.center_name
+  EXPERIMENT/DESIGN/SAMPLE_DESCRIPTOR/POOL/DEFAULT_MEMBER/@refname:                                              experiments[].pool.default_member.sample.id
+  EXPERIMENT/DESIGN/SAMPLE_DESCRIPTOR/POOL/DEFAULT_MEMBER/IDENTIFIERS:                                           (container)
+  EXPERIMENT/DESIGN/SAMPLE_DESCRIPTOR/POOL/DEFAULT_MEMBER/IDENTIFIERS/EXTERNAL_ID:                               experiments[].pool.default_member.sample.identifiers[external].value
+  EXPERIMENT/DESIGN/SAMPLE_DESCRIPTOR/POOL/DEFAULT_MEMBER/IDENTIFIERS/EXTERNAL_ID/@label:                        experiments[].pool.default_member.sample.identifiers[external].label
+  EXPERIMENT/DESIGN/SAMPLE_DESCRIPTOR/POOL/DEFAULT_MEMBER/IDENTIFIERS/EXTERNAL_ID/@namespace:                    experiments[].pool.default_member.sample.identifiers[external].namespace
+  EXPERIMENT/DESIGN/SAMPLE_DESCRIPTOR/POOL/DEFAULT_MEMBER/IDENTIFIERS/PRIMARY_ID:                                experiments[].pool.default_member.sample.identifiers[primary].value
+  EXPERIMENT/DESIGN/SAMPLE_DESCRIPTOR/POOL/DEFAULT_MEMBER/IDENTIFIERS/PRIMARY_ID/@label:                         experiments[].pool.default_member.sample.identifiers[primary].label
+  EXPERIMENT/DESIGN/SAMPLE_DESCRIPTOR/POOL/DEFAULT_MEMBER/IDENTIFIERS/SECONDARY_ID:                              experiments[].pool.default_member.sample.identifiers[secondary].value
+  EXPERIMENT/DESIGN/SAMPLE_DESCRIPTOR/POOL/DEFAULT_MEMBER/IDENTIFIERS/SECONDARY_ID/@label:                       experiments[].pool.default_member.sample.identifiers[secondary].label
+  EXPERIMENT/DESIGN/SAMPLE_DESCRIPTOR/POOL/DEFAULT_MEMBER/IDENTIFIERS/SUBMITTER_ID:                              experiments[].pool.default_member.sample.identifiers[submitter].value
+  EXPERIMENT/DESIGN/SAMPLE_DESCRIPTOR/POOL/DEFAULT_MEMBER/IDENTIFIERS/SUBMITTER_ID/@label:                       experiments[].pool.default_member.sample.identifiers[submitter].label
+  EXPERIMENT/DESIGN/SAMPLE_DESCRIPTOR/POOL/DEFAULT_MEMBER/IDENTIFIERS/SUBMITTER_ID/@namespace:                   experiments[].pool.default_member.sample.identifiers[submitter].namespace
+  EXPERIMENT/DESIGN/SAMPLE_DESCRIPTOR/POOL/DEFAULT_MEMBER/IDENTIFIERS/UUID:                                      experiments[].pool.default_member.sample.identifiers[uuid].value
+  EXPERIMENT/DESIGN/SAMPLE_DESCRIPTOR/POOL/DEFAULT_MEMBER/IDENTIFIERS/UUID/@label:                               experiments[].pool.default_member.sample.identifiers[uuid].label
+  EXPERIMENT/DESIGN/SAMPLE_DESCRIPTOR/POOL/DEFAULT_MEMBER/READ_LABEL:                                            experiments[].pool.default_member.read_labels[].value
+  EXPERIMENT/DESIGN/SAMPLE_DESCRIPTOR/POOL/DEFAULT_MEMBER/READ_LABEL/@read_group_tag:                            experiments[].pool.default_member.read_labels[].read_group_tag
+  EXPERIMENT/DESIGN/SAMPLE_DESCRIPTOR/POOL/MEMBER:                                                               experiments[].pool.members[]
+  EXPERIMENT/DESIGN/SAMPLE_DESCRIPTOR/POOL/MEMBER/@accession:                                                    experiments[].pool.members[].sample.accession
+  EXPERIMENT/DESIGN/SAMPLE_DESCRIPTOR/POOL/MEMBER/@member_name:                                                  experiments[].pool.members[].member_name
+  EXPERIMENT/DESIGN/SAMPLE_DESCRIPTOR/POOL/MEMBER/@proportion:                                                   experiments[].pool.members[].proportion
+  EXPERIMENT/DESIGN/SAMPLE_DESCRIPTOR/POOL/MEMBER/@refcenter:                                                    experiments[].pool.members[].sample.center_name
+  EXPERIMENT/DESIGN/SAMPLE_DESCRIPTOR/POOL/MEMBER/@refname:                                                      experiments[].pool.members[].sample.id
+  EXPERIMENT/DESIGN/SAMPLE_DESCRIPTOR/POOL/MEMBER/IDENTIFIERS:                                                   (container)
+  EXPERIMENT/DESIGN/SAMPLE_DESCRIPTOR/POOL/MEMBER/IDENTIFIERS/EXTERNAL_ID:                                       experiments[].pool.members[].sample.identifiers[external].value
+  EXPERIMENT/DESIGN/SAMPLE_DESCRIPTOR/POOL/MEMBER/IDENTIFIERS/EXTERNAL_ID/@label:                                experiments[].pool.members[].sample.identifiers[external].label
+  EXPERIMENT/DESIGN/SAMPLE_DESCRIPTOR/POOL/MEMBER/IDENTIFIERS/EXTERNAL_ID/@namespace:                            experiments[].pool.members[].sample.identifiers[external].namespace
+  EXPERIMENT/DESIGN/SAMPLE_DESCRIPTOR/POOL/MEMBER/IDENTIFIERS/PRIMARY_ID:                                        experiments[].pool.members[].sample.identifiers[primary].value
+  EXPERIMENT/DESIGN/SAMPLE_DESCRIPTOR/POOL/MEMBER/IDENTIFIERS/PRIMARY_ID/@label:                                 experiments[].pool.members[].sample.identifiers[primary].label
+  EXPERIMENT/DESIGN/SAMPLE_DESCRIPTOR/POOL/MEMBER/IDENTIFIERS/SECONDARY_ID:                                      experiments[].pool.members[].sample.identifiers[secondary].value
+  EXPERIMENT/DESIGN/SAMPLE_DESCRIPTOR/POOL/MEMBER/IDENTIFIERS/SECONDARY_ID/@label:                               experiments[].pool.members[].sample.identifiers[secondary].label
+  EXPERIMENT/DESIGN/SAMPLE_DESCRIPTOR/POOL/MEMBER/IDENTIFIERS/SUBMITTER_ID:                                      experiments[].pool.members[].sample.identifiers[submitter].value
+  EXPERIMENT/DESIGN/SAMPLE_DESCRIPTOR/POOL/MEMBER/IDENTIFIERS/SUBMITTER_ID/@label:                               experiments[].pool.members[].sample.identifiers[submitter].label
+  EXPERIMENT/DESIGN/SAMPLE_DESCRIPTOR/POOL/MEMBER/IDENTIFIERS/SUBMITTER_ID/@namespace:                           experiments[].pool.members[].sample.identifiers[submitter].namespace
+  EXPERIMENT/DESIGN/SAMPLE_DESCRIPTOR/POOL/MEMBER/IDENTIFIERS/UUID:                                              experiments[].pool.members[].sample.identifiers[uuid].value
+  EXPERIMENT/DESIGN/SAMPLE_DESCRIPTOR/POOL/MEMBER/IDENTIFIERS/UUID/@label:                                       experiments[].pool.members[].sample.identifiers[uuid].label
+  EXPERIMENT/DESIGN/SAMPLE_DESCRIPTOR/POOL/MEMBER/READ_LABEL:                                                    experiments[].pool.members[].read_labels[].value
+  EXPERIMENT/DESIGN/SAMPLE_DESCRIPTOR/POOL/MEMBER/READ_LABEL/@read_group_tag:                                    experiments[].pool.members[].read_labels[].read_group_tag
+  EXPERIMENT/DESIGN/SPOT_DESCRIPTOR:                                                                             experiments[].spot_descriptor
+  EXPERIMENT/DESIGN/SPOT_DESCRIPTOR/SPOT_DECODE_SPEC:                                                            (container)
+  EXPERIMENT/DESIGN/SPOT_DESCRIPTOR/SPOT_DECODE_SPEC/ADAPTER_SPEC:                                               experiments[].spot_descriptor.legacy.adapter_spec  # XSD に無い。D-way で 1,992 文書
+  EXPERIMENT/DESIGN/SPOT_DESCRIPTOR/SPOT_DECODE_SPEC/NUMBER_OF_READS_PER_SPOT:                                   experiments[].spot_descriptor.legacy.number_of_reads_per_spot  # XSD に無い。D-way で 4,606 文書
+  EXPERIMENT/DESIGN/SPOT_DESCRIPTOR/SPOT_DECODE_SPEC/READ_SPEC:                                                  experiments[].spot_descriptor.reads[]
+  EXPERIMENT/DESIGN/SPOT_DESCRIPTOR/SPOT_DECODE_SPEC/READ_SPEC/BASE_COORD:                                       experiments[].spot_descriptor.reads[].base_coord
+  EXPERIMENT/DESIGN/SPOT_DESCRIPTOR/SPOT_DECODE_SPEC/READ_SPEC/CYCLE_COORD:                                      experiments[].spot_descriptor.reads[].legacy.cycle_coord  # XSD に無い。D-way で 136 文書
+  EXPERIMENT/DESIGN/SPOT_DESCRIPTOR/SPOT_DECODE_SPEC/READ_SPEC/EXPECTED_BASECALL:                                experiments[].spot_descriptor.reads[].legacy.expected_basecall.value  # XSD に無い。D-way で 11,946 文書
+  EXPERIMENT/DESIGN/SPOT_DESCRIPTOR/SPOT_DECODE_SPEC/READ_SPEC/EXPECTED_BASECALL/@base_coord:                    experiments[].spot_descriptor.reads[].legacy.expected_basecall.base_coord  # XSD に無い。D-way で 11,495 文書
+  EXPERIMENT/DESIGN/SPOT_DESCRIPTOR/SPOT_DECODE_SPEC/READ_SPEC/EXPECTED_BASECALL/@default_length:                experiments[].spot_descriptor.reads[].legacy.expected_basecall.default_length  # XSD に無い。D-way で 11,509 文書
+  EXPERIMENT/DESIGN/SPOT_DESCRIPTOR/SPOT_DECODE_SPEC/READ_SPEC/EXPECTED_BASECALL_TABLE:                          experiments[].spot_descriptor.reads[].expected_basecall_table
+  EXPERIMENT/DESIGN/SPOT_DESCRIPTOR/SPOT_DECODE_SPEC/READ_SPEC/EXPECTED_BASECALL_TABLE/@base_coord:              experiments[].spot_descriptor.reads[].expected_basecall_table.base_coord
+  EXPERIMENT/DESIGN/SPOT_DESCRIPTOR/SPOT_DECODE_SPEC/READ_SPEC/EXPECTED_BASECALL_TABLE/@default_length:          experiments[].spot_descriptor.reads[].expected_basecall_table.default_length
+  EXPERIMENT/DESIGN/SPOT_DESCRIPTOR/SPOT_DECODE_SPEC/READ_SPEC/EXPECTED_BASECALL_TABLE/BASECALL:                 experiments[].spot_descriptor.reads[].expected_basecall_table.basecalls[].value
+  EXPERIMENT/DESIGN/SPOT_DESCRIPTOR/SPOT_DECODE_SPEC/READ_SPEC/EXPECTED_BASECALL_TABLE/BASECALL/@match_edge:     experiments[].spot_descriptor.reads[].expected_basecall_table.basecalls[].match_edge
+  EXPERIMENT/DESIGN/SPOT_DESCRIPTOR/SPOT_DECODE_SPEC/READ_SPEC/EXPECTED_BASECALL_TABLE/BASECALL/@max_mismatch:   experiments[].spot_descriptor.reads[].expected_basecall_table.basecalls[].max_mismatch
+  EXPERIMENT/DESIGN/SPOT_DESCRIPTOR/SPOT_DECODE_SPEC/READ_SPEC/EXPECTED_BASECALL_TABLE/BASECALL/@min_match:      experiments[].spot_descriptor.reads[].expected_basecall_table.basecalls[].min_match
+  EXPERIMENT/DESIGN/SPOT_DESCRIPTOR/SPOT_DECODE_SPEC/READ_SPEC/EXPECTED_BASECALL_TABLE/BASECALL/@read_group_tag: experiments[].spot_descriptor.reads[].expected_basecall_table.basecalls[].read_group_tag
+  EXPERIMENT/DESIGN/SPOT_DESCRIPTOR/SPOT_DECODE_SPEC/READ_SPEC/READ_CLASS:                                       experiments[].spot_descriptor.reads[].read_class
+  EXPERIMENT/DESIGN/SPOT_DESCRIPTOR/SPOT_DECODE_SPEC/READ_SPEC/READ_INDEX:                                       experiments[].spot_descriptor.reads[].read_index
+  EXPERIMENT/DESIGN/SPOT_DESCRIPTOR/SPOT_DECODE_SPEC/READ_SPEC/READ_LABEL:                                       experiments[].spot_descriptor.reads[].read_label
+  EXPERIMENT/DESIGN/SPOT_DESCRIPTOR/SPOT_DECODE_SPEC/READ_SPEC/READ_TYPE:                                        experiments[].spot_descriptor.reads[].read_type
+  EXPERIMENT/DESIGN/SPOT_DESCRIPTOR/SPOT_DECODE_SPEC/READ_SPEC/RELATIVE_ORDER:                                   experiments[].spot_descriptor.reads[].relative_order
+  EXPERIMENT/DESIGN/SPOT_DESCRIPTOR/SPOT_DECODE_SPEC/READ_SPEC/RELATIVE_ORDER/@follows_read_index:               experiments[].spot_descriptor.reads[].relative_order.follows_read_index
+  EXPERIMENT/DESIGN/SPOT_DESCRIPTOR/SPOT_DECODE_SPEC/READ_SPEC/RELATIVE_ORDER/@precedes_read_index:              experiments[].spot_descriptor.reads[].relative_order.precedes_read_index
+  EXPERIMENT/DESIGN/SPOT_DESCRIPTOR/SPOT_DECODE_SPEC/SPOT_LENGTH:                                                experiments[].spot_descriptor.spot_length
+  EXPERIMENT/EXPERIMENT_ATTRIBUTES:                                                                              (container)
+  EXPERIMENT/EXPERIMENT_ATTRIBUTES/EXPERIMENT_ATTRIBUTE:                                                         experiments[].attributes[]
+  EXPERIMENT/EXPERIMENT_ATTRIBUTES/EXPERIMENT_ATTRIBUTE/TAG:                                                     experiments[].attributes[].name
+  EXPERIMENT/EXPERIMENT_ATTRIBUTES/EXPERIMENT_ATTRIBUTE/UNITS:                                                   experiments[].attributes[].unit
+  EXPERIMENT/EXPERIMENT_ATTRIBUTES/EXPERIMENT_ATTRIBUTE/VALUE:                                                   experiments[].attributes[].value
+  EXPERIMENT/EXPERIMENT_LINKS:                                                                                   (container)
+  EXPERIMENT/EXPERIMENT_LINKS/EXPERIMENT_LINK:                                                                   relations[]
+  EXPERIMENT/EXPERIMENT_LINKS/EXPERIMENT_LINK/DDBJ_LINK:                                                         relations[xref].properties{sra_link_type} (DDBJ_LINK なら "ddbj")  # XSD に無い。D-way で 22 文書
+  EXPERIMENT/EXPERIMENT_LINKS/EXPERIMENT_LINK/DDBJ_LINK/DB:                                                      relations[xref].target.db  # XSD に無い。D-way で 22 文書
+  EXPERIMENT/EXPERIMENT_LINKS/EXPERIMENT_LINK/DDBJ_LINK/ID:                                                      relations[xref].target.id  # XSD に無い。D-way で 22 文書
+  EXPERIMENT/EXPERIMENT_LINKS/EXPERIMENT_LINK/URL_LINK:                                                          relations[reference]
+  EXPERIMENT/EXPERIMENT_LINKS/EXPERIMENT_LINK/URL_LINK/LABEL:                                                    relations[reference].label
+  EXPERIMENT/EXPERIMENT_LINKS/EXPERIMENT_LINK/URL_LINK/URL:                                                      relations[reference].target.url
+  EXPERIMENT/EXPERIMENT_LINKS/EXPERIMENT_LINK/XREF_LINK:                                                         relations[xref]
+  EXPERIMENT/EXPERIMENT_LINKS/EXPERIMENT_LINK/XREF_LINK/DB:                                                      relations[xref].target.db
+  EXPERIMENT/EXPERIMENT_LINKS/EXPERIMENT_LINK/XREF_LINK/ID:                                                      relations[xref].target.id
+  EXPERIMENT/EXPERIMENT_LINKS/EXPERIMENT_LINK/XREF_LINK/LABEL:                                                   relations[xref].label
+  EXPERIMENT/IDENTIFIERS:                                                                                        (container)
+  EXPERIMENT/IDENTIFIERS/EXTERNAL_ID:                                                                            experiments[].identifiers[external].value
+  EXPERIMENT/IDENTIFIERS/EXTERNAL_ID/@label:                                                                     experiments[].identifiers[external].label
+  EXPERIMENT/IDENTIFIERS/EXTERNAL_ID/@namespace:                                                                 experiments[].identifiers[external].namespace
+  EXPERIMENT/IDENTIFIERS/PRIMARY_ID:                                                                             experiments[].identifiers[primary].value
+  EXPERIMENT/IDENTIFIERS/PRIMARY_ID/@label:                                                                      experiments[].identifiers[primary].label
+  EXPERIMENT/IDENTIFIERS/SECONDARY_ID:                                                                           experiments[].identifiers[secondary].value
+  EXPERIMENT/IDENTIFIERS/SECONDARY_ID/@label:                                                                    experiments[].identifiers[secondary].label
+  EXPERIMENT/IDENTIFIERS/SUBMITTER_ID:                                                                           experiments[].identifiers[submitter].value
+  EXPERIMENT/IDENTIFIERS/SUBMITTER_ID/@label:                                                                    experiments[].identifiers[submitter].label
+  EXPERIMENT/IDENTIFIERS/SUBMITTER_ID/@namespace:                                                                experiments[].identifiers[submitter].namespace
+  EXPERIMENT/IDENTIFIERS/UUID:                                                                                   experiments[].identifiers[uuid].value
+  EXPERIMENT/IDENTIFIERS/UUID/@label:                                                                            experiments[].identifiers[uuid].label
+  EXPERIMENT/PLATFORM:                                                                                           experiments[].platform
+  EXPERIMENT/PLATFORM/ABI_SOLID:                                                                                 experiments[].platform.type (要素名が値)
+  EXPERIMENT/PLATFORM/ABI_SOLID/COLOR_MATRIX:                                                                    (container)  # XSD に無い。D-way で 390 文書
+  EXPERIMENT/PLATFORM/ABI_SOLID/COLOR_MATRIX/COLOR:                                                              experiments[].platform.legacy.color_matrix[].color  # XSD に無い。D-way で 390 文書
+  EXPERIMENT/PLATFORM/ABI_SOLID/COLOR_MATRIX/COLOR/@dibase:                                                      experiments[].platform.legacy.color_matrix[].dibase  # XSD に無い。D-way で 390 文書
+  EXPERIMENT/PLATFORM/ABI_SOLID/COLOR_MATRIX_CODE:                                                               experiments[].platform.legacy.color_matrix_code  # XSD に無い。D-way で 57 文書
+  EXPERIMENT/PLATFORM/ABI_SOLID/CYCLE_COUNT:                                                                     experiments[].platform.legacy.cycle_count  # XSD に無い。D-way で 453 文書
+  EXPERIMENT/PLATFORM/ABI_SOLID/INSTRUMENT_MODEL:                                                                experiments[].platform.instrument_model
+  EXPERIMENT/PLATFORM/ABI_SOLID/SEQUENCE_LENGTH:                                                                 experiments[].platform.legacy.sequence_length  # XSD に無い。D-way で 453 文書
+  EXPERIMENT/PLATFORM/BGISEQ:                                                                                    experiments[].platform.type (要素名が値)  # XSD 1.5.9, 1.6.0, 1.6.1
+  EXPERIMENT/PLATFORM/BGISEQ/INSTRUMENT_MODEL:                                                                   experiments[].platform.instrument_model  # XSD 1.5.9, 1.6.0, 1.6.1
+  EXPERIMENT/PLATFORM/CAPILLARY:                                                                                 experiments[].platform.type (要素名が値)
+  EXPERIMENT/PLATFORM/CAPILLARY/INSTRUMENT_MODEL:                                                                experiments[].platform.instrument_model
+  EXPERIMENT/PLATFORM/COMPLETE_GENOMICS:                                                                         experiments[].platform.type (要素名が値)
+  EXPERIMENT/PLATFORM/COMPLETE_GENOMICS/INSTRUMENT_MODEL:                                                        experiments[].platform.instrument_model
+  EXPERIMENT/PLATFORM/DNBSEQ:                                                                                    experiments[].platform.type (要素名が値)  # XSD 1.6.0, 1.6.1
+  EXPERIMENT/PLATFORM/DNBSEQ/INSTRUMENT_MODEL:                                                                   experiments[].platform.instrument_model  # XSD 1.6.0, 1.6.1
+  EXPERIMENT/PLATFORM/ELEMENT:                                                                                   experiments[].platform.type (要素名が値)  # XSD 1.6.0, 1.6.1
+  EXPERIMENT/PLATFORM/ELEMENT/INSTRUMENT_MODEL:                                                                  experiments[].platform.instrument_model  # XSD 1.6.0, 1.6.1
+  EXPERIMENT/PLATFORM/GENAPSYS:                                                                                  experiments[].platform.type (要素名が値)  # XSD 1.6.0, 1.6.1
+  EXPERIMENT/PLATFORM/GENAPSYS/INSTRUMENT_MODEL:                                                                 experiments[].platform.instrument_model  # XSD 1.6.0, 1.6.1
+  EXPERIMENT/PLATFORM/GENEMIND:                                                                                  experiments[].platform.type (要素名が値)  # XSD 1.6.0, 1.6.1
+  EXPERIMENT/PLATFORM/GENEMIND/INSTRUMENT_MODEL:                                                                 experiments[].platform.instrument_model  # XSD 1.6.0, 1.6.1
+  EXPERIMENT/PLATFORM/GENEUS_TECH:                                                                               experiments[].platform.type (要素名が値)  # XSD 1.6.1
+  EXPERIMENT/PLATFORM/GENEUS_TECH/INSTRUMENT_MODEL:                                                              experiments[].platform.instrument_model  # XSD 1.6.1
+  EXPERIMENT/PLATFORM/HELICOS:                                                                                   experiments[].platform.type (要素名が値)
+  EXPERIMENT/PLATFORM/HELICOS/FLOW_COUNT:                                                                        experiments[].platform.legacy.flow_count  # XSD に無い。D-way で 105 文書
+  EXPERIMENT/PLATFORM/HELICOS/FLOW_SEQUENCE:                                                                     experiments[].platform.legacy.flow_sequence  # XSD に無い。D-way で 165 文書
+  EXPERIMENT/PLATFORM/HELICOS/INSTRUMENT_MODEL:                                                                  experiments[].platform.instrument_model
+  EXPERIMENT/PLATFORM/ILLUMINA:                                                                                  experiments[].platform.type (要素名が値)
+  EXPERIMENT/PLATFORM/ILLUMINA/CYCLE_COUNT:                                                                      experiments[].platform.legacy.cycle_count  # XSD に無い。D-way で 9,552 文書
+  EXPERIMENT/PLATFORM/ILLUMINA/CYCLE_SEQUENCE:                                                                   experiments[].platform.legacy.cycle_sequence  # XSD に無い。D-way で 1,564 文書
+  EXPERIMENT/PLATFORM/ILLUMINA/INSTRUMENT_MODEL:                                                                 experiments[].platform.instrument_model
+  EXPERIMENT/PLATFORM/ILLUMINA/SEQUENCE_LENGTH:                                                                  experiments[].platform.legacy.sequence_length  # XSD に無い。D-way で 9,076 文書
+  EXPERIMENT/PLATFORM/ION_TORRENT:                                                                               experiments[].platform.type (要素名が値)
+  EXPERIMENT/PLATFORM/ION_TORRENT/INSTRUMENT_MODEL:                                                              experiments[].platform.instrument_model
+  EXPERIMENT/PLATFORM/LS454:                                                                                     experiments[].platform.type (要素名が値)
+  EXPERIMENT/PLATFORM/LS454/FLOW_COUNT:                                                                          experiments[].platform.legacy.flow_count  # XSD に無い。D-way で 787 文書
+  EXPERIMENT/PLATFORM/LS454/FLOW_SEQUENCE:                                                                       experiments[].platform.legacy.flow_sequence  # XSD に無い。D-way で 1,378 文書
+  EXPERIMENT/PLATFORM/LS454/INSTRUMENT_MODEL:                                                                    experiments[].platform.instrument_model
+  EXPERIMENT/PLATFORM/LS454/KEY_SEQUENCE:                                                                        experiments[].platform.legacy.key_sequence  # XSD に無い。D-way で 1,343 文書
+  EXPERIMENT/PLATFORM/OXFORD_NANOPORE:                                                                           experiments[].platform.type (要素名が値)
+  EXPERIMENT/PLATFORM/OXFORD_NANOPORE/INSTRUMENT_MODEL:                                                          experiments[].platform.instrument_model
+  EXPERIMENT/PLATFORM/PACBIO_SMRT:                                                                               experiments[].platform.type (要素名が値)
+  EXPERIMENT/PLATFORM/PACBIO_SMRT/INSTRUMENT_MODEL:                                                              experiments[].platform.instrument_model
+  EXPERIMENT/PLATFORM/SALUS:                                                                                     experiments[].platform.type (要素名が値)  # XSD 1.6.1
+  EXPERIMENT/PLATFORM/SALUS/INSTRUMENT_MODEL:                                                                    experiments[].platform.instrument_model  # XSD 1.6.1
+  EXPERIMENT/PLATFORM/SINGULAR_GENOMICS:                                                                         experiments[].platform.type (要素名が値)  # XSD 1.6.1
+  EXPERIMENT/PLATFORM/SINGULAR_GENOMICS/INSTRUMENT_MODEL:                                                        experiments[].platform.instrument_model  # XSD 1.6.1
+  EXPERIMENT/PLATFORM/TAPESTRI:                                                                                  experiments[].platform.type (要素名が値)  # XSD 1.6.0, 1.6.1
+  EXPERIMENT/PLATFORM/TAPESTRI/INSTRUMENT_MODEL:                                                                 experiments[].platform.instrument_model  # XSD 1.6.0, 1.6.1
+  EXPERIMENT/PLATFORM/ULTIMA:                                                                                    experiments[].platform.type (要素名が値)  # XSD 1.6.0, 1.6.1
+  EXPERIMENT/PLATFORM/ULTIMA/INSTRUMENT_MODEL:                                                                   experiments[].platform.instrument_model  # XSD 1.6.0, 1.6.1
+  EXPERIMENT/PLATFORM/VELA_DIAGNOSTICS:                                                                          experiments[].platform.type (要素名が値)  # XSD 1.6.0, 1.6.1
+  EXPERIMENT/PLATFORM/VELA_DIAGNOSTICS/INSTRUMENT_MODEL:                                                         experiments[].platform.instrument_model  # XSD 1.6.0, 1.6.1
+  EXPERIMENT/PLATFORM/Vela_Diagnostics:                                                                          experiments[].platform.type (要素名が値)  # XSD 1.5.9
+  EXPERIMENT/PLATFORM/Vela_Diagnostics/INSTRUMENT_MODEL:                                                         experiments[].platform.instrument_model  # XSD 1.5.9
+  EXPERIMENT/PROCESSING:                                                                                         (container)
+  EXPERIMENT/PROCESSING/BASE_CALLS:                                                                              experiments[].legacy.base_calling  # XSD に無い。D-way で 4,615 文書
+  EXPERIMENT/PROCESSING/BASE_CALLS/BASE_CALLER:                                                                  experiments[].legacy.base_calling.base_caller  # XSD に無い。D-way で 4,599 文書
+  EXPERIMENT/PROCESSING/BASE_CALLS/SEQUENCE_SPACE:                                                               experiments[].legacy.base_calling.sequence_space  # XSD に無い。D-way で 4,599 文書
+  EXPERIMENT/PROCESSING/DIRECTIVES:                                                                              (container)
+  EXPERIMENT/PROCESSING/DIRECTIVES/SAMPLE_DEMUX_DIRECTIVE:                                                       experiments[].sample_demux_directive
+  EXPERIMENT/PROCESSING/PIPELINE:                                                                                (container)
+  EXPERIMENT/PROCESSING/PIPELINE/PIPE_SECTION:                                                                   experiments[].processing[]
+  EXPERIMENT/PROCESSING/PIPELINE/PIPE_SECTION/@section_name:                                                     experiments[].processing[].section_name
+  EXPERIMENT/PROCESSING/PIPELINE/PIPE_SECTION/NOTES:                                                             experiments[].processing[].notes
+  EXPERIMENT/PROCESSING/PIPELINE/PIPE_SECTION/PREV_STEP_INDEX:                                                   experiments[].processing[].prev_step_indexes[]
+  EXPERIMENT/PROCESSING/PIPELINE/PIPE_SECTION/PROGRAM:                                                           experiments[].processing[].program
+  EXPERIMENT/PROCESSING/PIPELINE/PIPE_SECTION/STEP_INDEX:                                                        experiments[].processing[].step_index
+  EXPERIMENT/PROCESSING/PIPELINE/PIPE_SECTION/VERSION:                                                           experiments[].processing[].version
+  EXPERIMENT/PROCESSING/QUALITY_SCORES:                                                                          experiments[].legacy.quality_scoring[]  # XSD に無い。D-way で 4,606 文書
+  EXPERIMENT/PROCESSING/QUALITY_SCORES/@qtype:                                                                   experiments[].legacy.quality_scoring[].qtype  # XSD に無い。D-way で 4,593 文書
+  EXPERIMENT/PROCESSING/QUALITY_SCORES/MULTIPLIER:                                                               experiments[].legacy.quality_scoring[].multiplier  # XSD に無い。D-way で 1,898 文書
+  EXPERIMENT/PROCESSING/QUALITY_SCORES/NUMBER_OF_LEVELS:                                                         experiments[].legacy.quality_scoring[].number_of_levels  # XSD に無い。D-way で 1,898 文書
+  EXPERIMENT/PROCESSING/QUALITY_SCORES/QUALITY_SCORER:                                                           experiments[].legacy.quality_scoring[].quality_scorer  # XSD に無い。D-way で 4,598 文書
+  EXPERIMENT/STUDY_REF:                                                                                          relations[part_of project]
+  EXPERIMENT/STUDY_REF/@accession:                                                                               relations[part_of project].target.accession
+  EXPERIMENT/STUDY_REF/@refcenter:                                                                               relations[part_of project].target.center_name
+  EXPERIMENT/STUDY_REF/@refname:                                                                                 relations[part_of project].target.id
+  EXPERIMENT/STUDY_REF/IDENTIFIERS:                                                                              (container)
+  EXPERIMENT/STUDY_REF/IDENTIFIERS/EXTERNAL_ID:                                                                  relations[part_of project].target.identifiers[external].value
+  EXPERIMENT/STUDY_REF/IDENTIFIERS/EXTERNAL_ID/@label:                                                           relations[part_of project].target.identifiers[external].label
+  EXPERIMENT/STUDY_REF/IDENTIFIERS/EXTERNAL_ID/@namespace:                                                       relations[part_of project].target.identifiers[external].namespace
+  EXPERIMENT/STUDY_REF/IDENTIFIERS/PRIMARY_ID:                                                                   relations[part_of project].target.identifiers[primary].value
+  EXPERIMENT/STUDY_REF/IDENTIFIERS/PRIMARY_ID/@label:                                                            relations[part_of project].target.identifiers[primary].label
+  EXPERIMENT/STUDY_REF/IDENTIFIERS/SECONDARY_ID:                                                                 relations[part_of project].target.identifiers[secondary].value
+  EXPERIMENT/STUDY_REF/IDENTIFIERS/SECONDARY_ID/@label:                                                          relations[part_of project].target.identifiers[secondary].label
+  EXPERIMENT/STUDY_REF/IDENTIFIERS/SUBMITTER_ID:                                                                 relations[part_of project].target.identifiers[submitter].value
+  EXPERIMENT/STUDY_REF/IDENTIFIERS/SUBMITTER_ID/@label:                                                          relations[part_of project].target.identifiers[submitter].label
+  EXPERIMENT/STUDY_REF/IDENTIFIERS/SUBMITTER_ID/@namespace:                                                      relations[part_of project].target.identifiers[submitter].namespace
+  EXPERIMENT/STUDY_REF/IDENTIFIERS/UUID:                                                                         relations[part_of project].target.identifiers[uuid].value
+  EXPERIMENT/STUDY_REF/IDENTIFIERS/UUID/@label:                                                                  relations[part_of project].target.identifiers[uuid].label
+  EXPERIMENT/TITLE:                                                                                              experiments[].title
+
+run:
+  RUN:                                                                                             runs[]
+  RUN/@accession:                                                                                  runs[].accession
+  RUN/@alias:                                                                                      runs[].alias
+  RUN/@broker_name:                                                                                runs[].broker_name
+  RUN/@center_name:                                                                                runs[].center_name
+  RUN/@instrument_model:                                                                           runs[].legacy.instrument_model  # XSD に無い。D-way で 566 文書
+  RUN/@instrument_name:                                                                            runs[].legacy.instrument_name  # XSD に無い。D-way で 5,263 文書
+  RUN/@run_center:                                                                                 runs[].run_center
+  RUN/@run_date:                                                                                   runs[].run_date
+  RUN/@run_file:                                                                                   runs[].legacy.run_file  # XSD に無い。D-way で 94 文書
+  RUN/@total_data_blocks:                                                                          runs[].legacy.total_data_blocks  # XSD に無い。D-way で 1,213 文書
+  RUN/DATA_BLOCK:                                                                                  runs[].data_blocks[]
+  RUN/DATA_BLOCK/@format_code:                                                                     runs[].data_blocks[].legacy.format_code  # XSD に無い。D-way で 924 文書
+  RUN/DATA_BLOCK/@member_name:                                                                     runs[].data_blocks[].member_name
+  RUN/DATA_BLOCK/@name:                                                                            runs[].data_blocks[].name  # XSD に無い。D-way で 13,225 文書
+  RUN/DATA_BLOCK/@number_channels:                                                                 runs[].data_blocks[].legacy.number_channels  # XSD に無い。D-way で 924 文書
+  RUN/DATA_BLOCK/@region:                                                                          runs[].data_blocks[].legacy.region  # XSD に無い。D-way で 6,280 文書
+  RUN/DATA_BLOCK/@sector:                                                                          runs[].data_blocks[].legacy.sector  # XSD に無い。D-way で 9,409 文書
+  RUN/DATA_BLOCK/@serial:                                                                          runs[].data_blocks[].serial  # XSD に無い。D-way で 1,844 文書
+  RUN/DATA_BLOCK/@total_reads:                                                                     runs[].data_blocks[].legacy.total_reads  # XSD に無い。D-way で 2 文書
+  RUN/DATA_BLOCK/@total_spots:                                                                     runs[].data_blocks[].legacy.total_spots  # XSD に無い。D-way で 420 文書
+  RUN/DATA_BLOCK/FILES:                                                                            (container)
+  RUN/DATA_BLOCK/FILES/FILE:                                                                       runs[].data_blocks[].files[]
+  RUN/DATA_BLOCK/FILES/FILE/@ascii_offset:                                                         runs[].data_blocks[].files[].ascii_offset
+  RUN/DATA_BLOCK/FILES/FILE/@checksum:                                                             runs[].data_blocks[].files[].checksum
+  RUN/DATA_BLOCK/FILES/FILE/@checksum_method:                                                      runs[].data_blocks[].files[].checksum_method
+  RUN/DATA_BLOCK/FILES/FILE/@filename:                                                             runs[].data_blocks[].files[].filename
+  RUN/DATA_BLOCK/FILES/FILE/@filetype:                                                             runs[].data_blocks[].files[].filetype
+  RUN/DATA_BLOCK/FILES/FILE/@quality_encoding:                                                     runs[].data_blocks[].files[].quality_encoding
+  RUN/DATA_BLOCK/FILES/FILE/@quality_scoring_system:                                               runs[].data_blocks[].files[].quality_scoring_system
+  RUN/DATA_BLOCK/FILES/FILE/DATA_SERIES_LABEL:                                                     runs[].data_blocks[].files[].legacy.data_series_labels[]  # XSD に無い。D-way で 43 文書
+  RUN/DATA_BLOCK/FILES/FILE/READ_LABEL:                                                            runs[].data_blocks[].files[].read_labels[]
+  RUN/EXPERIMENT_REF:                                                                              relations[part_of experiment]
+  RUN/EXPERIMENT_REF/@accession:                                                                   relations[part_of experiment].target.accession
+  RUN/EXPERIMENT_REF/@refcenter:                                                                   relations[part_of experiment].target.center_name
+  RUN/EXPERIMENT_REF/@refname:                                                                     relations[part_of experiment].target.id
+  RUN/EXPERIMENT_REF/IDENTIFIERS:                                                                  (container)
+  RUN/EXPERIMENT_REF/IDENTIFIERS/EXTERNAL_ID:                                                      relations[part_of experiment].target.identifiers[external].value
+  RUN/EXPERIMENT_REF/IDENTIFIERS/EXTERNAL_ID/@label:                                               relations[part_of experiment].target.identifiers[external].label
+  RUN/EXPERIMENT_REF/IDENTIFIERS/EXTERNAL_ID/@namespace:                                           relations[part_of experiment].target.identifiers[external].namespace
+  RUN/EXPERIMENT_REF/IDENTIFIERS/PRIMARY_ID:                                                       relations[part_of experiment].target.identifiers[primary].value
+  RUN/EXPERIMENT_REF/IDENTIFIERS/PRIMARY_ID/@label:                                                relations[part_of experiment].target.identifiers[primary].label
+  RUN/EXPERIMENT_REF/IDENTIFIERS/SECONDARY_ID:                                                     relations[part_of experiment].target.identifiers[secondary].value
+  RUN/EXPERIMENT_REF/IDENTIFIERS/SECONDARY_ID/@label:                                              relations[part_of experiment].target.identifiers[secondary].label
+  RUN/EXPERIMENT_REF/IDENTIFIERS/SUBMITTER_ID:                                                     relations[part_of experiment].target.identifiers[submitter].value
+  RUN/EXPERIMENT_REF/IDENTIFIERS/SUBMITTER_ID/@label:                                              relations[part_of experiment].target.identifiers[submitter].label
+  RUN/EXPERIMENT_REF/IDENTIFIERS/SUBMITTER_ID/@namespace:                                          relations[part_of experiment].target.identifiers[submitter].namespace
+  RUN/EXPERIMENT_REF/IDENTIFIERS/UUID:                                                             relations[part_of experiment].target.identifiers[uuid].value
+  RUN/EXPERIMENT_REF/IDENTIFIERS/UUID/@label:                                                      relations[part_of experiment].target.identifiers[uuid].label
+  RUN/IDENTIFIERS:                                                                                 (container)
+  RUN/IDENTIFIERS/EXTERNAL_ID:                                                                     runs[].identifiers[external].value
+  RUN/IDENTIFIERS/EXTERNAL_ID/@label:                                                              runs[].identifiers[external].label
+  RUN/IDENTIFIERS/EXTERNAL_ID/@namespace:                                                          runs[].identifiers[external].namespace
+  RUN/IDENTIFIERS/PRIMARY_ID:                                                                      runs[].identifiers[primary].value
+  RUN/IDENTIFIERS/PRIMARY_ID/@label:                                                               runs[].identifiers[primary].label
+  RUN/IDENTIFIERS/SECONDARY_ID:                                                                    runs[].identifiers[secondary].value
+  RUN/IDENTIFIERS/SECONDARY_ID/@label:                                                             runs[].identifiers[secondary].label
+  RUN/IDENTIFIERS/SUBMITTER_ID:                                                                    runs[].identifiers[submitter].value
+  RUN/IDENTIFIERS/SUBMITTER_ID/@label:                                                             runs[].identifiers[submitter].label
+  RUN/IDENTIFIERS/SUBMITTER_ID/@namespace:                                                         runs[].identifiers[submitter].namespace
+  RUN/IDENTIFIERS/UUID:                                                                            runs[].identifiers[uuid].value
+  RUN/IDENTIFIERS/UUID/@label:                                                                     runs[].identifiers[uuid].label
+  RUN/PLATFORM:                                                                                    runs[].platform
+  RUN/PLATFORM/ABI_SOLID:                                                                          runs[].platform.type (要素名が値)
+  RUN/PLATFORM/ABI_SOLID/INSTRUMENT_MODEL:                                                         runs[].platform.instrument_model
+  RUN/PLATFORM/BGISEQ:                                                                             runs[].platform.type (要素名が値)  # XSD 1.5.9, 1.6.0, 1.6.1
+  RUN/PLATFORM/BGISEQ/INSTRUMENT_MODEL:                                                            runs[].platform.instrument_model  # XSD 1.5.9, 1.6.0, 1.6.1
+  RUN/PLATFORM/CAPILLARY:                                                                          runs[].platform.type (要素名が値)
+  RUN/PLATFORM/CAPILLARY/INSTRUMENT_MODEL:                                                         runs[].platform.instrument_model
+  RUN/PLATFORM/COMPLETE_GENOMICS:                                                                  runs[].platform.type (要素名が値)
+  RUN/PLATFORM/COMPLETE_GENOMICS/INSTRUMENT_MODEL:                                                 runs[].platform.instrument_model
+  RUN/PLATFORM/DNBSEQ:                                                                             runs[].platform.type (要素名が値)  # XSD 1.6.0, 1.6.1
+  RUN/PLATFORM/DNBSEQ/INSTRUMENT_MODEL:                                                            runs[].platform.instrument_model  # XSD 1.6.0, 1.6.1
+  RUN/PLATFORM/ELEMENT:                                                                            runs[].platform.type (要素名が値)  # XSD 1.6.0, 1.6.1
+  RUN/PLATFORM/ELEMENT/INSTRUMENT_MODEL:                                                           runs[].platform.instrument_model  # XSD 1.6.0, 1.6.1
+  RUN/PLATFORM/GENAPSYS:                                                                           runs[].platform.type (要素名が値)  # XSD 1.6.0, 1.6.1
+  RUN/PLATFORM/GENAPSYS/INSTRUMENT_MODEL:                                                          runs[].platform.instrument_model  # XSD 1.6.0, 1.6.1
+  RUN/PLATFORM/GENEMIND:                                                                           runs[].platform.type (要素名が値)  # XSD 1.6.0, 1.6.1
+  RUN/PLATFORM/GENEMIND/INSTRUMENT_MODEL:                                                          runs[].platform.instrument_model  # XSD 1.6.0, 1.6.1
+  RUN/PLATFORM/GENEUS_TECH:                                                                        runs[].platform.type (要素名が値)  # XSD 1.6.1
+  RUN/PLATFORM/GENEUS_TECH/INSTRUMENT_MODEL:                                                       runs[].platform.instrument_model  # XSD 1.6.1
+  RUN/PLATFORM/HELICOS:                                                                            runs[].platform.type (要素名が値)
+  RUN/PLATFORM/HELICOS/INSTRUMENT_MODEL:                                                           runs[].platform.instrument_model
+  RUN/PLATFORM/ILLUMINA:                                                                           runs[].platform.type (要素名が値)
+  RUN/PLATFORM/ILLUMINA/INSTRUMENT_MODEL:                                                          runs[].platform.instrument_model
+  RUN/PLATFORM/ION_TORRENT:                                                                        runs[].platform.type (要素名が値)
+  RUN/PLATFORM/ION_TORRENT/INSTRUMENT_MODEL:                                                       runs[].platform.instrument_model
+  RUN/PLATFORM/LS454:                                                                              runs[].platform.type (要素名が値)
+  RUN/PLATFORM/LS454/INSTRUMENT_MODEL:                                                             runs[].platform.instrument_model
+  RUN/PLATFORM/OXFORD_NANOPORE:                                                                    runs[].platform.type (要素名が値)
+  RUN/PLATFORM/OXFORD_NANOPORE/INSTRUMENT_MODEL:                                                   runs[].platform.instrument_model
+  RUN/PLATFORM/PACBIO_SMRT:                                                                        runs[].platform.type (要素名が値)
+  RUN/PLATFORM/PACBIO_SMRT/INSTRUMENT_MODEL:                                                       runs[].platform.instrument_model
+  RUN/PLATFORM/SALUS:                                                                              runs[].platform.type (要素名が値)  # XSD 1.6.1
+  RUN/PLATFORM/SALUS/INSTRUMENT_MODEL:                                                             runs[].platform.instrument_model  # XSD 1.6.1
+  RUN/PLATFORM/SINGULAR_GENOMICS:                                                                  runs[].platform.type (要素名が値)  # XSD 1.6.1
+  RUN/PLATFORM/SINGULAR_GENOMICS/INSTRUMENT_MODEL:                                                 runs[].platform.instrument_model  # XSD 1.6.1
+  RUN/PLATFORM/TAPESTRI:                                                                           runs[].platform.type (要素名が値)  # XSD 1.6.0, 1.6.1
+  RUN/PLATFORM/TAPESTRI/INSTRUMENT_MODEL:                                                          runs[].platform.instrument_model  # XSD 1.6.0, 1.6.1
+  RUN/PLATFORM/ULTIMA:                                                                             runs[].platform.type (要素名が値)  # XSD 1.6.0, 1.6.1
+  RUN/PLATFORM/ULTIMA/INSTRUMENT_MODEL:                                                            runs[].platform.instrument_model  # XSD 1.6.0, 1.6.1
+  RUN/PLATFORM/VELA_DIAGNOSTICS:                                                                   runs[].platform.type (要素名が値)  # XSD 1.6.0, 1.6.1
+  RUN/PLATFORM/VELA_DIAGNOSTICS/INSTRUMENT_MODEL:                                                  runs[].platform.instrument_model  # XSD 1.6.0, 1.6.1
+  RUN/PLATFORM/Vela_Diagnostics:                                                                   runs[].platform.type (要素名が値)  # XSD 1.5.9
+  RUN/PLATFORM/Vela_Diagnostics/INSTRUMENT_MODEL:                                                  runs[].platform.instrument_model  # XSD 1.5.9
+  RUN/PROCESSING:                                                                                  (container)
+  RUN/PROCESSING/DIRECTIVES:                                                                       (container)
+  RUN/PROCESSING/DIRECTIVES/SAMPLE_DEMUX_DIRECTIVE:                                                runs[].sample_demux_directive
+  RUN/PROCESSING/PIPELINE:                                                                         (container)
+  RUN/PROCESSING/PIPELINE/PIPE_SECTION:                                                            runs[].processing[]
+  RUN/PROCESSING/PIPELINE/PIPE_SECTION/@section_name:                                              runs[].processing[].section_name
+  RUN/PROCESSING/PIPELINE/PIPE_SECTION/NOTES:                                                      runs[].processing[].notes
+  RUN/PROCESSING/PIPELINE/PIPE_SECTION/PREV_STEP_INDEX:                                            runs[].processing[].prev_step_indexes[]
+  RUN/PROCESSING/PIPELINE/PIPE_SECTION/PROGRAM:                                                    runs[].processing[].program
+  RUN/PROCESSING/PIPELINE/PIPE_SECTION/STEP_INDEX:                                                 runs[].processing[].step_index
+  RUN/PROCESSING/PIPELINE/PIPE_SECTION/VERSION:                                                    runs[].processing[].version
+  RUN/RUN_ATTRIBUTES:                                                                              (container)
+  RUN/RUN_ATTRIBUTES/RUN_ATTRIBUTE:                                                                runs[].attributes[]
+  RUN/RUN_ATTRIBUTES/RUN_ATTRIBUTE/TAG:                                                            runs[].attributes[].name
+  RUN/RUN_ATTRIBUTES/RUN_ATTRIBUTE/UNITS:                                                          runs[].attributes[].unit
+  RUN/RUN_ATTRIBUTES/RUN_ATTRIBUTE/VALUE:                                                          runs[].attributes[].value
+  RUN/RUN_LINKS:                                                                                   (container)
+  RUN/RUN_LINKS/RUN_LINK:                                                                          relations[]
+  RUN/RUN_LINKS/RUN_LINK/DDBJ_LINK:                                                                relations[xref].properties{sra_link_type} (DDBJ_LINK なら "ddbj")  # XSD に無い。D-way で 20 文書
+  RUN/RUN_LINKS/RUN_LINK/DDBJ_LINK/DB:                                                             relations[xref].target.db  # XSD に無い。D-way で 20 文書
+  RUN/RUN_LINKS/RUN_LINK/DDBJ_LINK/ID:                                                             relations[xref].target.id  # XSD に無い。D-way で 20 文書
+  RUN/RUN_LINKS/RUN_LINK/ENTREZ_LINK:                                                              relations[xref].properties{sra_link_type} (ENTREZ_LINK なら "entrez")  # XSD に無い。D-way で 1 文書
+  RUN/RUN_LINKS/RUN_LINK/ENTREZ_LINK/DB:                                                           relations[xref].target.db  # XSD に無い。D-way で 1 文書
+  RUN/RUN_LINKS/RUN_LINK/URL_LINK:                                                                 relations[reference]
+  RUN/RUN_LINKS/RUN_LINK/URL_LINK/LABEL:                                                           relations[reference].label
+  RUN/RUN_LINKS/RUN_LINK/URL_LINK/URL:                                                             relations[reference].target.url
+  RUN/RUN_LINKS/RUN_LINK/XREF_LINK:                                                                relations[xref]
+  RUN/RUN_LINKS/RUN_LINK/XREF_LINK/DB:                                                             relations[xref].target.db
+  RUN/RUN_LINKS/RUN_LINK/XREF_LINK/ID:                                                             relations[xref].target.id
+  RUN/RUN_LINKS/RUN_LINK/XREF_LINK/LABEL:                                                          relations[xref].label
+  RUN/SPOT_DESCRIPTOR:                                                                             runs[].spot_descriptor
+  RUN/SPOT_DESCRIPTOR/SPOT_DECODE_SPEC:                                                            (container)
+  RUN/SPOT_DESCRIPTOR/SPOT_DECODE_SPEC/READ_SPEC:                                                  runs[].spot_descriptor.reads[]
+  RUN/SPOT_DESCRIPTOR/SPOT_DECODE_SPEC/READ_SPEC/BASE_COORD:                                       runs[].spot_descriptor.reads[].base_coord
+  RUN/SPOT_DESCRIPTOR/SPOT_DECODE_SPEC/READ_SPEC/EXPECTED_BASECALL_TABLE:                          runs[].spot_descriptor.reads[].expected_basecall_table
+  RUN/SPOT_DESCRIPTOR/SPOT_DECODE_SPEC/READ_SPEC/EXPECTED_BASECALL_TABLE/@base_coord:              runs[].spot_descriptor.reads[].expected_basecall_table.base_coord
+  RUN/SPOT_DESCRIPTOR/SPOT_DECODE_SPEC/READ_SPEC/EXPECTED_BASECALL_TABLE/@default_length:          runs[].spot_descriptor.reads[].expected_basecall_table.default_length
+  RUN/SPOT_DESCRIPTOR/SPOT_DECODE_SPEC/READ_SPEC/EXPECTED_BASECALL_TABLE/BASECALL:                 runs[].spot_descriptor.reads[].expected_basecall_table.basecalls[].value
+  RUN/SPOT_DESCRIPTOR/SPOT_DECODE_SPEC/READ_SPEC/EXPECTED_BASECALL_TABLE/BASECALL/@match_edge:     runs[].spot_descriptor.reads[].expected_basecall_table.basecalls[].match_edge
+  RUN/SPOT_DESCRIPTOR/SPOT_DECODE_SPEC/READ_SPEC/EXPECTED_BASECALL_TABLE/BASECALL/@max_mismatch:   runs[].spot_descriptor.reads[].expected_basecall_table.basecalls[].max_mismatch
+  RUN/SPOT_DESCRIPTOR/SPOT_DECODE_SPEC/READ_SPEC/EXPECTED_BASECALL_TABLE/BASECALL/@min_match:      runs[].spot_descriptor.reads[].expected_basecall_table.basecalls[].min_match
+  RUN/SPOT_DESCRIPTOR/SPOT_DECODE_SPEC/READ_SPEC/EXPECTED_BASECALL_TABLE/BASECALL/@read_group_tag: runs[].spot_descriptor.reads[].expected_basecall_table.basecalls[].read_group_tag
+  RUN/SPOT_DESCRIPTOR/SPOT_DECODE_SPEC/READ_SPEC/READ_CLASS:                                       runs[].spot_descriptor.reads[].read_class
+  RUN/SPOT_DESCRIPTOR/SPOT_DECODE_SPEC/READ_SPEC/READ_INDEX:                                       runs[].spot_descriptor.reads[].read_index
+  RUN/SPOT_DESCRIPTOR/SPOT_DECODE_SPEC/READ_SPEC/READ_LABEL:                                       runs[].spot_descriptor.reads[].read_label
+  RUN/SPOT_DESCRIPTOR/SPOT_DECODE_SPEC/READ_SPEC/READ_TYPE:                                        runs[].spot_descriptor.reads[].read_type
+  RUN/SPOT_DESCRIPTOR/SPOT_DECODE_SPEC/READ_SPEC/RELATIVE_ORDER:                                   runs[].spot_descriptor.reads[].relative_order
+  RUN/SPOT_DESCRIPTOR/SPOT_DECODE_SPEC/READ_SPEC/RELATIVE_ORDER/@follows_read_index:               runs[].spot_descriptor.reads[].relative_order.follows_read_index
+  RUN/SPOT_DESCRIPTOR/SPOT_DECODE_SPEC/READ_SPEC/RELATIVE_ORDER/@precedes_read_index:              runs[].spot_descriptor.reads[].relative_order.precedes_read_index
+  RUN/SPOT_DESCRIPTOR/SPOT_DECODE_SPEC/SPOT_LENGTH:                                                runs[].spot_descriptor.spot_length
+  RUN/TITLE:                                                                                       runs[].title
+
+analysis:
+  ANALYSIS:                                                                                            analyses[]
+  ANALYSIS/@accession:                                                                                 analyses[].accession
+  ANALYSIS/@alias:                                                                                     analyses[].alias
+  ANALYSIS/@analysis_center:                                                                           analyses[].analysis_center
+  ANALYSIS/@analysis_date:                                                                             analyses[].analysis_date
+  ANALYSIS/@broker_name:                                                                               analyses[].broker_name
+  ANALYSIS/@center_name:                                                                               analyses[].center_name
+  ANALYSIS/ANALYSIS_ATTRIBUTES:                                                                        (container)
+  ANALYSIS/ANALYSIS_ATTRIBUTES/ANALYSIS_ATTRIBUTE:                                                     analyses[].attributes[]
+  ANALYSIS/ANALYSIS_ATTRIBUTES/ANALYSIS_ATTRIBUTE/TAG:                                                 analyses[].attributes[].name
+  ANALYSIS/ANALYSIS_ATTRIBUTES/ANALYSIS_ATTRIBUTE/UNITS:                                               analyses[].attributes[].unit
+  ANALYSIS/ANALYSIS_ATTRIBUTES/ANALYSIS_ATTRIBUTE/VALUE:                                               analyses[].attributes[].value
+  ANALYSIS/ANALYSIS_LINKS:                                                                             (container)
+  ANALYSIS/ANALYSIS_LINKS/ANALYSIS_LINK:                                                               relations[]
+  ANALYSIS/ANALYSIS_LINKS/ANALYSIS_LINK/URL_LINK:                                                      relations[reference]
+  ANALYSIS/ANALYSIS_LINKS/ANALYSIS_LINK/URL_LINK/LABEL:                                                relations[reference].label
+  ANALYSIS/ANALYSIS_LINKS/ANALYSIS_LINK/URL_LINK/URL:                                                  relations[reference].target.url
+  ANALYSIS/ANALYSIS_LINKS/ANALYSIS_LINK/XREF_LINK:                                                     relations[xref]
+  ANALYSIS/ANALYSIS_LINKS/ANALYSIS_LINK/XREF_LINK/DB:                                                  relations[xref].target.db
+  ANALYSIS/ANALYSIS_LINKS/ANALYSIS_LINK/XREF_LINK/ID:                                                  relations[xref].target.id
+  ANALYSIS/ANALYSIS_LINKS/ANALYSIS_LINK/XREF_LINK/LABEL:                                               relations[xref].label
+  ANALYSIS/ANALYSIS_TYPE:                                                                              (container)
+  ANALYSIS/ANALYSIS_TYPE/ABUNDANCE_MEASUREMENT:                                                        analyses[].analysis_type (要素名を小文字にした値)
+  ANALYSIS/ANALYSIS_TYPE/ABUNDANCE_MEASUREMENT/PROCESSING:                                             (container)
+  ANALYSIS/ANALYSIS_TYPE/ABUNDANCE_MEASUREMENT/PROCESSING/PIPELINE:                                    (container)
+  ANALYSIS/ANALYSIS_TYPE/ABUNDANCE_MEASUREMENT/PROCESSING/PIPELINE/PIPE_SECTION:                       analyses[].processing[]
+  ANALYSIS/ANALYSIS_TYPE/ABUNDANCE_MEASUREMENT/PROCESSING/PIPELINE/PIPE_SECTION/@section_name:         analyses[].processing[].section_name
+  ANALYSIS/ANALYSIS_TYPE/ABUNDANCE_MEASUREMENT/PROCESSING/PIPELINE/PIPE_SECTION/NOTES:                 analyses[].processing[].notes
+  ANALYSIS/ANALYSIS_TYPE/ABUNDANCE_MEASUREMENT/PROCESSING/PIPELINE/PIPE_SECTION/PREV_STEP_INDEX:       analyses[].processing[].prev_step_indexes[]
+  ANALYSIS/ANALYSIS_TYPE/ABUNDANCE_MEASUREMENT/PROCESSING/PIPELINE/PIPE_SECTION/PROGRAM:               analyses[].processing[].program
+  ANALYSIS/ANALYSIS_TYPE/ABUNDANCE_MEASUREMENT/PROCESSING/PIPELINE/PIPE_SECTION/STEP_INDEX:            analyses[].processing[].step_index
+  ANALYSIS/ANALYSIS_TYPE/ABUNDANCE_MEASUREMENT/PROCESSING/PIPELINE/PIPE_SECTION/VERSION:               analyses[].processing[].version
+  ANALYSIS/ANALYSIS_TYPE/DE_NOVO_ASSEMBLY:                                                             analyses[].analysis_type (要素名を小文字にした値)
+  ANALYSIS/ANALYSIS_TYPE/DE_NOVO_ASSEMBLY/PROCESSING:                                                  (container)
+  ANALYSIS/ANALYSIS_TYPE/DE_NOVO_ASSEMBLY/PROCESSING/PIPELINE:                                         (container)
+  ANALYSIS/ANALYSIS_TYPE/DE_NOVO_ASSEMBLY/PROCESSING/PIPELINE/PIPE_SECTION:                            analyses[].processing[]
+  ANALYSIS/ANALYSIS_TYPE/DE_NOVO_ASSEMBLY/PROCESSING/PIPELINE/PIPE_SECTION/@section_name:              analyses[].processing[].section_name
+  ANALYSIS/ANALYSIS_TYPE/DE_NOVO_ASSEMBLY/PROCESSING/PIPELINE/PIPE_SECTION/NOTES:                      analyses[].processing[].notes
+  ANALYSIS/ANALYSIS_TYPE/DE_NOVO_ASSEMBLY/PROCESSING/PIPELINE/PIPE_SECTION/PREV_STEP_INDEX:            analyses[].processing[].prev_step_indexes[]
+  ANALYSIS/ANALYSIS_TYPE/DE_NOVO_ASSEMBLY/PROCESSING/PIPELINE/PIPE_SECTION/PROGRAM:                    analyses[].processing[].program
+  ANALYSIS/ANALYSIS_TYPE/DE_NOVO_ASSEMBLY/PROCESSING/PIPELINE/PIPE_SECTION/STEP_INDEX:                 analyses[].processing[].step_index
+  ANALYSIS/ANALYSIS_TYPE/DE_NOVO_ASSEMBLY/PROCESSING/PIPELINE/PIPE_SECTION/VERSION:                    analyses[].processing[].version
+  ANALYSIS/ANALYSIS_TYPE/REFERENCE_ALIGNMENT:                                                          analyses[].analysis_type (要素名を小文字にした値)
+  ANALYSIS/ANALYSIS_TYPE/REFERENCE_ALIGNMENT/ASSEMBLY:                                                 (container)
+  ANALYSIS/ANALYSIS_TYPE/REFERENCE_ALIGNMENT/ASSEMBLY/CUSTOM:                                          analyses[].reference_alignment.custom_assembly
+  ANALYSIS/ANALYSIS_TYPE/REFERENCE_ALIGNMENT/ASSEMBLY/CUSTOM/DESCRIPTION:                              analyses[].reference_alignment.custom_assembly.description
+  ANALYSIS/ANALYSIS_TYPE/REFERENCE_ALIGNMENT/ASSEMBLY/CUSTOM/REFERENCE_SOURCE:                         analyses[].reference_alignment.custom_assembly.sources[]
+  ANALYSIS/ANALYSIS_TYPE/REFERENCE_ALIGNMENT/ASSEMBLY/CUSTOM/REFERENCE_SOURCE/URL_LINK:                (container)
+  ANALYSIS/ANALYSIS_TYPE/REFERENCE_ALIGNMENT/ASSEMBLY/CUSTOM/REFERENCE_SOURCE/URL_LINK/LABEL:          analyses[].reference_alignment.custom_assembly.sources[].label
+  ANALYSIS/ANALYSIS_TYPE/REFERENCE_ALIGNMENT/ASSEMBLY/CUSTOM/REFERENCE_SOURCE/URL_LINK/URL:            analyses[].reference_alignment.custom_assembly.sources[].url
+  ANALYSIS/ANALYSIS_TYPE/REFERENCE_ALIGNMENT/ASSEMBLY/CUSTOM/REFERENCE_SOURCE/XREF_LINK:               (container)
+  ANALYSIS/ANALYSIS_TYPE/REFERENCE_ALIGNMENT/ASSEMBLY/CUSTOM/REFERENCE_SOURCE/XREF_LINK/DB:            analyses[].reference_alignment.custom_assembly.sources[].db
+  ANALYSIS/ANALYSIS_TYPE/REFERENCE_ALIGNMENT/ASSEMBLY/CUSTOM/REFERENCE_SOURCE/XREF_LINK/ID:            analyses[].reference_alignment.custom_assembly.sources[].id
+  ANALYSIS/ANALYSIS_TYPE/REFERENCE_ALIGNMENT/ASSEMBLY/CUSTOM/REFERENCE_SOURCE/XREF_LINK/LABEL:         analyses[].reference_alignment.custom_assembly.sources[].label
+  ANALYSIS/ANALYSIS_TYPE/REFERENCE_ALIGNMENT/ASSEMBLY/STANDARD:                                        analyses[].reference_alignment.standard_assembly
+  ANALYSIS/ANALYSIS_TYPE/REFERENCE_ALIGNMENT/ASSEMBLY/STANDARD/@short_name:                            analyses[].reference_alignment.standard_assembly.short_name
+  ANALYSIS/ANALYSIS_TYPE/REFERENCE_ALIGNMENT/ASSEMBLY/STANDARD/NAME:                                   analyses[].reference_alignment.standard_assembly.names[]
+  ANALYSIS/ANALYSIS_TYPE/REFERENCE_ALIGNMENT/ASSEMBLY/STANDARD/NAME/DB:                                analyses[].reference_alignment.standard_assembly.names[].db
+  ANALYSIS/ANALYSIS_TYPE/REFERENCE_ALIGNMENT/ASSEMBLY/STANDARD/NAME/ID:                                analyses[].reference_alignment.standard_assembly.names[].id
+  ANALYSIS/ANALYSIS_TYPE/REFERENCE_ALIGNMENT/ASSEMBLY/STANDARD/NAME/LABEL:                             analyses[].reference_alignment.standard_assembly.names[].label
+  ANALYSIS/ANALYSIS_TYPE/REFERENCE_ALIGNMENT/PROCESSING:                                               (container)
+  ANALYSIS/ANALYSIS_TYPE/REFERENCE_ALIGNMENT/PROCESSING/DIRECTIVES:                                    (container)
+  ANALYSIS/ANALYSIS_TYPE/REFERENCE_ALIGNMENT/PROCESSING/DIRECTIVES/alignment_includes_failed_reads:    analyses[].reference_alignment.includes_failed_reads
+  ANALYSIS/ANALYSIS_TYPE/REFERENCE_ALIGNMENT/PROCESSING/DIRECTIVES/alignment_includes_unaligned_reads: analyses[].reference_alignment.includes_unaligned_reads
+  ANALYSIS/ANALYSIS_TYPE/REFERENCE_ALIGNMENT/PROCESSING/DIRECTIVES/alignment_marks_duplicate_reads:    analyses[].reference_alignment.marks_duplicate_reads
+  ANALYSIS/ANALYSIS_TYPE/REFERENCE_ALIGNMENT/PROCESSING/PIPELINE:                                      (container)
+  ANALYSIS/ANALYSIS_TYPE/REFERENCE_ALIGNMENT/PROCESSING/PIPELINE/PIPE_SECTION:                         analyses[].processing[]
+  ANALYSIS/ANALYSIS_TYPE/REFERENCE_ALIGNMENT/PROCESSING/PIPELINE/PIPE_SECTION/@section_name:           analyses[].processing[].section_name
+  ANALYSIS/ANALYSIS_TYPE/REFERENCE_ALIGNMENT/PROCESSING/PIPELINE/PIPE_SECTION/NOTES:                   analyses[].processing[].notes
+  ANALYSIS/ANALYSIS_TYPE/REFERENCE_ALIGNMENT/PROCESSING/PIPELINE/PIPE_SECTION/PREV_STEP_INDEX:         analyses[].processing[].prev_step_indexes[]
+  ANALYSIS/ANALYSIS_TYPE/REFERENCE_ALIGNMENT/PROCESSING/PIPELINE/PIPE_SECTION/PROGRAM:                 analyses[].processing[].program
+  ANALYSIS/ANALYSIS_TYPE/REFERENCE_ALIGNMENT/PROCESSING/PIPELINE/PIPE_SECTION/STEP_INDEX:              analyses[].processing[].step_index
+  ANALYSIS/ANALYSIS_TYPE/REFERENCE_ALIGNMENT/PROCESSING/PIPELINE/PIPE_SECTION/VERSION:                 analyses[].processing[].version
+  ANALYSIS/ANALYSIS_TYPE/REFERENCE_ALIGNMENT/RUN_LABELS:                                               (container)
+  ANALYSIS/ANALYSIS_TYPE/REFERENCE_ALIGNMENT/RUN_LABELS/RUN:                                           analyses[].reference_alignment.run_labels[]
+  ANALYSIS/ANALYSIS_TYPE/REFERENCE_ALIGNMENT/RUN_LABELS/RUN/@accession:                                analyses[].reference_alignment.run_labels[].run.accession
+  ANALYSIS/ANALYSIS_TYPE/REFERENCE_ALIGNMENT/RUN_LABELS/RUN/@data_block_name:                          analyses[].reference_alignment.run_labels[].data_block_name
+  ANALYSIS/ANALYSIS_TYPE/REFERENCE_ALIGNMENT/RUN_LABELS/RUN/@read_group_label:                         analyses[].reference_alignment.run_labels[].read_group_label
+  ANALYSIS/ANALYSIS_TYPE/REFERENCE_ALIGNMENT/RUN_LABELS/RUN/@refcenter:                                analyses[].reference_alignment.run_labels[].run.center_name
+  ANALYSIS/ANALYSIS_TYPE/REFERENCE_ALIGNMENT/RUN_LABELS/RUN/@refname:                                  analyses[].reference_alignment.run_labels[].run.id
+  ANALYSIS/ANALYSIS_TYPE/REFERENCE_ALIGNMENT/SEQ_LABELS:                                               (container)
+  ANALYSIS/ANALYSIS_TYPE/REFERENCE_ALIGNMENT/SEQ_LABELS/SEQUENCE:                                      analyses[].reference_alignment.seq_labels[]
+  ANALYSIS/ANALYSIS_TYPE/REFERENCE_ALIGNMENT/SEQ_LABELS/SEQUENCE/@accession:                           analyses[].reference_alignment.seq_labels[].accession
+  ANALYSIS/ANALYSIS_TYPE/REFERENCE_ALIGNMENT/SEQ_LABELS/SEQUENCE/@data_block_name:                     analyses[].reference_alignment.seq_labels[].data_block_name
+  ANALYSIS/ANALYSIS_TYPE/REFERENCE_ALIGNMENT/SEQ_LABELS/SEQUENCE/@gi:                                  analyses[].reference_alignment.seq_labels[].gi
+  ANALYSIS/ANALYSIS_TYPE/REFERENCE_ALIGNMENT/SEQ_LABELS/SEQUENCE/@seq_label:                           analyses[].reference_alignment.seq_labels[].seq_label
+  ANALYSIS/ANALYSIS_TYPE/SEQUENCE_ANNOTATION:                                                          analyses[].analysis_type (要素名を小文字にした値)
+  ANALYSIS/ANALYSIS_TYPE/SEQUENCE_ANNOTATION/PROCESSING:                                               (container)
+  ANALYSIS/ANALYSIS_TYPE/SEQUENCE_ANNOTATION/PROCESSING/PIPELINE:                                      (container)
+  ANALYSIS/ANALYSIS_TYPE/SEQUENCE_ANNOTATION/PROCESSING/PIPELINE/PIPE_SECTION:                         analyses[].processing[]
+  ANALYSIS/ANALYSIS_TYPE/SEQUENCE_ANNOTATION/PROCESSING/PIPELINE/PIPE_SECTION/@section_name:           analyses[].processing[].section_name
+  ANALYSIS/ANALYSIS_TYPE/SEQUENCE_ANNOTATION/PROCESSING/PIPELINE/PIPE_SECTION/NOTES:                   analyses[].processing[].notes
+  ANALYSIS/ANALYSIS_TYPE/SEQUENCE_ANNOTATION/PROCESSING/PIPELINE/PIPE_SECTION/PREV_STEP_INDEX:         analyses[].processing[].prev_step_indexes[]
+  ANALYSIS/ANALYSIS_TYPE/SEQUENCE_ANNOTATION/PROCESSING/PIPELINE/PIPE_SECTION/PROGRAM:                 analyses[].processing[].program
+  ANALYSIS/ANALYSIS_TYPE/SEQUENCE_ANNOTATION/PROCESSING/PIPELINE/PIPE_SECTION/STEP_INDEX:              analyses[].processing[].step_index
+  ANALYSIS/ANALYSIS_TYPE/SEQUENCE_ANNOTATION/PROCESSING/PIPELINE/PIPE_SECTION/VERSION:                 analyses[].processing[].version
+  ANALYSIS/DATA_BLOCK:                                                                                 analyses[].data_blocks[]
+  ANALYSIS/DATA_BLOCK/@member:                                                                         analyses[].data_blocks[].member_name
+  ANALYSIS/DATA_BLOCK/@name:                                                                           analyses[].data_blocks[].name
+  ANALYSIS/DATA_BLOCK/@serial:                                                                         analyses[].data_blocks[].serial
+  ANALYSIS/DATA_BLOCK/FILES:                                                                           (container)
+  ANALYSIS/DATA_BLOCK/FILES/FILE:                                                                      analyses[].data_blocks[].files[]
+  ANALYSIS/DATA_BLOCK/FILES/FILE/@checksum:                                                            analyses[].data_blocks[].files[].checksum
+  ANALYSIS/DATA_BLOCK/FILES/FILE/@checksum_method:                                                     analyses[].data_blocks[].files[].checksum_method
+  ANALYSIS/DATA_BLOCK/FILES/FILE/@filename:                                                            analyses[].data_blocks[].files[].filename
+  ANALYSIS/DATA_BLOCK/FILES/FILE/@filetype:                                                            analyses[].data_blocks[].files[].filetype
+  ANALYSIS/DESCRIPTION:                                                                                analyses[].description
+  ANALYSIS/IDENTIFIERS:                                                                                (container)
+  ANALYSIS/IDENTIFIERS/EXTERNAL_ID:                                                                    analyses[].identifiers[external].value
+  ANALYSIS/IDENTIFIERS/EXTERNAL_ID/@label:                                                             analyses[].identifiers[external].label
+  ANALYSIS/IDENTIFIERS/EXTERNAL_ID/@namespace:                                                         analyses[].identifiers[external].namespace
+  ANALYSIS/IDENTIFIERS/PRIMARY_ID:                                                                     analyses[].identifiers[primary].value
+  ANALYSIS/IDENTIFIERS/PRIMARY_ID/@label:                                                              analyses[].identifiers[primary].label
+  ANALYSIS/IDENTIFIERS/SECONDARY_ID:                                                                   analyses[].identifiers[secondary].value
+  ANALYSIS/IDENTIFIERS/SECONDARY_ID/@label:                                                            analyses[].identifiers[secondary].label
+  ANALYSIS/IDENTIFIERS/SUBMITTER_ID:                                                                   analyses[].identifiers[submitter].value
+  ANALYSIS/IDENTIFIERS/SUBMITTER_ID/@label:                                                            analyses[].identifiers[submitter].label
+  ANALYSIS/IDENTIFIERS/SUBMITTER_ID/@namespace:                                                        analyses[].identifiers[submitter].namespace
+  ANALYSIS/IDENTIFIERS/UUID:                                                                           analyses[].identifiers[uuid].value
+  ANALYSIS/IDENTIFIERS/UUID/@label:                                                                    analyses[].identifiers[uuid].label
+  ANALYSIS/STUDY_REF:                                                                                  relations[part_of project]
+  ANALYSIS/STUDY_REF/@accession:                                                                       relations[part_of project].target.accession
+  ANALYSIS/STUDY_REF/@refcenter:                                                                       relations[part_of project].target.center_name
+  ANALYSIS/STUDY_REF/@refname:                                                                         relations[part_of project].target.id
+  ANALYSIS/STUDY_REF/IDENTIFIERS:                                                                      (container)
+  ANALYSIS/STUDY_REF/IDENTIFIERS/EXTERNAL_ID:                                                          relations[part_of project].target.identifiers[external].value
+  ANALYSIS/STUDY_REF/IDENTIFIERS/EXTERNAL_ID/@label:                                                   relations[part_of project].target.identifiers[external].label
+  ANALYSIS/STUDY_REF/IDENTIFIERS/EXTERNAL_ID/@namespace:                                               relations[part_of project].target.identifiers[external].namespace
+  ANALYSIS/STUDY_REF/IDENTIFIERS/PRIMARY_ID:                                                           relations[part_of project].target.identifiers[primary].value
+  ANALYSIS/STUDY_REF/IDENTIFIERS/PRIMARY_ID/@label:                                                    relations[part_of project].target.identifiers[primary].label
+  ANALYSIS/STUDY_REF/IDENTIFIERS/SECONDARY_ID:                                                         relations[part_of project].target.identifiers[secondary].value
+  ANALYSIS/STUDY_REF/IDENTIFIERS/SECONDARY_ID/@label:                                                  relations[part_of project].target.identifiers[secondary].label
+  ANALYSIS/STUDY_REF/IDENTIFIERS/SUBMITTER_ID:                                                         relations[part_of project].target.identifiers[submitter].value
+  ANALYSIS/STUDY_REF/IDENTIFIERS/SUBMITTER_ID/@label:                                                  relations[part_of project].target.identifiers[submitter].label
+  ANALYSIS/STUDY_REF/IDENTIFIERS/SUBMITTER_ID/@namespace:                                              relations[part_of project].target.identifiers[submitter].namespace
+  ANALYSIS/STUDY_REF/IDENTIFIERS/UUID:                                                                 relations[part_of project].target.identifiers[uuid].value
+  ANALYSIS/STUDY_REF/IDENTIFIERS/UUID/@label:                                                          relations[part_of project].target.identifiers[uuid].label
+  ANALYSIS/TARGETS:                                                                                    (container)
+  ANALYSIS/TARGETS/IDENTIFIERS:                                                                        (container)
+  ANALYSIS/TARGETS/IDENTIFIERS/EXTERNAL_ID:                                                            relations[derived_from].target.identifiers[external].value
+  ANALYSIS/TARGETS/IDENTIFIERS/EXTERNAL_ID/@label:                                                     relations[derived_from].target.identifiers[external].label
+  ANALYSIS/TARGETS/IDENTIFIERS/EXTERNAL_ID/@namespace:                                                 relations[derived_from].target.identifiers[external].namespace
+  ANALYSIS/TARGETS/IDENTIFIERS/PRIMARY_ID:                                                             relations[derived_from].target.identifiers[primary].value
+  ANALYSIS/TARGETS/IDENTIFIERS/PRIMARY_ID/@label:                                                      relations[derived_from].target.identifiers[primary].label
+  ANALYSIS/TARGETS/IDENTIFIERS/SECONDARY_ID:                                                           relations[derived_from].target.identifiers[secondary].value
+  ANALYSIS/TARGETS/IDENTIFIERS/SECONDARY_ID/@label:                                                    relations[derived_from].target.identifiers[secondary].label
+  ANALYSIS/TARGETS/IDENTIFIERS/SUBMITTER_ID:                                                           relations[derived_from].target.identifiers[submitter].value
+  ANALYSIS/TARGETS/IDENTIFIERS/SUBMITTER_ID/@label:                                                    relations[derived_from].target.identifiers[submitter].label
+  ANALYSIS/TARGETS/IDENTIFIERS/SUBMITTER_ID/@namespace:                                                relations[derived_from].target.identifiers[submitter].namespace
+  ANALYSIS/TARGETS/IDENTIFIERS/UUID:                                                                   relations[derived_from].target.identifiers[uuid].value
+  ANALYSIS/TARGETS/IDENTIFIERS/UUID/@label:                                                            relations[derived_from].target.identifiers[uuid].label
+  ANALYSIS/TARGETS/TARGET:                                                                             relations[derived_from]
+  ANALYSIS/TARGETS/TARGET/@accession:                                                                  relations[derived_from].target.accession
+  ANALYSIS/TARGETS/TARGET/@refcenter:                                                                  relations[derived_from].target.center_name
+  ANALYSIS/TARGETS/TARGET/@refname:                                                                    relations[derived_from].target.id
+  ANALYSIS/TARGETS/TARGET/@sra_object_type:                                                            relations[derived_from].target.db (種類の名前にした値)
+  ANALYSIS/TITLE:                                                                                      analyses[].title
